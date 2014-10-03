@@ -1,0 +1,13 @@
+DEPENDENCIES
+  bursa
+    path: .
+    metadata: true
+  bursa-gpm
+    path: ../bursa-gpm
+
+GRAPH
+  bursa (0.1.0)
+    bursa-gpm (>= 0.0.0)
+    golang (>= 0.0.0)
+  bursa-gpm (0.1.0)
+  golang (1.4.0)
