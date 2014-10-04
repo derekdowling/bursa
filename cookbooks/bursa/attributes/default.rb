@@ -1,2 +1,7 @@
 default["bursa"]["path"] = "/bursa"
 default["bursa"]["gopath"] = "#{node["bursa"]["path"]}/app"
+
+# BURSA-DUOJS
+default["bursa"]["user"]["homedir"] = "/home/vagrant"
+default["bursa"]["github"]["login"] = "bursa-io"
+default["bursa"]["github"]["password"] = "67ffb19b463e20d76d6e5f2968ed423a44c54ff5"

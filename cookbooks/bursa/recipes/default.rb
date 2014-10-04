@@ -6,6 +6,7 @@
 #
 include_recipe "golang"
 include_recipe "bursa-gpm"
+include_recipe "bursa-duojs"
 
 # FUTURE ELASTICSEARCH SERVER
 # Until we start provisioning different types of production servers, this will be
@@ -29,3 +30,9 @@ end
 bash "PATH" do
     environment "PATH" => "#{path}:#{node["bursa"]["gopath"]}"
 end
+
+# NODE (NPM, ReactJS)
+include_recipe "nodejs"
+include_recipe "nodejs::npm"
+
+nodejs_npm "react-tools"
