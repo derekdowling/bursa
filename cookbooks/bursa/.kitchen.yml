@@ -9,7 +9,7 @@ provisioner:
     - ["forwarded_port", {guest: 80, host: 8080}]
   driver:
     synced_folders:
-      - ["/../", "/bursa", "create: true, type: :nfs"]
+      - ["../../", "/bursa", "create: true, type: :nfs"]
 
 platforms:
   - name: ubuntu-14.04
