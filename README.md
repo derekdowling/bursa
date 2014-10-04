@@ -1,11 +1,11 @@
-# Bursa
+# Making Bursa Work
 
-## Requirements
+## Chef/Kitchen Requirements
 
 * Install the chef development kit, which has tools to replace the vagrant berkshelf plugin:
 
 		wget https://opscode-omnibus-packages.s3.amazonaws.com/mac_os_x/10.8/x86_64/chefdk-0.3.0-1.dmg
-* Install neccessary gems:
+* Install neccessary gems in bursa root:
  
   		bundle install
 * Within the cookbooks/bursa directory:
@@ -30,18 +30,12 @@
 	* See if gpm is available:
 			
 			gpm --version
-		
-	
-
-  
    
-## References
+### References
 
   
 * [Getting Started with Chef DK](http://tcotav.github.io/chefdk_getting_started.html)
 
-## Cookbook References
+### Cookbook References
 
 * https://github.com/phlipper/chef-postgresql
-   
-   
