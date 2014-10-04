@@ -41,5 +41,5 @@ bin/*
 .kitchen/
 .kitchen.local.yml
 
-node_modules
-bower_components
+node_modules/
+components/
