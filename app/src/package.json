@@ -1,11 +1,20 @@
 {
   "name": "bursa",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "Github for Bitcoin",
   "dependencies": {
-    "bower": "^1.3.12",
-    "gulp": "^3.8.8"
+    "duo": "^0.8.4",
+    "gulp": "^3.8.8",
+    "gulp-shell": "^0.2.9",
+    "gulp-slim": "^0.0.10",
+    "jquery": "^2.1.1",
+    "react": "^0.11.2",
+    "bootstrap": "^3.2.0",
+    "coffee-react-transform": "^1.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/derekdowling/bursa.git"
   },
   "devDependencies": {},
   "scripts": {
