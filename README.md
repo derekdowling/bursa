@@ -20,7 +20,9 @@
 	
 			kitchen create all
 			
-	  Subsequently you'll want to use `kitchen converge` to update the existing VMs.
+	* Provision the VM:
+			
+			kitchen converge
 	  
 	* Login to the kitchen-generated vm:
 	  
@@ -41,6 +43,5 @@
 ## Cookbook References
 
 * https://github.com/phlipper/chef-postgresql
-* 
    
    
