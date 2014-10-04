@@ -7,14 +7,13 @@
 include_recipe "golang"
 include_recipe "bursa-gpm"
 
-env "GOROOT" do
-    action :create
-    value node["bursa"]["path"]
+path = ENV['PATH']
+
+bash "GOROOT" do
+    environment "GOROOT" => node["bursa"]["path"]
 end
 
 # Appends the value to the end with the delimiter in between
-env "PATH" do
-    action :modify
-    value "#{node["bursa"]["path"]}/bin"
-    delim ":"
+bash "PATH" do
+    environment "PATH" => "#{path}:#{node["bursa"]["gopath"]}"
 end
