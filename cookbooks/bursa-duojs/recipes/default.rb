@@ -10,4 +10,6 @@ include_recipe "nodejs::npm"
 nodejs_npm "duo"
 
 # Configures a Github API token for private repos and higher througput.
-template "#{node['bursa']['user']['homedir']}/.netrc"
+template "#{node['bursa']['user']['homedir']}/.netrc" do
+  source "netrc.erb"
+end
