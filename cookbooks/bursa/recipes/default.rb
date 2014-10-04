@@ -16,8 +16,19 @@ include_recipe "java"
 include_recipe "elasticsearch"
 
 # FUTURE POSTGRESQL SERVER
+include_recipe "database"
 include_recipe "postgresql"
 include_recipe "postgresql::server"
+
+postgresql_database 'bursa' do
+  connection(
+    :host => '127.0.0.1',
+    :port => 5432,
+    :username => 'bursa',
+    :password => 'securemebaby'
+  )
+  action :create
+end
 
 # BURSA APP AND GO ENV
 path = ENV['PATH']
