@@ -1,0 +1,13 @@
+source "https://supermarket.getchef.com"
+source "https://api.berkshelf.com"
+
+metadata
+
+// this is a little hack to handle importing other cookbooks because
+// test kitchen can't be run from the root level
+Dir.glob('../*').each do |path|
+  # Skip myself.
+  unless File.basename(path) == 'bursa'
+    cookbook File.basename(path), path: path
+  end
+end
