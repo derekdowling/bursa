@@ -22,3 +22,24 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+# Vagrant related
+.vagrant
+Berksfile.lock
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+
+# Bundler
+Gemfile.lock
+bin/*
+.bundle/*
+
+.kitchen/
+.kitchen.local.yml
+
+node_modules
+bower_components
