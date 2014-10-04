@@ -20,5 +20,10 @@ default_attributes(
         "url" => "http://download.elasticsearch.org/elasticsearch/marvel/marvel-latest.zip"
       }
     }
+  },
+  "postgresql" => {
+    "password" => {
+      "postgres" => "securemebaby"
+    }
   }
 )

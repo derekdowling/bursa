@@ -1,8 +1,6 @@
-Bursa
-=====
+# Bursa
 
-Requirements
-------------
+## Requirements
 
 * Install the chef development kit, which has tools to replace the vagrant berkshelf plugin:
 
@@ -35,9 +33,14 @@ Requirements
 
   
    
-References
-----------
+## References
+
   
 * [Getting Started with Chef DK](http://tcotav.github.io/chefdk_getting_started.html)
+
+## Cookbook References
+
+* https://github.com/phlipper/chef-postgresql
+* 
    
    
