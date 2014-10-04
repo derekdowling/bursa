@@ -1,15 +1,14 @@
 ---
 driver:
   name: vagrant
-
-provisioner:
-  name: chef_solo
   network:
     - ["private_network", { ip: "10.1.3.7" }]
     - ["forwarded_port", {guest: 80, host: 8080}]
-  driver:
-    synced_folders:
-      - ["../../", "/bursa", "create: true, type: :nfs"]
+  synced_folders:
+    - ["../../", "/bursa", "create: true, type: :nfs"]
+
+provisioner:
+  name: chef_solo
 
 platforms:
   - name: ubuntu-14.04
