@@ -2,6 +2,7 @@ package models
 
 import (
   "time"
+  "github.com/jinzhu/gorm"
 )
 
 const (
@@ -44,10 +45,19 @@ type Transfer struct {
 type Wallet struct {
   Id string `sql:"size:255"`
   Name string `sql:"size:255"`
+  Pin string `sql:"size:255"`
   Balance int64
   Transfers []Transfer
 
   CreatedAt time.Time
   CreatedBy User
   OwnedBy User
+}
+
+// Well suited to some kind of management cli.
+func Initialize() {
+  db, err := gorm.Open("postgres", "user=bursa dbname=bursa sslmode=disable")
+  db.CreateTable(User{})
+  db.CreateTable(Transfer{})
+  db.CreateTable(Wallet{})
 }
