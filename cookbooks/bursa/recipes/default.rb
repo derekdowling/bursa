@@ -7,6 +7,7 @@
 include_recipe "golang"
 include_recipe "bursa-gpm"
 include_recipe "bursa-duojs"
+include_recipe "bursa::ruby"
 
 # FUTURE ELASTICSEARCH SERVER
 # Until we start provisioning different types of production servers, this will be
