@@ -1,6 +1,6 @@
 name             'bursa'
-maintainer       'The Authors'
-maintainer_email 'you@example.com'
+maintainer       'Jacob Straszynski'
+maintainer_email 'jacobstr@gmail.com'
 license          'all_rights'
 description      'Installs/Configures bursa'
 long_description 'Installs/Configures bursa'

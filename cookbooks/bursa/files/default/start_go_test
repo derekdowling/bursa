@@ -2,5 +2,6 @@
 bundle install
 npm install
 gulp build
-source gvp
+source gvp in
 gpm install
+$GOPATH/src go test -port=8181 &

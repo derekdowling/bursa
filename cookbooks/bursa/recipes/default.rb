@@ -7,6 +7,7 @@
 include_recipe "golang"
 include_recipe "bursa-gpm"
 include_recipe "bursa-duojs"
+include_recipe "bursa::ruby"
 
 # FUTURE ELASTICSEARCH SERVER
 # Until we start provisioning different types of production servers, this will be
@@ -17,30 +18,57 @@ include_recipe "elasticsearch"
 
 # FUTURE POSTGRESQL SERVER
 include_recipe "database"
-include_recipe "postgresql"
+include_recipe "database::postgresql"
+# include_recipe "postgresql::ruby"
 include_recipe "postgresql::server"
 
-postgresql_database 'bursa' do
-  connection(
-    :host => '127.0.0.1',
-    :port => 5432,
-    :username => 'bursa',
-    :password => 'securemebaby'
-  )
-  action :create
+# Create our PGDB and create a user
+postgresql_database "bursa" do
+  connection node["bursa"]["pg_sa"]
+  action [:create]
 end
 
-# BURSA APP AND GO ENV
+postgresql_database_user node["bursa"]["pg_user"]["username"] do
+  connection node["bursa"]["pg_sa"]
+  database_name "bursa"
+  password node["bursa"]["pg_user"]["password"]
+  privileges [:all]
+  action [:create, :grant]
+end
+
+# Setup System Environment Vars
+bash "GOPATH" do
+    environment "GOPATH" => node["bursa"]["gopath"]
+end
+
 path = ENV['PATH']
-
-bash "GOROOT" do
-    environment "GOROOT" => node["bursa"]["path"]
-end
-
-# Appends the value to the end with the delimiter in between
 bash "PATH" do
     environment "PATH" => "#{path}:#{node["bursa"]["gopath"]}"
 end
+
+# Compile Various Website Bits
+gem_package "bundler" do
+  action :install
+end
+
+#Start our webserver
+# service "goserver" do
+  # pattern "goserver"
+  # supports :start => true
+  # init_command "#{node["bursa"]["gopath"]}/src go run main.go&"
+  # action [:enable,:start]
+# end
+
+# # Enable GoConvey Auto Testing on localhost:8181 if not in Production
+# service "gotests" do
+  # pattern "gotests"
+  # supports :start => true
+  # init_command
+  # case node["bursa"]["testing"]
+  # when "enabled"
+    # action [:enable, :start]
+  # end
+# end
 
 # NODE (NPM, ReactJS)
 include_recipe "nodejs"
