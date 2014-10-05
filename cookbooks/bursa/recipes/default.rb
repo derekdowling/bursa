@@ -30,18 +30,40 @@ postgresql_database 'bursa' do
   action :create
 end
 
-# BURSA APP AND GO ENV
-path = ENV['PATH']
+# Setup System Environment Vars
+bash "GOPATH" do
+    environment "GOPATH" => node["bursa"]["gopath"]
+end
 
-# Appends the value to the end with the delimiter in between
+path = ENV['PATH']
 bash "PATH" do
     environment "PATH" => "#{path}:#{node["bursa"]["gopath"]}"
 end
 
+# Compile Various Website Bits
 bash "build" do
     action :run
     cwd "#{node["bursa"]["gopath"]}/src"
     command "./build-script"
+end
+
+# Start our webserver
+service "goserver" do
+  pattern "goserver"
+  supports :start => true
+  init_command "#{node["bursa"]["gopath"]}/src go run main.go&"
+  action [:enable,:start]
+end
+
+# Enable GoConvey Auto Testing on localhost:8181 if not in Production
+service "gotests" do
+  pattern "gotests"
+  supports :start => true
+  init_command "#{node["bursa"]["gopath"]}/src go test -port=8181 &"
+  case node["bursa"]["testing"]
+  when "enabled"
+    action [:enable, :start]
+  end
 end
 
 # NODE (NPM, ReactJS)
