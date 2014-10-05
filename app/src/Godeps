@@ -2,3 +2,4 @@ github.com/gorilla/mux *
 github.com/jinzhu/gorm *
 github.com/smartystreets/goconvey *
 github.com/lib/pq *
+github.com/conformal/btcrpcclient 160a8431716c918070c8efaffbad4591ae604471
