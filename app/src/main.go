@@ -1,11 +1,15 @@
-package main
-import "net/http"
-import "fmt"
-import "html"
-import "github.com/gorilla/mux"
+package bursa
+
+import (
+  "net/http"
+  "fmt"
+  "html"
+  "github.com/gorilla/mux"
+  "github.com/derekdowling/bursa/models"
+)
 
 func main() {
-	route()
+    route()
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {

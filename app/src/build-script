@@ -2,4 +2,5 @@
 bundle install
 npm install
 gulp build
+source gvp in
 gpm install
