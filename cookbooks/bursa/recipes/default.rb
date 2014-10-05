@@ -18,7 +18,9 @@ include_recipe "elasticsearch"
 # FUTURE POSTGRESQL SERVER
 include_recipe "database"
 include_recipe "postgresql"
+include_recipe "postgresql::ruby"
 include_recipe "postgresql::server"
+
 
 postgresql_database 'bursa' do
   connection(
@@ -41,6 +43,10 @@ bash "PATH" do
 end
 
 # Compile Various Website Bits
+gem_package "bundler" do
+  action :install
+end
+
 bash "build" do
     action :run
     cwd "#{node["bursa"]["gopath"]}/src"
