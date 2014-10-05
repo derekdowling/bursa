@@ -50,30 +50,24 @@ gem_package "bundler" do
   action :install
 end
 
-bash "build" do
-    action :run
-    cwd "#{node["bursa"]["gopath"]}/src"
-    command "./build-script"
-end
+#Start our webserver
+# service "goserver" do
+  # pattern "goserver"
+  # supports :start => true
+  # init_command "#{node["bursa"]["gopath"]}/src go run main.go&"
+  # action [:enable,:start]
+# end
 
-# Start our webserver
-service "goserver" do
-  pattern "goserver"
-  supports :start => true
-  init_command "#{node["bursa"]["gopath"]}/src go run main.go&"
-  action [:enable,:start]
-end
-
-# Enable GoConvey Auto Testing on localhost:8181 if not in Production
-service "gotests" do
-  pattern "gotests"
-  supports :start => true
-  init_command "#{node["bursa"]["gopath"]}/src go test -port=8181 &"
-  case node["bursa"]["testing"]
-  when "enabled"
-    action [:enable, :start]
-  end
-end
+# # Enable GoConvey Auto Testing on localhost:8181 if not in Production
+# service "gotests" do
+  # pattern "gotests"
+  # supports :start => true
+  # init_command
+  # case node["bursa"]["testing"]
+  # when "enabled"
+    # action [:enable, :start]
+  # end
+# end
 
 # NODE (NPM, ReactJS)
 include_recipe "nodejs"
