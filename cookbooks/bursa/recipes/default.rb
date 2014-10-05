@@ -22,13 +22,15 @@ include_recipe "postgresql::server"
 # BURSA APP AND GO ENV
 path = ENV['PATH']
 
-bash "GOROOT" do
-    environment "GOROOT" => node["bursa"]["path"]
-end
-
 # Appends the value to the end with the delimiter in between
 bash "PATH" do
     environment "PATH" => "#{path}:#{node["bursa"]["gopath"]}"
+end
+
+bash "build" do
+    action :run
+    cwd "#{node["bursa"]["gopath"]}/src"
+    command "./build-script"
 end
 
 # NODE (NPM, ReactJS)
