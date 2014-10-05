@@ -21,10 +21,16 @@ include_recipe "database::postgresql"
 # include_recipe "postgresql::ruby"
 include_recipe "postgresql::server"
 
-# grant all privileges on all tables in foo db
-postgresql_database_user 'bursa' do
-  connection node["bursa"]["pg_user"]
-  database_name 'bursa'
+# Create our PGDB and create a user
+postgresql_database "bursa" do
+  connection node["bursa"]["pg_sa"]
+  action [:create]
+end
+
+postgresql_database_user node["bursa"]["pg_user"]["username"] do
+  connection node["bursa"]["pg_sa"]
+  database_name "bursa"
+  password node["bursa"]["pg_user"]["password"]
   privileges [:all]
   action [:create, :grant]
 end

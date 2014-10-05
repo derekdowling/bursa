@@ -23,7 +23,7 @@ default_attributes(
   },
   "postgresql" => {
     "password" => {
-      "postgres" => "securemebaby"
+      "postgres" => "sa_securemebaby"
     }
   }
 )
