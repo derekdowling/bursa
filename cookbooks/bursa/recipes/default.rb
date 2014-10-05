@@ -17,19 +17,16 @@ include_recipe "elasticsearch"
 
 # FUTURE POSTGRESQL SERVER
 include_recipe "database"
-include_recipe "postgresql"
-include_recipe "postgresql::ruby"
+include_recipe "database::postgresql"
+# include_recipe "postgresql::ruby"
 include_recipe "postgresql::server"
 
-
-postgresql_database 'bursa' do
-  connection(
-    :host => '127.0.0.1',
-    :port => 5432,
-    :username => 'bursa',
-    :password => 'securemebaby'
-  )
-  action :create
+# grant all privileges on all tables in foo db
+postgresql_database_user 'bursa' do
+  connection node["bursa"]["pg_user"]
+  database_name 'bursa'
+  privileges [:all]
+  action [:create, :grant]
 end
 
 # Setup System Environment Vars
