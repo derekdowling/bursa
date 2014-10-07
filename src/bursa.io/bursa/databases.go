@@ -1,4 +1,4 @@
-package databases
+package bursa
 
 import (
 	"database/sql"

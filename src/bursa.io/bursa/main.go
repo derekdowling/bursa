@@ -1,11 +1,10 @@
-package bursa
+package main
 
 import (
   "net/http"
   "fmt"
   "html"
   "github.com/gorilla/mux"
-  "github.com/derekdowling/bursa/models"
 )
 
 func main() {
