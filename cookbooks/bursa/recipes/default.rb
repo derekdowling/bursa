@@ -18,7 +18,6 @@ include_recipe "elasticsearch"
 # FUTURE POSTGRESQL SERVER
 include_recipe "database"
 include_recipe "database::postgresql"
-# include_recipe "postgresql::ruby"
 include_recipe "postgresql::server"
 
 # Create our PGDB and create a user
@@ -36,13 +35,12 @@ postgresql_database_user node["bursa"]["pg_user"]["username"] do
 end
 
 # Setup System Environment Vars
-bash "GOPATH" do
-    environment "GOPATH" => node["bursa"]["gopath"]
+magic_shell_environment "GOPATH" do
+    value "#{node["bursa"]["web_root"]}/.godeps/bin"
 end
 
-path = ENV['PATH']
-bash "PATH" do
-    environment "PATH" => "#{path}:#{node["bursa"]["gopath"]}"
+magic_shell_environment "PATH" do
+  value "$PATH:$GOPATH"
 end
 
 # Compile Various Website Bits
