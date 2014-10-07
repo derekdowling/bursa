@@ -43,5 +43,5 @@ bin/*
 
 node_modules/
 components/
-.godeps/*
+.godeps/
 dist/*
