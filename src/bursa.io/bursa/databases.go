@@ -5,9 +5,12 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func pg_connect() {
-	db, err := sql.Open("postgres", "user=pqgotest dbname=pqgotest sslmode=verify-full")
+func pg_connect() *driver.Conn {
+	db, err := sql.Open("postgres", "postgres://bursa:securemebaby@localhost/bursa")
 	if err != nil {
 		log.Fatal(err)
+		return null
 	}
+	
+	return db
 }
