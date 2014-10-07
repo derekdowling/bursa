@@ -14,3 +14,4 @@ depends "elasticsearch"
 depends "database"
 depends "postgresql"
 depends "nodejs"
+depends 'magic_shell'

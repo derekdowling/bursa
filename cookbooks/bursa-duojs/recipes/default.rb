@@ -7,6 +7,7 @@
 include_recipe "nodejs::npm"
 
 # Install Duo
+nodejs_npm "gulp"
 nodejs_npm "duo"
 
 # Configures a Github API token for private repos and higher througput.
