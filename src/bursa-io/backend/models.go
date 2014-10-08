@@ -22,7 +22,7 @@ type User struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 
-	Email `sql:"size:255"`
+	Email string `sql:"size:255"`
 }
 
 type Transfer struct {

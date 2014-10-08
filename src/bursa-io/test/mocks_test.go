@@ -1,4 +1,4 @@
-package backend
+package test
 
 import (
 	"bursa-io/backend"
