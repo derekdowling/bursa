@@ -1,5 +1,21 @@
 # Making Bursa Work
 
+## Running The Website
+
+* Assuming you have already installed chef/kitchen below:
+	
+  Navigate to the web-backend:
+    cd src/github.com/bursa-io/bursa
+
+  Install Go Deps:
+	gpm install
+
+  Start the webserver:
+    go run main.go
+
+  Or, run the tests:
+    go test
+
 ## Chef/Kitchen Requirements
 
 * Install the chef development kit, which has tools to replace the vagrant berkshelf plugin:
