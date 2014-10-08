@@ -42,5 +42,5 @@ Gemfile.lock
 
 app/node_modules
 components/
-.godeps/
+.godeps/*
 app/dist/
