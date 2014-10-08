@@ -4,17 +4,17 @@
 
 * Assuming you have already installed chef/kitchen below:
 	
-  Navigate to the web-backend:
-    cd src
+  Go to Bursa Root, then set Go Paths:
+	source gvp
 
   Install Go Deps:
     gpm install
 
-  Start the webserver:
-    go run main.go
+  Setup your packages:
+    go install bursa-io/<package_name>
 
-  Or, run the tests:
-    go test
+  Run or test:
+    go (run/test) bursa-io/<package_name>
 
 ## Chef/Kitchen Requirements
 
