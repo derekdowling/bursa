@@ -35,7 +35,6 @@ Berksfile.lock
 
 # Bundler
 Gemfile.lock
-bin/*
 .bundle/*
 
 .kitchen/
@@ -44,6 +43,4 @@ bin/*
 app/node_modules
 components/
 .godeps/
-dist/*
-src/github*
-src/code.google*
+app/dist/
