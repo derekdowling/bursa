@@ -5,10 +5,10 @@
 * Assuming you have already installed chef/kitchen below:
 	
   Navigate to the web-backend:
-    cd src/github.com/bursa-io/bursa
+    cd src
 
   Install Go Deps:
-	gpm install
+    gpm install
 
   Start the webserver:
     go run main.go
