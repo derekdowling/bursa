@@ -1,9 +1,6 @@
-package tests
+package backend
 
 import (
-	"bursa.io/bursa/backends"
-	"bursa.io/bursa/mocks"
-	"bursa.io/bursa/wallets"
 	"strings"
 	"testing"
 

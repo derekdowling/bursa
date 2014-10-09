@@ -16,7 +16,12 @@ gulp.task('duo', shell.task([
     'duo assets/scss/*.{scss} dist/css'
 ]))
 
+gulp.task('cjsx', shell.task([
+    'cjsx-transform assets/coffee/*.coffee | coffee -cs > dist/js/app.js"
+]);
+
 gulp.task('build', [
+    'duo',
+    'cjsx',
     'slim',
-    'duo'
 ]);

@@ -1,9 +1,9 @@
-package bursa
+package backend
 
 import (
 	"strings"
 
-	"conformal/btcrpcclient"
+	"github.com/conformal/btcrpcclient"
 )
 
 // Not quite sure what we want here yet

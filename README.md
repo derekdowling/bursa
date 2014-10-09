@@ -1,5 +1,30 @@
 # Making Bursa Work
 
+## Running The Website
+
+* Assuming you have already installed chef/kitchen below:
+	
+  Go to Bursa Root, then set Go Paths:
+	source gvp
+
+  Install Go Deps:
+    gpm install
+
+  Run or test(from file's folder):
+    go (run/test) <file_name>.go
+    
+  To run all the tests:
+    go test bursa-io/backend
+
+## Running the Convey Test Server
+
+  Build convey (from Bursa root):
+	go build smartystreets/goconvey -o .godeps/bin/goconvey \
+	github.com/smartystreets/goconvey
+
+  Run Convey:
+	./.godeps/bin/goconvey
+
 ## Chef/Kitchen Requirements
 
 * Install the chef development kit, which has tools to replace the vagrant berkshelf plugin:

@@ -35,13 +35,12 @@ Berksfile.lock
 
 # Bundler
 Gemfile.lock
-bin/*
 .bundle/*
 
 .kitchen/
 .kitchen.local.yml
 
-node_modules/
+app/node_modules
 components/
-.godeps/
-dist/*
+.godeps/*
+app/dist/*

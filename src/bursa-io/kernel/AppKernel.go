@@ -1,18 +1,19 @@
 package main
 
 import (
-  "net/http"
-  "fmt"
-  "html"
-  "github.com/gorilla/mux"
+	"bursa-io/backend"
+	"fmt"
+	"github.com/gorilla/mux"
+	"html"
+	"net/http"
 )
 
 func main() {
-    route()
+	route()
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-  fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
+	fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
 }
 
 // Handles our basic routes
@@ -24,11 +25,11 @@ func route() {
 
 	// Just some basic other examples
 	router.HandleFunc("/wallets/create", homeHandler)
-  router.HandleFunc("/wallets/{id:[0-9]+", homeHandler).Methods("GET")
+	router.HandleFunc("/wallets/{id:[0-9]+", homeHandler).Methods("GET")
 
-  // Pass our router to net/http
-  http.Handle("/", router)
+	// Pass our router to net/http
+	http.Handle("/", router)
 
-  // Listen and serve on localhost:8080
-  http.ListenAndServe(":8080", nil)
+	// Listen and serve on localhost:8080
+	http.ListenAndServe(":8080", nil)
 }

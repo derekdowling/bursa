@@ -37,11 +37,11 @@ end
 
 # Setup System Environment Vars
 magic_shell_environment "GOPATH" do
-    value "#{node["bursa"]["web_root"]}/.godeps/bin"
+    value "#{node["bursa"]["web_root"]}"
 end
 
 magic_shell_environment "PATH" do
-  value "$PATH:$GOPATH"
+  value "$PATH:#{node["bursa"]["web_root"]}/bin"
 end
 
 # Compile Various Website Bits

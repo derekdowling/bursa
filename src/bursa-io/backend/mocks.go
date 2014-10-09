@@ -1,6 +1,4 @@
-package bursa 
-
-import "bursa.io/bursas"
+package backend
 
 type MockTransfer struct {
 	*Transfer

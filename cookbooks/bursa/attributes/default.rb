@@ -1,6 +1,6 @@
 # GO RELATED
 default["bursa"]["path"] = "/bursa"
-default["bursa"]["web_root"] = "#{node["bursa"]["path"]}/app/src"
+default["bursa"]["web_root"] = "#{node["bursa"]["path"]}"
 default["bursa"]["testing"] = "enabled"
 
 # BURSA-DUOJS
