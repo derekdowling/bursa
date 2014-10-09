@@ -10,11 +10,11 @@
   Install Go Deps:
     gpm install
 
-  Setup your packages:
-    go install bursa-io/<package_name>
-
-  Run or test:
-    go (run/test) bursa-io/<package_name>
+  Run or test(from file's folder):
+    go (run/test) <file_name>.go
+    
+  To run all the tests:
+    go test bursa-io/backend
 
 ## Running the Convey Test Server
 
