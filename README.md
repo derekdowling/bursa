@@ -16,6 +16,15 @@
   Run or test:
     go (run/test) bursa-io/<package_name>
 
+## Running the Convey Test Server
+
+  Build convey (from Bursa root):
+	go build smartystreets/goconvey -o .godeps/bin/goconvey \
+	github.com/smartystreets/goconvey
+
+  Run Convey:
+	./.godeps/bin/goconvey
+
 ## Chef/Kitchen Requirements
 
 * Install the chef development kit, which has tools to replace the vagrant berkshelf plugin:
