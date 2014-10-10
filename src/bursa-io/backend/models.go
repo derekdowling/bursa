@@ -16,6 +16,10 @@ const (
 	RolledBackStatus = "rolledback"
 )
 
+const (
+	CodeSuccess = 200
+)
+
 type User struct {
 	Id        int64
 	Name      string `sql:"size:255"`
@@ -40,6 +44,11 @@ type Transfer struct {
 	CreatedAt   time.Time
 	CompletedAt time.Time
 	Status      string `sql:"size:32"`
+	Code        int16 `sql:"size:8"`
+}
+
+func (self *Transfer) IsSuccess() bool {
+  return self.Code == CodeSuccess
 }
 
 type Wallet struct {
@@ -56,7 +65,7 @@ type Wallet struct {
 
 // Well suited to some kind of management cli.
 func Initialize() {
-	db, err := gorm.Open("postgres", "user=bursa dbname=bursa sslmode=disable")
+	db, _ := gorm.Open("postgres", "user=bursa dbname=bursa sslmode=disable")
 	db.CreateTable(User{})
 	db.CreateTable(Transfer{})
 	db.CreateTable(Wallet{})
