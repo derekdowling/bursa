@@ -8,7 +8,7 @@ import (
 
 // returns a driver.Conn
 // http://godoc.org/database/sql/driver#Conn
-func pg_connect() driver.Conn {
+func pg_connect() *sql.DB {
 	db, err := sql.Open("postgres", "postgres://bursa:securemebaby@localhost/bursa")
 	if err != nil {
 		log.Fatal(err)

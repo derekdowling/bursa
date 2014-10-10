@@ -1,9 +1,9 @@
 package backend
 
 import (
-	"strings"
+	// "strings"
 
-	"github.com/conformal/btcrpcclient"
+	// "github.com/conformal/btcrpcclient"
 )
 
 // Not quite sure what we want here yet
@@ -13,7 +13,7 @@ type TransferResponse struct {
 }
 
 type CurrencyBackend interface {
-	executeTransfer(transfer *Transfer) *TransferResponse
+	ExecuteTransfer(transfer *Transfer) *TransferResponse
 }
 
 type BitcoinBackend struct {
