@@ -1,8 +1,10 @@
 package backend
 
 import (
-	"github.com/jinzhu/gorm"
+  "log"
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 const (
@@ -31,7 +33,7 @@ type User struct {
 
 type Transfer struct {
 	// TODO Refer to bitcoin protocol.
-	Id string `sql:"size:255"`
+  Id string `sql:"type:varchar(255);unique"`
 
 	// Amount in satoshis when using Bitcoin.
 	Currency string `sql:"size:255"`
@@ -52,7 +54,7 @@ func (self *Transfer) IsSuccess() bool {
 }
 
 type Wallet struct {
-	Id        string `sql:"size:255"`
+  Id        string `sql:"type:varchar(255);unique"`
 	Name      string `sql:"size:255"`
 	Pin       string `sql:"size:255"`
 	Balance   int64
@@ -65,8 +67,23 @@ type Wallet struct {
 
 // Well suited to some kind of management cli.
 func Initialize() {
-	db, _ := gorm.Open("postgres", "user=bursa dbname=bursa sslmode=disable")
-	db.CreateTable(User{})
-	db.CreateTable(Transfer{})
-	db.CreateTable(Wallet{})
+  // TODO use config for these variables
+	db, err := gorm.Open("postgres", "user=bursa password=securemebaby dbname=bursa sslmode=disable host=localhost")
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  // See https://github.com/jinzhu/gorm/blob/master/migration_test.go#L23
+  // Note that the scope of db_err is visible only to this if block.
+  if db_err := db.CreateTable(User{}).Error; db_err != nil {
+    log.Print(db_err)
+  }
+
+  if db_err := db.CreateTable(Transfer{}).Error; db_err != nil {
+    log.Print(db_err)
+  }
+
+  if db_err := db.CreateTable(Wallet{}).Error; db_err != nil {
+    log.Print(db_err)
+  }
 }
