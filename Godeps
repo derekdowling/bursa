@@ -3,3 +3,4 @@ github.com/jinzhu/gorm *
 github.com/smartystreets/goconvey *
 github.com/lib/pq *
 github.com/conformal/btcrpcclient * 
+github.com/spf13/viper *
