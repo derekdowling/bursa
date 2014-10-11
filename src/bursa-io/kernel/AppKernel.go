@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bursa-io/backend"
+	"bursa-io/middleware"
 	"fmt"
 	"github.com/gorilla/mux"
 	"html"
@@ -13,7 +13,11 @@ func main() {
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
+	fmt.Fprintf(w, "Hello, %q \n", html.EscapeString(r.URL.Path))
+}
+
+func walletHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Wallets are here!, %q \n", html.EscapeString(r.URL.Path))
 }
 
 // Handles our basic routes
@@ -21,10 +25,10 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 func route() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/", homeHandler)
+	router.HandleFunc("/", middleware.GlobalHandler.WithController(homeHandler))
 
 	// Just some basic other examples
-	router.HandleFunc("/wallets/create", homeHandler)
+	router.HandleFunc("/wallets/create", middleware.GlobalHandler.WithController(walletHandler))
 	router.HandleFunc("/wallets/{id:[0-9]+", homeHandler).Methods("GET")
 
 	// Pass our router to net/http
