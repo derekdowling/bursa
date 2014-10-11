@@ -52,7 +52,7 @@ func TestSpec(t *testing.T) {
 			So(len(password.salt), ShouldEqual, SaltLength)
 		})
 
-		Convey("comparePassword", func() {
+		Convey("PasswordMatch()", func() {
 			password := "megaman49"
 			passwordMeta := CreatePassword(password)
 
