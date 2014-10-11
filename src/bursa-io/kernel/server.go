@@ -1,10 +1,9 @@
 package main
 
+// This is essentially our server kernel. It handles
 import (
 	"bursa-io/middleware"
-	"fmt"
 	"github.com/gorilla/mux"
-	"html"
 	"net/http"
 )
 
@@ -12,23 +11,15 @@ func main() {
 	route()
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %q \n", html.EscapeString(r.URL.Path))
-}
-
-func walletHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Wallets are here!, %q \n", html.EscapeString(r.URL.Path))
-}
-
 // Handles our basic routes
 // http://www.gorillatoolkit.org/pkg/mux
 func route() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/", middleware.GlobalHandler.WithController(homeHandler))
+	router.HandleFunc("/", middleware.Orchestartor.WithController(homeHandler))
 
 	// Just some basic other examples
-	router.HandleFunc("/wallets/create", middleware.GlobalHandler.WithController(walletHandler))
+	router.HandleFunc("/wallets/create", middleware.Orchestrator.WithController(walletController))
 	router.HandleFunc("/wallets/{id:[0-9]+", homeHandler).Methods("GET")
 
 	// Pass our router to net/http
