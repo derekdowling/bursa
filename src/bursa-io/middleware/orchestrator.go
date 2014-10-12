@@ -8,8 +8,6 @@ import (
 // functions
 type Handler func(w http.ResponseWriter, r *http.Request)
 
-var Orchestrator = new(ControllerController)
-
 type ControllerController struct {
 	handlers []Handler
 }
@@ -27,14 +25,4 @@ func (self *ControllerController) WithController(controller Handler) Handler {
 		}
 		controller(w, r)
 	}
-}
-
-// This is where we add all of our middleware layers in
-
-// Gets called when the package is first loaded, add middleware here
-func init() {
-
-	config := new(ConfigMiddleware)
-
-	Orchestrator.AddMiddleware(config.GetHandler())
 }

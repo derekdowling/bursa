@@ -16,15 +16,22 @@ func main() {
 func route() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/", middleware.Orchestartor.WithController(homeHandler))
+	router.HandleFunc("/", Orchestartor.WithController(homeController))
 
 	// Just some basic other examples
-	router.HandleFunc("/wallets/create", middleware.Orchestrator.WithController(walletController))
-	router.HandleFunc("/wallets/{id:[0-9]+", homeHandler).Methods("GET")
+	router.HandleFunc("/wallets/create", Orchestrator.WithController(walletController))
+	router.HandleFunc("/wallets/{id:[0-9]+", Orchestrator.WithController(walletController)).Methods("GET")
 
 	// Pass our router to net/http
 	http.Handle("/", router)
 
 	// Listen and serve on localhost:8080
 	http.ListenAndServe(":8080", nil)
+}
+
+func init() {
+	Orchestrator := new(ControllerController)
+
+	config := new(ConfigMiddleware)
+	Orchestrator.AddMiddleware(config.GetHandler())
 }
