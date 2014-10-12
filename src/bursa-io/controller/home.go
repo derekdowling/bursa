@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"bursa-io/middleware"
 	"fmt"
 	"html"
 	"net/http"
@@ -8,6 +9,8 @@ import (
 
 type HomeController struct{}
 
-func (h *HomeController) Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %q \n", html.EscapeString(r.URL.Path))
+func (h *HomeController) GetHandler() middleware.Handler {
+	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Welcome home, %q \n", html.EscapeString(r.URL.Path))
+	}
 }

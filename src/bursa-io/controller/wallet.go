@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"bursa-io/middleware"
 	"fmt"
 	"html"
 	"net/http"
@@ -8,6 +9,8 @@ import (
 
 type WalletController struct{}
 
-func (wc *WalletController) Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %q \n", html.EscapeString(r.URL.Path))
+func (wc *WalletController) GetHandler() middleware.Handler {
+	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello, %q \n", html.EscapeString(r.URL.Path))
+	}
 }
