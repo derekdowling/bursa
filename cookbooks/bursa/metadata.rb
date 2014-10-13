@@ -9,6 +9,7 @@ version          '0.1.0'
 depends "golang"
 depends "bursa-gpm"
 depends "bursa-duojs"
+depends "bursa-bitcoincore"
 depends "java"
 depends "elasticsearch"
 depends "database"
