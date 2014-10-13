@@ -4,6 +4,7 @@ import (
 	"log"
 	"time"
 
+	"bursa-io/authentication"
 	"github.com/jinzhu/gorm"
 )
 
@@ -27,6 +28,8 @@ type User struct {
 	Name      string `sql:"size:255"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	Password  string `sql:"size:255"`
+	Salt      string `sql:"size:64"`
 
 	Email string `sql:"size:255"`
 }

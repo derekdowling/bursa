@@ -1,10 +1,10 @@
 package main
 
+// This is essentially our server kernel. It handles
 import (
+	"bursa-io/controller"
 	"bursa-io/middleware"
-	"fmt"
 	"github.com/gorilla/mux"
-	"html"
 	"net/http"
 )
 
@@ -12,24 +12,24 @@ func main() {
 	route()
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %q \n", html.EscapeString(r.URL.Path))
-}
-
-func walletHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Wallets are here!, %q \n", html.EscapeString(r.URL.Path))
-}
-
 // Handles our basic routes
 // http://www.gorillatoolkit.org/pkg/mux
 func route() {
+
+	// Define and populate our middleware layers
+	orchestrator := new(middleware.ControllerController)
+	config := new(middleware.ConfigMiddleware)
+	orchestrator.AddMiddleware(config.GetHandler())
+
+	// Initialize Controllers Here
+	walletController := new(controller.WalletController)
+	homeController := new(controller.HomeController)
+
+	// Setup Routes
 	router := mux.NewRouter()
-
-	router.HandleFunc("/", middleware.GlobalHandler.WithController(homeHandler))
-
-	// Just some basic other examples
-	router.HandleFunc("/wallets/create", middleware.GlobalHandler.WithController(walletHandler))
-	router.HandleFunc("/wallets/{id:[0-9]+", homeHandler).Methods("GET")
+	router.HandleFunc("/", orchestrator.WithController(homeController.GetHandler()))
+	router.HandleFunc("/wallets/create", orchestrator.WithController(walletController.GetHandler()))
+	router.HandleFunc("/wallets/{id:[0-9]+", orchestrator.WithController(walletController.GetHandler())).Methods("GET")
 
 	// Pass our router to net/http
 	http.Handle("/", router)
