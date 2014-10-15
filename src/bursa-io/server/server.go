@@ -31,8 +31,9 @@ func route() {
 	router.HandleFunc("/wallets/create", orchestrator.WithController(walletController.GetHandler()))
 	router.HandleFunc("/wallets/{id:[0-9]+", orchestrator.WithController(walletController.GetHandler())).Methods("GET")
 
-	// Serve static assets from the website
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("/../../../dist/")))
+	// Serve static assets that the website requests
+	fs := http.FileServer(http.Dir("static"))
+	router.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	// Pass our router to net/http
 	http.Handle("/", router)
