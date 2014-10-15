@@ -9,35 +9,33 @@ import (
 	"net/http"
 )
 
-// A blueprint allows us to interface with the inventions of others after we
-// "Discover" them ourselves.
+// A blueprint allows Davinci to interface with standard Go http middleware
 type Blueprint func(w http.ResponseWriter, r *http.Request)
 
-// A mechanism is one of the middleware pieces on our invention.
+// A mechanism is one of the middleware pieces in our invention. We pass Picasso
+// into
 type Mechanism func(p *picasso.Picasso)
 
-// All of the mechanisms put together in the order they were created
+// All of the mechanisms put together makes a contraption
 type Contraption struct {
 	mechanisms []Mechanism
 }
 
-// Adds a new mechanism to the overall contraption
+// Adds a new mechanism(Middleware) to this current contraption
 func (self *Contraption) AddMechanism(m Mechanism) {
 	self.mechanisms = append(self.mechanisms, m)
 }
 
-// Allows DaVinci to use 3rd Party Middleware without ruining one of his
-// contraptions.
-func (self *Contraption) AddDiscovery(blueprint Blueprint, p *picasso.Picasso) {
+// Allows 3rd Party Blueprints to be used without ruining the contraption
+func (self *Contraption) ImportMechanism(blueprint Blueprint, p *picasso.Picasso) {
 	mechanism := func(p *picasso.Picasso) {
 		blueprint(p.Critique())
 	}
 	self.AddMechanism(mechanism)
 }
 
-// Adds the final touch, a control to the contraption so that it becomes useful
-// and then returns a blueprint so meer mortals can build and operate it
-func (self *Contraption) Invent(controller Mechanism) Blueprint {
+// Puts the contraption together and provides a controller to make it useful
+func (self *Contraption) Create(controller Mechanism) Blueprint {
 	return func(w http.ResponseWriter, r *http.Request) {
 		pablo := picasso.NewPicasso(w, r)
 		for _, mechanism := range self.mechanisms {

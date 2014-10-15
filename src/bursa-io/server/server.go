@@ -31,9 +31,9 @@ func route() {
 
 	// Setup Routes
 	router := mux.NewRouter()
-	router.HandleFunc("/", contraption.Invent(homeController.GetHandler()))
-	router.HandleFunc("/wallets/create", contraption.Invent(walletController.GetHandler()))
-	router.HandleFunc("/wallets/{id:[0-9]+", contraption.Invent(walletController.GetHandler())).Methods("GET")
+	router.HandleFunc("/", contraption.Create(homeController.GetHandler()))
+	router.HandleFunc("/wallets/create", contraption.Create(walletController.GetHandler()))
+	router.HandleFunc("/wallets/{id:[0-9]+", contraption.Create(walletController.GetHandler())).Methods("GET")
 
 	// Serve static assets that the website requests
 	fs := http.FileServer(http.Dir("static"))
