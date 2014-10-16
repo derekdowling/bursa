@@ -2,9 +2,9 @@ package main
 
 // This is essentially our server kernel. It handles
 import (
-	"bursa-io/config"
-	"bursa-io/controller"
-	"bursa-io/middleware"
+	"bursa.io/config"
+	"bursa.io/controller"
+	"bursa.io/renaissance/davinci"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -23,7 +23,7 @@ func main() {
 func route() {
 
 	// Define and populate our middleware layers
-	contraption := new(Contraption)
+	mechanisms := []Mechanisms{}
 
 	// Initialize Controllers Here
 	walletController := new(controller.WalletController)
@@ -31,10 +31,8 @@ func route() {
 
 	// Setup Routes
 	router := mux.NewRouter()
-	router.HandleFunc("/", contraption.Create(homeController.GetHandler()))
-	router.HandleFunc("/wallets/create", contraption.Create(walletController.GetHandler()))
-	router.HandleFunc("/wallets/{id:[0-9]+", contraption.Create(walletController.GetHandler())).Methods("GET")
-
+	router.HandleFunc("/", CreateBlueprint.AddMechanisms(mechanisms).AddController(home))
+	router.HandleFunc("/wallets/create", CreateBlueprint.AddMechanisms(mechanisms).AddController(wallet))
 	// Serve static assets that the website requests
 	fs := http.FileServer(http.Dir("static"))
 	router.Handle("/static/", http.StripPrefix("/static/", fs))

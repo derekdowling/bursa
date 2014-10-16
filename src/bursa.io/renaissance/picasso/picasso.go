@@ -71,9 +71,3 @@ func (self *Picasso) serveTemplate(view_name string, pass_ins map[string]string)
 		self.Serve500(err)
 	}
 }
-
-// Allows us to access Picasso's stored variables. Essentially denormalizes a work
-// back into a form that can be comprehended by meer mortals.
-func (p *Picasso) Critique() (http.ResponseWriter, *http.Request) {
-	return p.writer, p.Request
-}
