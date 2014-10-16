@@ -2,11 +2,17 @@ package main
 
 // This is essentially our server kernel. It handles
 import (
-	"bursa-io/controller"
-	"bursa-io/middleware"
+	"bursa.io/config"
+	"bursa.io/controller"
+	"bursa.io/renaissance/davinci"
 	"github.com/gorilla/mux"
 	"net/http"
 )
+
+func init() {
+	// loads our config into Viper so it can be used anywhere
+	config.LoadConfig()
+}
 
 func main() {
 	route()
@@ -17,9 +23,7 @@ func main() {
 func route() {
 
 	// Define and populate our middleware layers
-	orchestrator := new(middleware.ControllerController)
-	config := new(middleware.ConfigMiddleware)
-	orchestrator.AddMiddleware(config.GetHandler())
+	mechanisms := []Mechanisms{}
 
 	// Initialize Controllers Here
 	walletController := new(controller.WalletController)
@@ -27,10 +31,8 @@ func route() {
 
 	// Setup Routes
 	router := mux.NewRouter()
-	router.HandleFunc("/", orchestrator.WithController(homeController.GetHandler()))
-	router.HandleFunc("/wallets/create", orchestrator.WithController(walletController.GetHandler()))
-	router.HandleFunc("/wallets/{id:[0-9]+", orchestrator.WithController(walletController.GetHandler())).Methods("GET")
-
+	router.HandleFunc("/", CreateBlueprint.AddMechanisms(mechanisms).AddController(home))
+	router.HandleFunc("/wallets/create", CreateBlueprint.AddMechanisms(mechanisms).AddController(wallet))
 	// Serve static assets that the website requests
 	fs := http.FileServer(http.Dir("static"))
 	router.Handle("/static/", http.StripPrefix("/static/", fs))
