@@ -4,7 +4,6 @@ import (
 	"log"
 	"time"
 
-	"bursa-io/authentication"
 	"github.com/jinzhu/gorm"
 )
 
