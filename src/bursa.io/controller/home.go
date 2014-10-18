@@ -3,7 +3,7 @@ package controller
 // This handles rendering our unauthenticated user facing static web pages.
 
 import (
-	"bursa.io/models"
+	"bursa.io/models/user"
 	"bursa.io/renaissance/authentication"
 	"bursa.io/renaissance/picasso"
 	"bursa.io/renaissance/satchel"
@@ -42,7 +42,9 @@ func (h *HomeController) Login(s *satchel.Satchel) {
 	email, password := getCredentials(request)
 
 	// if not logged in successfully, return to main page
-	if success := user.Authenticated(email, password); success {
+	if user := user.AttemptLogin(email, password); user {
+		// TODO: include attempted email for auto-fill
+		// TODO: add login fail flag for login failure alert
 		http.Redirect(writer, request, "/index.html")
 	}
 

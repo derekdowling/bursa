@@ -1,21 +1,23 @@
-package models
+package user
 
 // Handles all things user related such as creating them, logging in, updating
 // attributes, and deleting them
 
 import (
+	"bursa.io/models"
 	"bursa.io/renaissance/authentication"
 )
 
 func CreateUser(email string, password string) {
 
 	// hash and salt password
-	password_obj := authentication.CreatePassword(password)
+	salt, hash := authentication.CreatePassword(password)
 
 	// create user object
 	user := User{
-		email:    email,
-		password: password_obj,
+		Email:    email,
+		Salt:     salt,
+		Password: hash,
 	}
 
 	// create/save user
@@ -24,9 +26,9 @@ func CreateUser(email string, password string) {
 }
 
 // Test's whether or not a user has authenticated successfully
-func ValidCredentials(email string, password string) bool {
+func AttemptLogin(email string, password string) models.User {
 	db := models.Connect()
 	user := db.Where("email = ?", email)
-	match := authentication.PasswordMatch(password, user.password)
-	return match
+	match := authentication.PasswordMatch(password, user.salt, user.hash)
+	return user
 }
