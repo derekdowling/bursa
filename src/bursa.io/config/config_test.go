@@ -1,4 +1,4 @@
-package middleware
+package config
 
 import (
 	. "github.com/smartystreets/goconvey/convey"
@@ -11,7 +11,7 @@ func TestSpec(t *testing.T) {
 	Convey("Config Tests", t, func() {
 
 		Convey("LoadConfig", func() {
-			loadConfig()
+			LoadConfig()
 			asset_path := viper.Get("asset_path")
 			So(asset_path, ShouldNotBeNil)
 			So(asset_path, ShouldEqual, "../../dist/")

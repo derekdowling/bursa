@@ -30,10 +30,11 @@ func TestSpec(t *testing.T) {
 	Convey("Davinci Tests", t, func() {
 
 		Convey("Function Runner", func() {
+
 			runner := new(FunctionRunner)
 			runner.Add(func() {})
-
 			So(len(runner.Functions), ShouldEqual, 1)
+
 		})
 
 		blueprint := new(Blueprint)
@@ -41,31 +42,38 @@ func TestSpec(t *testing.T) {
 		testController := new(FunctionRunner)
 
 		Convey("AddMechanisms()", func() {
+
 			Convey("Should store properly", func() {
 				blueprint.AddMechanisms([]Mechanism{testMechanism})
 				So(len(blueprint.mechanisms), ShouldEqual, 1)
 			})
+
 		})
 
 		Convey("AddController()", func() {
+
 			blueprint.AddController(testController)
 			So(blueprint.controller, ShouldNotBeNil)
 
 			// This test needs some magic to catch the Panic instead of erroring
 			// out the test
 			So(func() { blueprint.AddController(testController) }, ShouldPanic)
+
 		})
 
 		Convey("Test Fluency", func() {
+
 			chained_blueprint := new(Blueprint)
 			chained_blueprint_2 := chained_blueprint.
 				AddMechanisms([]Mechanism{testMechanism}).
 				AddController(testController)
 			So(chained_blueprint, ShouldHaveSameTypeAs, blueprint)
 			So(chained_blueprint, ShouldEqual, chained_blueprint_2)
+
 		})
 
 		Convey("build()", func() {
+
 			blueprint := new(Blueprint)
 			contraption := blueprint.
 				AddMechanisms([]Mechanism{testMechanism}).
@@ -74,7 +82,11 @@ func TestSpec(t *testing.T) {
 
 			So(contraption, ShouldHaveSameTypeAs, &Contraption{})
 			So(len(contraption.mechanisms), ShouldEqual, 2)
+
+			// making sure that we don't have a copy in our contraption
+			testMechanism.stateful = true
 			So(contraption.mechanisms[0], ShouldNotEqual, testMechanism)
+
 		})
 	})
 }

@@ -76,11 +76,13 @@ func (self *Blueprint) build() *Contraption {
 	// iterate through middleware Mechanisms and create new instances of each so
 	// each contraption is isolated
 	for _, mechanism := range self.mechanisms {
-		contraption.mechanisms = append(contraption.mechanisms, mechanism)
+		clone := mechanism
+		contraption.mechanisms = append(contraption.mechanisms, clone)
 	}
 
 	// Now add the Controller to the list of Mechanisms
-	contraption.mechanisms = append(contraption.mechanisms, self.controller)
+	clone := self.controller
+	contraption.mechanisms = append(contraption.mechanisms, clone)
 
 	return contraption
 }

@@ -1,10 +1,20 @@
-package backend
+package bitcoin
 
 import (
-	// "strings"
+	"log"
 
-	// "github.com/conformal/btcrpcclient"
+	"bursa.io/config"
+	"github.com/spf13/viper"
+	"github.com/conformal/btcrpcclient"
 )
+
+func init() {
+	// I feel like this piece should be part of some kind of applicatio kernel it
+	// would be nice to not have to load it while also avoiding becoming to dependent
+	// on said application kernel to establish a working state for the application
+	// - which tends to lead to annoying-to-test code.
+	config.LoadConfig()
+}
 
 // Not quite sure what we want here yet
 type TransferResponse struct {
@@ -12,9 +22,31 @@ type TransferResponse struct {
 	code int
 }
 
+type Transfer struct {
+}
+
 type CurrencyBackend interface {
 	ExecuteTransfer(transfer *Transfer) *TransferResponse
 }
 
-type BitcoinBackend struct {
+type Latinum struct {
+	client *btcrpcclient.Client
+}
+
+func NewLatinum() *Latinum {
+	client, err := btcrpcclient.New(&btcrpcclient.ConnConfig{
+		HttpPostMode: viper.GetBool("bitcoin.HttpPostMode"),
+		DisableTLS:   false,
+		Host:         viper.GetString("bitcoin.Host"),
+		User:         viper.GetString("bitcoin.User"),
+		Pass:         viper.GetString("bitcoin.Pass"),
+	}, nil)
+
+	// I usually like to connect explicitly in a Connect call.
+	// This kind of unexpected bailing is pretty side-effect-y IMO.
+	if err != nil {
+		log.Fatalf("Latinum could not create a new Bitcoin client.", err)
+	}
+
+	return &Latinum{client: client}
 }
