@@ -12,7 +12,6 @@ func TestSpec(t *testing.T) {
 
 		Convey("LoadConfig", func() {
 			LoadConfig()
-			viper.Debug()
 			asset_path := viper.Get("asset_path")
 			So(asset_path, ShouldNotBeNil)
 			So(asset_path, ShouldEqual, "../../dist/")

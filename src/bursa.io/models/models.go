@@ -1,7 +1,7 @@
-package backend
+package models
 
 import (
-  "log"
+	"log"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -27,13 +27,15 @@ type User struct {
 	Name      string `sql:"size:255"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	Password  string `sql:"size:255"`
+	Salt      string `sql:"size:64"`
 
 	Email string `sql:"size:255"`
 }
 
 type Transfer struct {
 	// TODO Refer to bitcoin protocol.
-  Id string `sql:"type:varchar(255);unique"`
+	Id string `sql:"type:varchar(255);unique"`
 
 	// Amount in satoshis when using Bitcoin.
 	Currency string `sql:"size:255"`
@@ -46,15 +48,15 @@ type Transfer struct {
 	CreatedAt   time.Time
 	CompletedAt time.Time
 	Status      string `sql:"size:32"`
-	Code        int16 `sql:"size:8"`
+	Code        int16  `sql:"size:8"`
 }
 
 func (self *Transfer) IsSuccess() bool {
-  return self.Code == CodeSuccess
+	return self.Code == CodeSuccess
 }
 
 type Wallet struct {
-  Id        string `sql:"type:varchar(255);unique"`
+	Id        string `sql:"type:varchar(255);unique"`
 	Name      string `sql:"size:255"`
 	Pin       string `sql:"size:255"`
 	Balance   int64
@@ -67,23 +69,23 @@ type Wallet struct {
 
 // Well suited to some kind of management cli.
 func Initialize() {
-  // TODO use config for these variables
+	// TODO use config for these variables
 	db, err := gorm.Open("postgres", "user=bursa password=securemebaby dbname=bursa sslmode=disable host=localhost")
-  if err != nil {
-    log.Fatal(err)
-  }
+	if err != nil {
+		log.Fatal(err)
+	}
 
-  // See https://github.com/jinzhu/gorm/blob/master/migration_test.go#L23
-  // Note that the scope of db_err is visible only to this if block.
-  if db_err := db.CreateTable(User{}).Error; db_err != nil {
-    log.Print(db_err)
-  }
+	// See https://github.com/jinzhu/gorm/blob/master/migration_test.go#L23
+	// Note that the scope of db_err is visible only to this if block.
+	if db_err := db.CreateTable(User{}).Error; db_err != nil {
+		log.Print(db_err)
+	}
 
-  if db_err := db.CreateTable(Transfer{}).Error; db_err != nil {
-    log.Print(db_err)
-  }
+	if db_err := db.CreateTable(Transfer{}).Error; db_err != nil {
+		log.Print(db_err)
+	}
 
-  if db_err := db.CreateTable(Wallet{}).Error; db_err != nil {
-    log.Print(db_err)
-  }
+	if db_err := db.CreateTable(Wallet{}).Error; db_err != nil {
+		log.Print(db_err)
+	}
 }
