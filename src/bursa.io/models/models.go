@@ -89,3 +89,15 @@ func Initialize() {
 		log.Print(db_err)
 	}
 }
+
+// Opens a database connection
+func Connect() {
+
+	// retries := config.GetInt("connect_retries")
+	// TODO use config for these variables
+	db, err := gorm.Open("postgres", "user=bursa password=securemebaby dbname=bursa sslmode=disable host=localhost")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+}

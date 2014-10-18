@@ -10,3 +10,5 @@ bitcoin:
   User: 'bitcoinrpc'
   Pass: 'D7YKqDXM5nuhHhAn6xkiMYaapiDfBKzHwCUfLFbVNZkK'
 sessions_key: 'GtdxzNHRNhJsLmKVywQX8wo8TRRZ'
+database:
+  connect_retries: 5

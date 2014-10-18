@@ -4,17 +4,8 @@ package models
 // attributes, and deleting them
 
 import (
-    "github.com/gorilla/sessions"
-	"bursa.io/models"
+	"bursa.io/renaissance/authentication"
 )
-
-session.Options = &sessions.Options{
-	Path:     "/",
-	MaxAge:   86400 * 7,
-	HttpOnly: true,
-}
-
-var store = sessions.NewCookieStore([]byte(viper.Get("session-key")))
 
 func CreateUser(email string, password string) {
 
@@ -28,16 +19,14 @@ func CreateUser(email string, password string) {
 	}
 
 	// create/save user
+	db := models.Connect()
 	db.Create(&user)
 }
 
 // Test's whether or not a user has authenticated successfully
-func Authenticated(email string, password string) bool {
+func ValidCredentials(email string, password string) bool {
+	db := models.Connect()
 	user := db.Where("email = ?", email)
 	match := authentication.PasswordMatch(password, user.password)
-
 	return match
-}
-
-func createUserSession() {
 }

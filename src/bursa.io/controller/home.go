@@ -3,11 +3,10 @@ package controller
 // This handles rendering our unauthenticated user facing static web pages.
 
 import (
+	"bursa.io/models"
 	"bursa.io/renaissance/authentication"
-	"bursa.io/renaissance/models"
 	"bursa.io/renaissance/picasso"
 	"bursa.io/renaissance/satchel"
-	"github.com/gorilla/sessions"
 	"net/http"
 )
 
@@ -26,7 +25,10 @@ func (h *HomeController) CreateUser(s *satchel.Satchel) {
 	writer, request := satchel.Context()
 	email, pass := getCredentials(request)
 
+	// store user in the database
 	user.CreateUser(email, pass)
+
+	models.CreateUserSession()
 
 	// direct user to the app
 	http.Redirect(writer, request, "/app", 200)
