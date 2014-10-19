@@ -6,10 +6,6 @@ import (
 	"github.com/gorilla/sessions"
 )
 
-const (
-	LoggedIn = "logged_in"
-)
-
 func loadStore() sessions.Store {
 	// Load our session store
 	store := sessions.NewCookieStore([]byte(config.GetString("session-key")))
@@ -32,7 +28,7 @@ func CreateUserSession() {
 }
 
 // Checks whether or not a user is already logged in via their session token
-func HasSession() {
+func LoggedIn(r *http.Request) bool {
 	session, _ := store.Get(r, "app-session")
 
 	logged_in = session.Get(LoggedIn)

@@ -6,6 +6,13 @@ package user
 import (
 	"bursa.io/models"
 	"bursa.io/renaissance/authentication"
+	"bursa.io/renaissance/firewall"
+)
+
+// Our role definitions as specified by renaissance/firewall
+const (
+	Visitor Role = 1 << iota
+	User
 )
 
 func CreateUser(email string, password string) {
