@@ -1,11 +1,11 @@
-package bitcoin
+package backend
 
 import (
 	"log"
 
 	"bursa.io/config"
-	"github.com/spf13/viper"
 	"github.com/conformal/btcrpcclient"
+	"github.com/spf13/viper"
 )
 
 func init() {
@@ -35,8 +35,10 @@ type Latinum struct {
 
 func NewLatinum() *Latinum {
 	client, err := btcrpcclient.New(&btcrpcclient.ConnConfig{
-		HttpPostMode: viper.GetBool("bitcoin.HttpPostMode"),
-		DisableTLS:   false,
+		// There appears to be a bug with nested booleans and viper.GetBool.
+		// HttpPostMode: viper.GetBool("bitcoin.HttpPostMode"),
+		HttpPostMode: true,
+		DisableTLS:   true,
 		Host:         viper.GetString("bitcoin.Host"),
 		User:         viper.GetString("bitcoin.User"),
 		Pass:         viper.GetString("bitcoin.Pass"),
@@ -44,7 +46,7 @@ func NewLatinum() *Latinum {
 
 	// I usually like to connect explicitly in a Connect call.
 	// This kind of unexpected bailing is pretty side-effect-y IMO.
-	if err != nil {
+	if err != nil{
 		log.Fatalf("Latinum could not create a new Bitcoin client.", err)
 	}
 
