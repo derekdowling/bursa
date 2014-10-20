@@ -9,6 +9,7 @@ import (
 	"bursa.io/controller"
 	"bursa.io/renaissance/davinci"
 	"github.com/gorilla/mux"
+	"github.com/unrolled/secure"
 	"net/http"
 )
 
@@ -19,20 +20,25 @@ func init() {
 
 // This handles starting up our web kernel. It'll load our routes, controllers, and
 // middleware.
-func start() {
+func start(production bool) {
 
 	// Builds our router and gives it routes
 	router := buildRouter()
 
-	// Serve static assets that the website requests
-	fs := http.FileServer(http.Dir("static"))
-	router.Handle("/static/", http.StripPrefix("/static/", fs))
+	if production {
+		// Serve static assets that the website requests
+		fs := http.FileServer(http.Dir("static"))
+		router.Handle("/static/", http.StripPrefix("/static/", fs))
+	}
 
-	// Pass our router to net/http
-	http.Handle("/", router)
+	// Build our contraption middleware and add the router
+	// as the last piece
+	app := new(Contraption)
+	app.AddSet(buildMiddleware())
+	app.Add(router)
 
-	// Listen and serve on localhost:8080
-	http.ListenAndServe(":8080", nil)
+	// Listen, Serve, Log
+	log.Fatal(http.ListenAndServeTLS(viper.GetString("server.Https_Port"), "cert.pem", "key.pem", app))
 }
 
 // Builds our routes
@@ -76,4 +82,20 @@ func defineRoutes() map[string]http.Handler {
 func defineMiddleware() []Mechanism {
 	middleware := []Mechanism{}
 	return middleware
+}
+
+// Sets our secure middleware based on what mode we are in
+func createSecureMiddleware(production bool) {
+	secureMiddleware := secure.New(secure.Options{
+		AllowedHosts:          viper.GetStringSlice("Allowed_Hosts"),
+		SSLRedirect:           true,
+		SSLHost:               viper.GetString("server.SSL_Host"),
+		SSLProxyHeaders:       map[string]string{"X-Forwarded-Proto": "https"},
+		STSSeconds:            315360000,
+		STSIncludeSubdomains:  true,
+		FrameDeny:             true,
+		ContentTypeNosniff:    true,
+		BrowserXssFilter:      true,
+		ContentSecurityPolicy: "default-src 'self'",
+	})
 }

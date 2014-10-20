@@ -1,6 +1,17 @@
 ---
-asset_path: "../../dist/"
-mailchimp_key: "4df049b873c7e2d5d08416ecfac6eee4-us9"
+server:
+  Https_Port: ":8443"
+  Http_Port: ":8080"
+  Asset_Path: "../../dist/"
+  SSL_Host: "ssl.bursa.io"
+  Allowed_Hosts:
+    - "bursa.io"
+    - "blog.bursa.io"
+    - "ssl.bursa.io"
+
+email:
+  Mailchimp_Key: "4df049b873c7e2d5d08416ecfac6eee4-us9"
+
 bitcoin:
   HttpPostMode: true
   DisableTLS: false,
