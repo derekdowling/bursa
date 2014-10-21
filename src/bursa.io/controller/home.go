@@ -6,15 +6,14 @@ import (
 	"bursa.io/models/user"
 	"bursa.io/renaissance/authentication"
 	"bursa.io/renaissance/picasso"
-	"bursa.io/renaissance/satchel"
 	"net/http"
 )
 
 type HomeController struct{}
 
-// Returns the site home page
-func (h *HomeController) Trigger(s *satchel.Satchel) {
-	picasso := satchel.GetPicasso()
+func (h *HomeController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	// Temporary command to get the ball rolling
+	picasso := picasso.New(w, r)
 	picasso.Render("index.html", nil)
 }
 

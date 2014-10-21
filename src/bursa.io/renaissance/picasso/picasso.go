@@ -17,7 +17,7 @@ type Picasso struct {
 	Request *http.Request
 }
 
-func NewPicasso(writer http.ResponseWriter, request *http.Request) *Picasso {
+func New(writer http.ResponseWriter, request *http.Request) *Picasso {
 	p := &Picasso{Request: request}
 	p.writer = writer
 	return p
