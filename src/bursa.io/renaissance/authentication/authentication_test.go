@@ -54,9 +54,9 @@ func TestSpec(t *testing.T) {
 			password := "megaman49"
 			salt, hash := CreatePassword(password)
 
-			So(PasswordMatch(password, salt, hash), ShouldBeTrue)
+			So(PasswordMatch("megaman49", salt, hash), ShouldBeTrue)
 			So(PasswordMatch("lolfail", salt, hash), ShouldBeFalse)
-			So(PasswordMatch("Megaman49", salt, hash), ShouldBeFalse)
+			So(PasswordMatch("MegAman49", salt, hash), ShouldBeFalse)
 		})
 	})
 }
