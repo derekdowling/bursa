@@ -5,3 +5,4 @@ github.com/lib/pq *
 github.com/conformal/btcrpcclient * 
 github.com/spf13/viper *
 github.com/unrolled/secure *
+github.com/codegangsta/negroni *

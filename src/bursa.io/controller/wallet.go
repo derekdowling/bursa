@@ -1,10 +1,10 @@
 package controller
 
 import (
-	"bursa.io/renaissance/satchel"
+	"net/http"
 )
 
 type WalletController struct{}
 
-func (wc *WalletController) Trigger(s *satchel.Satchel) {
+func (wc *WalletController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }

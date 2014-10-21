@@ -7,9 +7,10 @@ package kernel
 import (
 	"bursa.io/config"
 	"bursa.io/controller"
-	"bursa.io/renaissance/davinci"
+	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/unrolled/secure"
+	"log"
 	"net/http"
 )
 
@@ -33,12 +34,23 @@ func start(production bool) {
 
 	// Build our contraption middleware and add the router
 	// as the last piece
-	app := new(Contraption)
-	app.AddSet(buildMiddleware())
-	app.Add(router)
+	stack := negroni.New()
+
+	if production {
+		stack.UseHandler(secureMiddleware())
+	}
+
+	stack.UseHandler(router)
 
 	// Listen, Serve, Log
-	log.Fatal(http.ListenAndServeTLS(viper.GetString("server.Https_Port"), "cert.pem", "key.pem", app))
+	log.Fatal(
+		http.ListenAndServeTLS(
+			config.GetString("server.Https_Port"),
+			"cert.pem",
+			"key.pem",
+			stack,
+		),
+	)
 }
 
 // Builds our routes
@@ -72,22 +84,20 @@ func defineRoutes() map[string]http.Handler {
 	homeController := new(controller.HomeController)
 
 	// Website Routes
-	routes["/"] = CreateBlueprint.AddMechanisms(mechanisms).AddController(home)
-	routes["/wallet/create"] = CreateBlueprint.AddMechanisms(mechanisms).AddController(controller.WalletController)
-
+	routes["/"] = home
+	routes["/wallet/create"] = wallet
 	return routes
 }
 
 // Defines the mechanisms that we will be using and returns them
-func defineMiddleware() []Mechanism {
-	middleware := []Mechanism{}
-	return middleware
+func buildMiddleware() []Mechanism {
+	middleware := interpose.New()
 }
 
 // Sets our secure middleware based on what mode we are in
-func createSecureMiddleware(production bool) {
+func secureMiddleware() http.Handler {
 	secureMiddleware := secure.New(secure.Options{
-		AllowedHosts:          viper.GetStringSlice("Allowed_Hosts"),
+		AllowedHosts:          viper.GetStringSlice("server.Allowed_Hosts"),
 		SSLRedirect:           true,
 		SSLHost:               viper.GetString("server.SSL_Host"),
 		SSLProxyHeaders:       map[string]string{"X-Forwarded-Proto": "https"},
@@ -98,4 +108,5 @@ func createSecureMiddleware(production bool) {
 		BrowserXssFilter:      true,
 		ContentSecurityPolicy: "default-src 'self'",
 	})
+	return secureMiddleware
 }
