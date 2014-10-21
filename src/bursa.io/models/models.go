@@ -4,6 +4,9 @@ import (
 	"github.com/jinzhu/gorm"
 	"log"
 	"time"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/lib/pq"
 )
 
 const (
@@ -68,30 +71,24 @@ type Wallet struct {
 
 // Well suited to some kind of management cli.
 func Initialize() {
-	db := Connect()
+	db, err := Connect()
 
 	// See https://github.com/jinzhu/gorm/blob/master/migration_test.go#L23
 	// Note that the scope of db_err is visible only to this if block.
 	if db_err := db.CreateTable(User{}).Error; db_err != nil {
-		log.Print(db_err)
+		// Gorm already logs for us.
 	}
 
 	if db_err := db.CreateTable(Transfer{}).Error; db_err != nil {
-		log.Print(db_err)
+		// Gorm already logs for us.
 	}
 
 	if db_err := db.CreateTable(Wallet{}).Error; db_err != nil {
-		log.Print(db_err)
+		// Gorm already logs for us.
 	}
 }
 
-// Opens a database connection
-func Connect() gorm.DB {
-	// retries := config.GetInt("connect_retries")
-	// TODO use config for these variables
-	db, err := gorm.Open("postgres", "user=bursa password=securemebaby dbname=bursa sslmode=disable host=localhost")
-	if err != nil {
-		log.Fatal(err)
-	}
-	return db
+func Connect() (gorm.DB, error) {
+	// TODO use config for these variables.
+	return gorm.Open("postgres", "user=bursa password=securemebaby dbname=bursa sslmode=disable host=localhost")
 }

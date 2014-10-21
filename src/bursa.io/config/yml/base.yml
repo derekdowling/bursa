@@ -14,15 +14,10 @@ email:
 
 bitcoin:
   HttpPostMode: true
-  DisableTLS: false,
-  # TODO firewall this
-  Host: '127.0.0.1:8332'
-  # TODO change this
-  User: 'bitcoinrpc'
-  Pass: 'D7YKqDXM5nuhHhAn6xkiMYaapiDfBKzHwCUfLFbVNZkK'
-sessions_key: 'GtdxzNHRNhJsLmKVywQX8wo8TRRZ'
-database:
-  connect_retries: 5
+  DisableTLS: true
+  Host: localhost:18332
+  User: bitcoinrpc
+  Pass: D7YKqDXM5nuhHhAn6xkiMYaapiDfBKzHwCUfLFbVNZkK
 
 app:
   Logic_Url: "/login"

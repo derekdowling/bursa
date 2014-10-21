@@ -3,7 +3,9 @@ github.com/gorilla/sessions *
 github.com/jinzhu/gorm *
 github.com/smartystreets/goconvey *
 github.com/lib/pq *
-github.com/conformal/btcrpcclient * 
+github.com/conformal/btcrpcclient *
+github.com/conformal/btcutil *
+github.com/conformal/btcec *
 github.com/spf13/viper *
 github.com/unrolled/secure *
 github.com/codegangsta/negroni *
