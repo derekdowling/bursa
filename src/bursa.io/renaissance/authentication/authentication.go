@@ -60,23 +60,23 @@ func generateSalt() string {
 
 // Handles create a new hash/salt combo from a raw password as inputted
 // by the user
-func CreatePassword(raw_pass string) *Password {
+func CreatePassword(raw_pass string) (salt string, hash string) {
 
 	password := new(Password)
-	password.salt = generateSalt()
+	salt = generateSalt()
 	salted_pass := combine(password.salt, raw_pass)
-	password.hash = hashPassword(salted_pass)
+	hash = hashPassword(salted_pass)
 
-	return password
+	return salt, hash
 }
 
 // Checks whether or not the correct password has been provided
-func PasswordMatch(guess string, password *Password) bool {
+func PasswordMatch(guess string, salt string, hash string) bool {
 
-	salted_guess := combine(password.salt, guess)
+	salted_guess := combine(salt, guess)
 
 	// compare to the real deal
-	if bcrypt.CompareHashAndPassword([]byte(password.hash), []byte(salted_guess)) != nil {
+	if bcrypt.CompareHashAndPassword([]byte(hash), []byte(salted_guess)) != nil {
 		return false
 	}
 

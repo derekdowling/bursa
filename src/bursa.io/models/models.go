@@ -1,10 +1,12 @@
 package models
 
 import (
+	"github.com/jinzhu/gorm"
 	"log"
 	"time"
-	_ "github.com/lib/pq"
+
 	"github.com/jinzhu/gorm"
+	_ "github.com/lib/pq"
 )
 
 const (
@@ -69,11 +71,7 @@ type Wallet struct {
 
 // Well suited to some kind of management cli.
 func Initialize() {
-	// TODO use config for these variables
-	db, err := gorm.Open("postgres", "user=bursa password=securemebaby dbname=bursa sslmode=disable host=localhost")
-	if err != nil {
-		log.Fatal(err)
-	}
+	db, err := Connect()
 
 	// See https://github.com/jinzhu/gorm/blob/master/migration_test.go#L23
 	// Note that the scope of db_err is visible only to this if block.

@@ -10,3 +10,13 @@ func LoadConfig() {
 	viper.AddConfigPath("/bursa/src/bursa.io/config/yml/")
 	viper.ReadInConfig()
 }
+
+// Little wrapper so we don't have to load viper & the config in places, also
+// decouples us slightly
+func GetString(key string) string {
+	return viper.GetString(key)
+}
+
+func GetInt(key string) int {
+	return viper.GetInt(key)
+}

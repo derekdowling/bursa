@@ -7,8 +7,10 @@ package kernel
 import (
 	"bursa.io/config"
 	"bursa.io/controller"
-	"bursa.io/renaissance/davinci"
+	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
+	"github.com/unrolled/secure"
+	"log"
 	"net/http"
 )
 
@@ -19,20 +21,36 @@ func init() {
 
 // This handles starting up our web kernel. It'll load our routes, controllers, and
 // middleware.
-func start() {
+func start(production bool) {
 
 	// Builds our router and gives it routes
 	router := buildRouter()
 
 	// Serve static assets that the website requests
 	fs := http.FileServer(http.Dir("static"))
-	router.Handle("/static/", http.StripPrefix("/static/", fs))
+	router.Handle("/static/", http.StripPrefix("/static/", fs)).Methods("GET")
 
-	// Pass our router to net/http
-	http.Handle("/", router)
+	// Build our contraption middleware and add the router
+	// as the last piece
+	stack := negroni.New()
 
-	// Listen and serve on localhost:8080
-	http.ListenAndServe(":8080", nil)
+	// define our list of production middleware here for now
+	if production {
+		// Secure middleware has a Negroni integration, hence the wonky syntax
+		stack.Use(negroni.HandlerFunc(secureMiddleware().HandlerFuncWithNext))
+	}
+
+	stack.UseHandler(router)
+
+	// Listen, Serve, Log
+	log.Fatal(
+		http.ListenAndServeTLS(
+			config.GetString("server.Https_Port"),
+			"cert.pem",
+			"key.pem",
+			stack,
+		),
+	)
 }
 
 // Builds our routes
@@ -66,14 +84,29 @@ func defineRoutes() map[string]http.Handler {
 	homeController := new(controller.HomeController)
 
 	// Website Routes
-	routes["/"] = CreateBlueprint.AddMechanisms(mechanisms).AddController(home)
-	routes["/wallet/create"] = CreateBlueprint.AddMechanisms(mechanisms).AddController(controller.WalletController)
-
+	routes["/"] = home
+	routes["/wallet/create"] = wallet
 	return routes
 }
 
 // Defines the mechanisms that we will be using and returns them
-func defineMiddleware() []Mechanism {
-	middleware := []Mechanism{}
-	return middleware
+func buildMiddleware() []Mechanism {
+	middleware := interpose.New()
+}
+
+// Sets our secure middleware based on what mode we are in
+func secureMiddleware() http.Handler {
+	secureMiddleware := secure.New(secure.Options{
+		AllowedHosts:          viper.GetStringSlice("server.Allowed_Hosts"),
+		SSLRedirect:           true,
+		SSLHost:               viper.GetString("server.SSL_Host"),
+		SSLProxyHeaders:       map[string]string{"X-Forwarded-Proto": "https"},
+		STSSeconds:            315360000,
+		STSIncludeSubdomains:  true,
+		FrameDeny:             true,
+		ContentTypeNosniff:    true,
+		BrowserXssFilter:      true,
+		ContentSecurityPolicy: "default-src 'self'",
+	})
+	return secureMiddleware
 }

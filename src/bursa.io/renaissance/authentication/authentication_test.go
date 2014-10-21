@@ -43,22 +43,20 @@ func TestSpec(t *testing.T) {
 
 		Convey("CreatePassword()", func() {
 			passString := "mmmPassword1"
-			password := CreatePassword(passString)
-			pass_struct := new(Password)
+			salt, hash := CreatePassword(passString)
 
-			So(password, ShouldHaveSameTypeAs, pass_struct)
-			So(password.hash, ShouldNotBeBlank)
-			So(password.salt, ShouldNotBeBlank)
-			So(len(password.salt), ShouldEqual, SaltLength)
+			So(salt, ShouldNotBeBlank)
+			So(hash, ShouldNotBeBlank)
+			So(len(salt), ShouldEqual, SaltLength)
 		})
 
 		Convey("PasswordMatch()", func() {
 			password := "megaman49"
-			passwordMeta := CreatePassword(password)
+			salt, hash := CreatePassword(password)
 
-			So(PasswordMatch(password, passwordMeta), ShouldBeTrue)
-			So(PasswordMatch("lolfail", passwordMeta), ShouldBeFalse)
-			So(PasswordMatch("Megaman49", passwordMeta), ShouldBeFalse)
+			So(PasswordMatch("megaman49", salt, hash), ShouldBeTrue)
+			So(PasswordMatch("lolfail", salt, hash), ShouldBeFalse)
+			So(PasswordMatch("MegAman49", salt, hash), ShouldBeFalse)
 		})
 	})
 }
