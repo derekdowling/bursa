@@ -26,11 +26,9 @@ func start(production bool) {
 	// Builds our router and gives it routes
 	router := buildRouter()
 
-	if production {
-		// Serve static assets that the website requests
-		fs := http.FileServer(http.Dir("static"))
-		router.Handle("/static/", http.StripPrefix("/static/", fs))
-	}
+	// Serve static assets that the website requests
+	fs := http.FileServer(http.Dir("static"))
+	router.Handle("/static/", http.StripPrefix("/static/", fs)).Methods("GET")
 
 	// Build our contraption middleware and add the router
 	// as the last piece
