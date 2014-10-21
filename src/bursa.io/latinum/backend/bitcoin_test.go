@@ -1,4 +1,4 @@
-package bitcoin
+package backend
 
 import (
 	. "github.com/smartystreets/goconvey/convey"
@@ -10,6 +10,20 @@ func TestSpec(t *testing.T) {
 		Convey("NewLatinum()", func() {
 			Convey("Should create a new Latinum instance", func() {
 				So(NewLatinum(), ShouldHaveSameTypeAs, &Latinum{})
+			})
+		})
+
+		Convey("ProvisionWallet", func() {
+			Convey("Should create a new user account", func() {
+
+			})
+
+			Convey("Should create a new user account", func() {
+
+			})
+
+			Convey("Should create a new user account", func() {
+
 			})
 		})
 	})

@@ -3,7 +3,7 @@ package models
 import (
 	"log"
 	"time"
-
+	_ "github.com/lib/pq"
 	"github.com/jinzhu/gorm"
 )
 
@@ -78,14 +78,19 @@ func Initialize() {
 	// See https://github.com/jinzhu/gorm/blob/master/migration_test.go#L23
 	// Note that the scope of db_err is visible only to this if block.
 	if db_err := db.CreateTable(User{}).Error; db_err != nil {
-		log.Print(db_err)
+		// Gorm already logs for us.
 	}
 
 	if db_err := db.CreateTable(Transfer{}).Error; db_err != nil {
-		log.Print(db_err)
+		// Gorm already logs for us.
 	}
 
 	if db_err := db.CreateTable(Wallet{}).Error; db_err != nil {
-		log.Print(db_err)
+		// Gorm already logs for us.
 	}
+}
+
+func Connect() (gorm.DB, error) {
+	// TODO use config for these variables.
+	return gorm.Open("postgres", "user=bursa password=securemebaby dbname=bursa sslmode=disable host=localhost")
 }

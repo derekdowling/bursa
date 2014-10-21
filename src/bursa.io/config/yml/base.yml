@@ -3,10 +3,8 @@ asset_path: "../../dist/"
 mailchimp_key: "4df049b873c7e2d5d08416ecfac6eee4-us9"
 bitcoin:
   HttpPostMode: true
-  DisableTLS: false,
-  # TODO firewall this
-  Host: '127.0.0.1:8332'
-  # TODO change this
-  User: 'bitcoinrpc'
-  Pass: 'D7YKqDXM5nuhHhAn6xkiMYaapiDfBKzHwCUfLFbVNZkK'
+  DisableTLS: true
+  Host: localhost:18332
+  User: bitcoinrpc
+  Pass: D7YKqDXM5nuhHhAn6xkiMYaapiDfBKzHwCUfLFbVNZkK
 
