@@ -23,3 +23,6 @@ bitcoin:
 sessions_key: 'GtdxzNHRNhJsLmKVywQX8wo8TRRZ'
 database:
   connect_retries: 5
+
+app:
+  Logic_Url: "/login"

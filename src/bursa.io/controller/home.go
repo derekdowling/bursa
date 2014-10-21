@@ -3,7 +3,7 @@ package controller
 // This handles rendering our unauthenticated user facing static web pages.
 
 import (
-	"bursa.io/models/user"
+	"bursa.io/models"
 	"bursa.io/renaissance/authentication"
 	"bursa.io/renaissance/picasso"
 	"net/http"

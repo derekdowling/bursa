@@ -1,11 +1,9 @@
+// This part of the package ensures that authenticated users do not access parts of
+// the site that they do not have roles for
 package firewall
 
-// The purpose of this package is to provide a firewall layer that prevents users
-// from accessing parts of the website without appropriate credentials
-
 import (
-	"bursa.io/models/users"
-	"bursa.io/renaissance/satchel"
+	"net/http"
 )
 
 // Our type for specifying role flags
@@ -22,16 +20,16 @@ import (
 // it allows us to check all rows much quicker
 type Role int
 
-type Firewall struct {
-	route_rules map[String]Role
+type Rollwall struct {
+	route_rules map[string]Role
 }
 
 // Implements our Mechanism Inteface for Davinci
-func (self *Firewall) Trigger(s *satchel.Satchel) {
-	authorized = session.LoggedIn()
+func (self *Rollwall) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
 }
 
 // Checks our route rules vs what our session currently tells us about the user
-func (self *Firewall) Check(r *http.Request) {
+func (self *Rollwall) Check(r *http.Request) {
 
 }

@@ -36,8 +36,10 @@ func start(production bool) {
 	// as the last piece
 	stack := negroni.New()
 
+	// define our list of production middleware here for now
 	if production {
-		stack.UseHandler(secureMiddleware())
+		// Secure middleware has a Negroni integration, hence the wonky syntax
+		stack.Use(negroni.HandlerFunc(secureMiddleware().HandlerFuncWithNext))
 	}
 
 	stack.UseHandler(router)
