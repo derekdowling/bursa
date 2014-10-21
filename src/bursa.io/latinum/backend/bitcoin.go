@@ -52,3 +52,19 @@ func NewLatinum() *Latinum {
 
 	return &Latinum{client: client}
 }
+
+// Sends amt satoshis from `from_address` to `to_address`. Automatically
+// calculates change output. Uses a greedy strategy of using your smallest UTXO's
+// first.
+func (self *Latinum) Send(from_address string, to_adddress string, amt int) {
+	vault.GetEncodedAddress()
+}
+
+// Generates bitcoins and gives them to an address. Used only during testing
+// in regtest mode where setgenerate is actually functional.
+func (self *Latinum) GenerateInto(amt int, address string) error {
+	err := self.client.SetGenerate(true, amt)
+	if err != nil {
+		log.Fatalf("Couldn't generate bitcoins")
+	}
+}
