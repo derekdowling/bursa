@@ -28,15 +28,16 @@ func CreateUser(email string, password string) {
 	}
 
 	// create/save user
-	db := Connect()
+	db, _ := Connect()
 	db.Create(&user)
 }
 
 // Test's whether or not a user has authenticated successfully
-func AttemptLogin(email string, password string) User {
+func AttemptLogin(email string, password string) *User {
 	// Todo: this is broken
-	db := Connect()
-	user := db.Where("email = ?", email)
-	match := authentication.PasswordMatch(password, user.salt, user.hash)
+	db, _ := Connect()
+	var user *User
+	db.Where("email = ?", email).First(&user)
+	// match := authentication.PasswordMatch(password, user.salt, user.hash)
 	return user
 }

@@ -2,10 +2,8 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
-	"log"
 	"time"
 
-	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 )
 
@@ -71,7 +69,7 @@ type Wallet struct {
 
 // Well suited to some kind of management cli.
 func Initialize() {
-	db, err := Connect()
+	db, _ := Connect()
 
 	// See https://github.com/jinzhu/gorm/blob/master/migration_test.go#L23
 	// Note that the scope of db_err is visible only to this if block.

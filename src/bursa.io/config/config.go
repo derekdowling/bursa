@@ -20,3 +20,7 @@ func GetString(key string) string {
 func GetInt(key string) int {
 	return viper.GetInt(key)
 }
+
+func GetStringSlice(key string) []string {
+	return viper.GetStringSlice(key)
+}
