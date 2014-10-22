@@ -88,17 +88,20 @@ func GenerateInto(amt float64, encoded_address string) error {
 	// Aggregate unspent transactions until we have more than then requested amount.
 	// Who needs ruby? Good old for loops.
 	current_amt := 0.0
-	index := uint32(0)
 	var inputs []btcjson.TransactionInput
 	var amounts = make(map[btcutil.Address]btcutil.Amount)
 
 	for _, utxo := range unspent {
+		fmt.Println(utxo.Address)
+		if utxo.Address != "mnFWmpz1xYi1SeR8KkSyPD5es4TkY2LTto" {
+			continue
+		}
+
 		if current_amt > amt {
 			break
 		}
 
-		inputs = append(inputs, btcjson.TransactionInput{Txid: utxo.TxId, Vout: index})
-		index += 1
+		inputs = append(inputs, btcjson.TransactionInput{Txid: utxo.TxId, Vout: utxo.Vout})
 		current_amt += utxo.Amount
 	}
 
@@ -138,14 +141,15 @@ func GenerateInto(amt float64, encoded_address string) error {
 
 	fmt.Println(inputs)
 
-	// TODO we may want to return a new error rather than the descended one.
+	// TODO we may want to return a new error rather than the descended one because
+	// it ends up leaking the underlying abstraction details to our caller.
 	if err != nil {
 		log.Print("Couldn't generate unsigned raw transaction", err)
 		return err
 	}
 
 	// WIF is the format returned by bitcoin-cli dumpprivkey
-	signed, err := vault.SignWithEncodedWIFKey(unsigned_raw_tx, "cSGVtqLagpxtAHV6M6EvRCg7RtXAooDm8Dg4vSaH9jqJni1JLyxj")
+	signed, err := vault.SignWithEncodedWIFKey(unsigned_raw_tx, "cP1UYV2etniLmJAoEj9bE88P7PprMHGBCwUvSo6iqiEk3TVFCXWC")
 	if err != nil {
 		log.Print("Couldn't sign the damn thing.", err)
 		return err

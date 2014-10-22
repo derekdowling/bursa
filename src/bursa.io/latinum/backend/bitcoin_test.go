@@ -56,7 +56,7 @@ func TestSpec(t *testing.T) {
 				key_a, _ := vault.NewMaster()
 				// TODO these should probably return a potential error.
 				address_a := vault.GetEncodedAddress(key_a)
-				err := GenerateInto(40, address_a)
+				err := GenerateInto(0.5, address_a)
 				So(err, ShouldBeNil)
 			})
 		})
