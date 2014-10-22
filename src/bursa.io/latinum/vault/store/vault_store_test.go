@@ -32,10 +32,13 @@ func TestSpec(t *testing.T) {
 				user := models.User{
 					Name: testutils.SuffixedId("vault_retrieve"),
 				}
-				key := "makethisavalidbase58key"
+
 				So(db.Save(&user).Error, ShouldBeNil)
-				So(Store(user.Id, key), ShouldBeNil)
-				So(Retrieve(user.Id), ShouldEqual, key)
+				So(Store(user.Id, "makethisavalidbase58key"), ShouldBeNil)
+
+				retrieved_key, err := Retrieve(user.Id)
+				So(err, ShouldBeNil)
+				So(retrieved_key, ShouldEqual, "makethisavalidbase58key")
 			})
 		})
 	})
