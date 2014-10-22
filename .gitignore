@@ -40,7 +40,7 @@ Gemfile.lock
 .kitchen/
 .kitchen.local.yml
 
-app/node_modules
+node_modules/
 components/
 .godeps/*
 app/dist/*
