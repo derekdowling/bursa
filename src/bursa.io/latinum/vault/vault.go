@@ -8,7 +8,12 @@ package vault
 
 import (
 	"bursa.io/latinum/vault/store"
+	"bursa.io/latinum/backend/client"
+	"bursa.io/latinum/shared/config"
+
 	"github.com/conformal/btcutil/hdkeychain"
+	"github.com/conformal/btcwire"
+	"github.com/conformal/btcutil"
 	"log"
 )
 
@@ -20,17 +25,69 @@ func GetPublicKey(username string) string {
 // a transaction may be ready for processing unless additional signatures are
 // required.
 //
-// TODO `tx interface` is a placeholder for an actual transaction type - which might
-// be provided by one of conformal's libs.
-func Sign(tx interface{}) string {
-	return "Stub"
+// TODO passing the latinum client wrapper is just a crappy side effect of wanting
+// to make this work for now. This should be isolated from the network and needing
+// an rpc call to bitcoind in order to sign a transaction input is extremely MEH.
+func SignByUserId(tx *btcwire.MsgTx, user_id int64) (*btcwire.MsgTx, error) {
+	// TODO error checking
+	encoded_key, _ := store.Retrieve(user_id)
+
+	return SignWithEncodedExtendedKey(tx, encoded_key)
+}
+
+func signWithWIFKey(tx *btcwire.MsgTx, wif_key *btcutil.WIF) (*btcwire.MsgTx, error) {
+	// TODO I really wanted to just do this in-line.
+	var private_keys []string
+	private_keys = append(private_keys, wif_key.String())
+
+	// NOTE The ok parameter "indicates whether the received value was sent on the
+	// channel (true) or is a zero value returned because the channel is closed and
+	// empty (false)."
+	response, _, err := client.Get().SignRawTransaction3(tx, nil, private_keys)
+	return response, err
+}
+
+func SignWithEncodedWIFKey(tx *btcwire.MsgTx, encoded_key string) (*btcwire.MsgTx, error) {
+	wif_key, err := btcutil.DecodeWIF(encoded_key)
+	if err != nil {
+		log.Fatalf("Couldn't decode encoded wif key", err)
+	}
+
+	return signWithWIFKey(tx, wif_key)
+}
+
+func SignWithEncodedExtendedKey(tx *btcwire.MsgTx, encoded_key string) (*btcwire.MsgTx, error) {
+	// This beautiful sequence converts the encoded private key into a
+	// Wallet Import Format (WIF) private key that the rpc client can use.
+	// The API, as you can see, is garbage.
+	extended_key, err := hdkeychain.NewKeyFromString(encoded_key)
+	if err != nil {
+		log.Fatalf("Couldn't create extended key", err)
+	}
+
+	private_key, err := extended_key.ECPrivKey()
+	if err != nil {
+		log.Fatalf("Couldn't create private key", err)
+	}
+
+	wif_key, err := btcutil.NewWIF(
+		private_key,
+		config.BTCNet(),
+		true,
+	)
+
+	if err != nil {
+		log.Fatalf("Couldn't convert key to WIF", err)
+	}
+
+	return signWithWIFKey(tx, wif_key)
 }
 
 // Generate a new private key for a given user.
 // TODO error propagation.
 func NewMasterForUser(user_id int64) (string, error) {
-	key = NewMaster()
-	store.Store(user_id, key.String())
+	key, _ := NewMaster()
+	store.Store(user_id, key)
 	return key, nil
 }
 
@@ -65,8 +122,8 @@ func NewMaster() (string, error) {
 // The use case for non-hardened might be auditing it seems? Share a public key
 // at a given depth in the organization with an auditor and they can see all
 // transactions made to any descended public key, but cannot spend your money?
-func GetEncodedAddressForUser(user_id int64) (string, error) {
-	encoded_key, err := Retrieve(user_id)
+func GetEncodedAddressForUser(user_id int64) (string) {
+	encoded_key, err := store.Retrieve(user_id)
 
 	// TODO this is harsh. It will happen if the user simply doesn't have a key.
 	// We don't wait it killing our entire daemon in that case.
@@ -80,14 +137,14 @@ func GetEncodedAddressForUser(user_id int64) (string, error) {
 
 // Returns an encoded public address hash (usable with P2PKH) for a given encoded
 // private key.
-func GetEncodedAddress(encoded_base_58_key string) (string, error) {
+func GetEncodedAddress(encoded_base_58_key string) string {
 	key, err := hdkeychain.NewKeyFromString(encoded_base_58_key)
 	// TODO look through all my Fatalf's and handle them gracefully.
 	if err != nil {
 		log.Fatalf("Failed to decode key", err)
 	}
 
-	address, err := key.Address(btc_network)
+	address, err := key.Address(config.BTCNet())
 	if err != nil {
 		log.Fatalf("Failed to decode key", err)
 	}
@@ -96,5 +153,5 @@ func GetEncodedAddress(encoded_base_58_key string) (string, error) {
 	// many forms.
 	// TODO How are addresses different from public keys, or what makes a public
 	// key into a valid address?
-	return address.Encode()
+	return address.String()
 }

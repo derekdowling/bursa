@@ -2,12 +2,17 @@ package backend
 
 import (
 	"log"
+	"fmt"
+	"errors"
 
-	"bursa.io/latinum/shared/config"
+	"bursa.io/latinum/backend/client"
+	shared_config "bursa.io/latinum/shared/config"
 	"bursa.io/latinum/vault"
+
 	"bursa.io/config"
 	"github.com/conformal/btcrpcclient"
 	"github.com/conformal/btcjson"
+	"github.com/conformal/btcutil"
 	"github.com/spf13/viper"
 )
 
@@ -60,7 +65,6 @@ func NewLatinum() *Latinum {
 // calculates change output. Uses a greedy strategy of using your smallest UTXO's
 // first.
 func (self *Latinum) Send(from_address string, to_adddress string, amt int) {
-	vault.GetEncodedAddress()
 }
 
 // Generates bitcoins and gives them to an address. Used only during testing
@@ -73,59 +77,84 @@ func (self *Latinum) Send(from_address string, to_adddress string, amt int) {
 // Amt shoult be set to > 101 in order to ensure we've confirmed some blocks.
 // to make the newly minted bitcoins spendable. Yes - we're "mining" here. The
 // 100 confirmations thing is to iron out blockchain forks.
-func (self *Latinum) GenerateInto(amt int, encoded_address string) error {
-	err := self.client.SetGenerate(true, amt)
-	if err != nil {
-		log.Fatalf("Couldn't generate bitcoins")
-	}
+func GenerateInto(amt float64, encoded_address string) error {
+	// err := client.Get().SetGenerate(true, 100)
+	// if err != nil {
+	//   log.Fatalf("Couldn't generate bitcoins", err)
+	// }
 
-	unspent, err := self.client.ListUnspent()
+	unspent, err := client.Get().ListUnspent()
 
 	// Aggregate unspent transactions until we have more than then requested amount.
 	// Who needs ruby? Good old for loops.
-	current_amt := 0
-	index := 0
+	current_amt := 0.0
+	index := uint32(0)
 	var inputs []btcjson.TransactionInput
-	for utxo := range unspent {
+	var amounts = make(map[btcutil.Address]btcutil.Amount)
+
+	for _, utxo := range unspent {
 		if current_amt > amt {
 			break
 		}
 
-		current_amt += utxo.amount
-		append(btcjson.TransactionInput{Txid: utxo.Txid, Vout: index}, utxo)
+		inputs = append(inputs, btcjson.TransactionInput{Txid: utxo.TxId, Vout: index})
 		index += 1
+		current_amt += utxo.Amount
 	}
 
-	if (curent_amt < amt) {
+	if (current_amt < amt) {
 		return errors.New("Insufficient funds in server wallet")
 	}
 
+	fmt.Println("current amt:", current_amt)
+
 	// Transaction fee is the difference between in/out.
-	tx_fee := 0.00001
+	tx_fee := 0.001
 
 	// Calculate change to send back to ourselves.
 	change := current_amt - tx_fee - amt
 
-	var inputs []btcjson.TransactionInput
-	var amounts map[btcutil.Address]btcutil.Amount
-
-	src_address, err := self.client.GetNewAddress()
+	src_address, err := client.Get().GetNewAddress()
 	if err != nil {
 		return err
 	}
 
-	dest_address, err := btcutil.DecodeAddress(encoded_address, config.BTCNet())
+	fmt.Println("change", change)
+	fmt.Println("amt", amt)
+	fmt.Println("tx_fee", tx_fee)
+	fmt.Println("new address", src_address)
+	fmt.Println("encoded address", encoded_address)
 
-	amounts[src_address] = amt
-	amounts[dest_address] = change
+	dest_address, err := btcutil.DecodeAddress(encoded_address, shared_config.BTCNet())
+	if err != nil {
+		log.Print("Couldn't decode destination address", err)
+		return err
+	}
 
-	unsigned_raw_tx, err := self.client.CreateRawTransaction(inputs, amounts)
+	amounts[src_address], _ = btcutil.NewAmount(amt)
+	amounts[dest_address], _ = btcutil.NewAmount(change)
+
+	unsigned_raw_tx, err := client.Get().CreateRawTransaction(inputs, amounts)
+
+	fmt.Println(inputs)
 
 	// TODO we may want to return a new error rather than the descended one.
 	if err != nil {
+		log.Print("Couldn't generate unsigned raw transaction", err)
 		return err
 	}
 
-	// This should be around the final step.
-	// self.latinum.client.SignRawTransaction(unsigned_raw_tx, 
+	// WIF is the format returned by bitcoin-cli dumpprivkey
+	signed, err := vault.SignWithEncodedWIFKey(unsigned_raw_tx, "cSGVtqLagpxtAHV6M6EvRCg7RtXAooDm8Dg4vSaH9jqJni1JLyxj")
+	if err != nil {
+		log.Print("Couldn't sign the damn thing.", err)
+		return err
+	}
+
+	fmt.Println("signed")
+	sha_hash, err := client.Get().SendRawTransaction(signed, false)
+
+	fmt.Println(sha_hash)
+
+	return err
 }
