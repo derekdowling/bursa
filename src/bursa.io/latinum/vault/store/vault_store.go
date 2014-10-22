@@ -76,7 +76,7 @@ func Store(user_id int64, encoded_base_58_key string) error {
 // going to be broken because a user might have multiple private keys and this
 // only returns the first. A common use case is likely going to be filtering by
 // a public key corresponding to one (or none) of the user's private keys.
-func Retrieve(user_id int64) string {
+func Retrieve(user_id int64) (string, error) {
 	// See comment for the global db variable at the start of this file.
 	db, db_err := models.Connect()
 	if db_err != nil {
@@ -86,5 +86,5 @@ func Retrieve(user_id int64) string {
 	var user_key UserKey
 	// TODO error checking goes here!
 	db.Where("user_id = ?", user_id).First(&user_key)
-	return user_key.ExtendedKey
+	return user_key.ExtendedKey, nil
 }
