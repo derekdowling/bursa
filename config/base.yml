@@ -1,0 +1,26 @@
+---
+ports:
+  http: ":8080"
+  https: ":8443"
+paths: 
+  static: "./static"
+  templates: "./static/views"
+  partials: "./static/views/partials"
+ssl_host: "ssl.bursa.io"
+allowed_hosts:
+  - "bursa.io"
+  - "blog.bursa.io"
+  - "ssl.bursa.io"
+
+email:
+  Mailchimp_Key: "4df049b873c7e2d5d08416ecfac6eee4-us9"
+
+bitcoin:
+  HttpPostMode: true
+  DisableTLS: true
+  Host: localhost:18332
+  User: bitcoinrpc
+  Pass: D7YKqDXM5nuhHhAn6xkiMYaapiDfBKzHwCUfLFbVNZkK
+
+app:
+  Login_Url: "/login"

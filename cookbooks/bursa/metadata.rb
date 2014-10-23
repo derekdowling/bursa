@@ -1,6 +1,6 @@
 name             'bursa'
 maintainer       'Jacob Straszynski'
-maintainer_email 'jacobstr@gmail.com'
+maintainer_email 'admin@bursa.io'
 license          'all_rights'
 description      'Installs/Configures bursa'
 long_description 'Installs/Configures bursa'
@@ -16,3 +16,4 @@ depends "database"
 depends "postgresql"
 depends "nodejs"
 depends 'magic_shell'
+depends 'vim'

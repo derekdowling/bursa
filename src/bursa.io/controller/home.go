@@ -4,8 +4,8 @@ package controller
 
 import (
 	"bursa.io/models"
-	"bursa.io/renaissance/authentication"
-	"bursa.io/renaissance/picasso"
+	"bursa.io/picasso"
+	"bursa.io/renaissance/session"
 	"net/http"
 )
 
@@ -13,47 +13,46 @@ type HomeController struct{}
 
 func (h *HomeController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Temporary command to get the ball rolling
-	picasso := picasso.New(w, r)
-	picasso.Render("index.html", nil)
+	picasso.Render(w, "layout", "index", nil)
 }
 
 // Creates a new user when they complete the signup process
-func (h *HomeController) CreateUser(s *satchel.Satchel) {
+func (h *HomeController) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	// get email/password from the form
-	writer, request := satchel.Context()
-	email, pass := getCredentials(request)
+	email, pass := getCredentials(r)
 
 	// store user in the database
-	user.CreateUser(email, pass)
+	models.CreateUser(email, pass)
 
-	models.CreateUserSession()
+	session.CreateUserSession(w, r)
 
 	// direct user to the app
-	http.Redirect(writer, request, "/app", 200)
+	http.Redirect(w, r, "/app", http.StatusOK)
 }
 
 // validates a user's login credentials
-func (h *HomeController) Login(s *satchel.Satchel) {
+func (h *HomeController) Login(w http.ResponseWriter, r *http.Request) {
 
 	// get email/password from the form
-	writer, request := satchel.Context()
-	email, password := getCredentials(request)
+	email, password := getCredentials(r)
 
 	// if not logged in successfully, return to main page
-	if user := user.AttemptLogin(email, password); user {
+	user := models.AttemptLogin(email, password)
+
+	if user == nil {
 		// TODO: include attempted email for auto-fill
 		// TODO: add login fail flag for login failure alert
-		http.Redirect(writer, request, "/index.html")
+		http.Redirect(w, r, "/index.html", http.StatusUnauthorized)
 	}
 
 	// direct the user to the app if login successful
-	http.Redirect(writer, request, "/app", 200)
+	http.Redirect(w, r, "/app", http.StatusOK)
 }
 
 // Used to fetch the a username/password from an input form
 func getCredentials(r *http.Request) (string, string) {
-	email := r.PostFormValues("email")
-	password := r.PostFormValues("password")
+	email := r.PostFormValue("email")
+	password := r.PostFormValue("password")
 	return email, password
 }

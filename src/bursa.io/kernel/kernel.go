@@ -9,26 +9,25 @@ import (
 	"bursa.io/controller"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
+	"github.com/spf13/viper"
 	"github.com/unrolled/secure"
 	"log"
 	"net/http"
+	"os"
 )
 
 func init() {
+
+	// set log output path
+	log.SetOutput(os.Stdout)
+
 	// loads our config into Viper so it can be used anywhere
 	config.LoadConfig()
 }
 
 // This handles starting up our web kernel. It'll load our routes, controllers, and
 // middleware.
-func start(production bool) {
-
-	// Builds our router and gives it routes
-	router := buildRouter()
-
-	// Serve static assets that the website requests
-	fs := http.FileServer(http.Dir("static"))
-	router.Handle("/static/", http.StripPrefix("/static/", fs)).Methods("GET")
+func Start(production bool) {
 
 	// Build our contraption middleware and add the router
 	// as the last piece
@@ -38,19 +37,34 @@ func start(production bool) {
 	if production {
 		// Secure middleware has a Negroni integration, hence the wonky syntax
 		stack.Use(negroni.HandlerFunc(secureMiddleware().HandlerFuncWithNext))
+	} else {
+		stack.Use(negroni.NewLogger())
 	}
+
+	// Builds our router and gives it routes
+	router := buildRouter()
+
+	// Serve static assets that the website requests
+	paths := config.GetStringMapString("paths")
+	router.PathPrefix("/").Handler(
+		http.FileServer(http.Dir(paths["static"])),
+	)
 
 	stack.UseHandler(router)
 
+	// port := config.GetString("server.Ports.Http")
+	port := viper.GetStringMapString("ports")["http"]
+	log.Printf("Listening for requests on %s", port)
+	log.Fatal(http.ListenAndServe(port, stack))
 	// Listen, Serve, Log
-	log.Fatal(
-		http.ListenAndServeTLS(
-			config.GetString("server.Https_Port"),
-			"cert.pem",
-			"key.pem",
-			stack,
-		),
-	)
+	// log.Fatal(
+	// http.ListenAndServeTLS(
+	// config.GetString("server.Https_Port"),
+	// "src/bursa.io/server/certs/cert.pem",
+	// "src/bursa.io/server/certs/key.pem",
+	// stack,
+	// ),
+	// )
 }
 
 // Builds our routes
@@ -76,30 +90,22 @@ func defineRoutes() map[string]http.Handler {
 
 	routes := make(map[string]http.Handler)
 
-	//prepare middleware
-	middleware := defineMiddleware()
-
 	// Initialize Controllers Here
 	walletController := new(controller.WalletController)
 	homeController := new(controller.HomeController)
 
 	// Website Routes
-	routes["/"] = home
-	routes["/wallet/create"] = wallet
+	routes["/"] = homeController
+	routes["/wallet/create"] = walletController
 	return routes
 }
 
-// Defines the mechanisms that we will be using and returns them
-func buildMiddleware() []Mechanism {
-	middleware := interpose.New()
-}
-
 // Sets our secure middleware based on what mode we are in
-func secureMiddleware() http.Handler {
+func secureMiddleware() *secure.Secure {
 	secureMiddleware := secure.New(secure.Options{
-		AllowedHosts:          viper.GetStringSlice("server.Allowed_Hosts"),
+		AllowedHosts:          config.GetStringSlice("server.Allowed_Hosts"),
 		SSLRedirect:           true,
-		SSLHost:               viper.GetString("server.SSL_Host"),
+		SSLHost:               config.GetString("server.SSL_Host"),
 		SSLProxyHeaders:       map[string]string{"X-Forwarded-Proto": "https"},
 		STSSeconds:            315360000,
 		STSIncludeSubdomains:  true,

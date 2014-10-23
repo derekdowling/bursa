@@ -45,7 +45,6 @@ magic_shell_environment "PATH" do
   value "$PATH:#{node["bursa"]["web_root"]}/bin"
 end
 
-# Compile Various Website Bits
 gem_package "bundler" do
   action :install
 end
@@ -73,4 +72,8 @@ end
 include_recipe "nodejs"
 include_recipe "nodejs::npm"
 
+nodejs_npm "gulp"
 nodejs_npm "react-tools"
+
+# BASIC TOOLS
+include_recipe "vim"
