@@ -44,11 +44,17 @@ func Start(production bool) {
 	router := buildRouter()
 
 	// Serve static assets that the website requests
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
+	router.PathPrefix("/").Handler(
+		http.FileServer(http.Dir(config.GetString("server.Paths.Static"))),
+	)
+
 	stack.UseHandler(router)
 
-	log.Print("Listening for requests")
-	log.Fatal(http.ListenAndServe(":8080", stack))
+	// port := config.GetString("server.Ports.Http")
+	var port = config.GetString("server")
+
+	log.Printf("Listening for requests on %s", port)
+	log.Fatal(http.ListenAndServe(port, stack))
 	// Listen, Serve, Log
 	// log.Fatal(
 	// http.ListenAndServeTLS(

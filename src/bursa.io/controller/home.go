@@ -4,7 +4,7 @@ package controller
 
 import (
 	"bursa.io/models"
-	"bursa.io/renaissance/picasso"
+	"bursa.io/picasso"
 	"bursa.io/renaissance/session"
 	"net/http"
 )
@@ -13,8 +13,7 @@ type HomeController struct{}
 
 func (h *HomeController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Temporary command to get the ball rolling
-	picasso := picasso.New(w, r)
-	picasso.Render("index.html", make(map[string]string))
+	picasso.Render(w, "layout", "index", nil)
 }
 
 // Creates a new user when they complete the signup process

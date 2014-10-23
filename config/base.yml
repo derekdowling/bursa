@@ -1,14 +1,17 @@
 ---
 server:
-  Https_Port: ":8443"
-  Http_Port: ":8080"
-  Asset_Path: "../../dist/"
+  Ports:
+    Http: ":8080"
+    Https: ":8443"
+  Paths: 
+    Static: "./static"
+    Templates: "./static/views"
+    Partials: "./static/views/partials"
   SSL_Host: "ssl.bursa.io"
   Allowed_Hosts:
     - "bursa.io"
     - "blog.bursa.io"
     - "ssl.bursa.io"
-  Static_Path: "src/bursa.io/server/static"
 
 email:
   Mailchimp_Key: "4df049b873c7e2d5d08416ecfac6eee4-us9"
@@ -21,4 +24,4 @@ bitcoin:
   Pass: D7YKqDXM5nuhHhAn6xkiMYaapiDfBKzHwCUfLFbVNZkK
 
 app:
-  Logic_Url: "/login"
+  Login_Url: "/login"

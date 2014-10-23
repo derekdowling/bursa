@@ -4,19 +4,16 @@ import (
 	"github.com/spf13/viper"
 )
 
-func init() {
-	LoadConfig()
-}
-
 // Loads our app configuration files into place
 func LoadConfig() {
 	viper.SetConfigName("base")
-	viper.AddConfigPath("/bursa/src/bursa.io/config/yml")
+	viper.AddConfigPath("config/")
 	viper.ReadInConfig()
 }
 
-// Little wrapper so we don't have to load viper & the config in places, also
-// decouples us slightly
+// Little wrapper so we don't have to load both viper & the config in places,
+// also decouples us slightly
+
 func GetString(key string) string {
 	return viper.GetString(key)
 }
