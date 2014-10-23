@@ -25,3 +25,7 @@ func GetInt(key string) int {
 func GetStringSlice(key string) []string {
 	return viper.GetStringSlice(key)
 }
+
+func GetStringMapString(key string) map[string]string {
+	return viper.GetStringMapString(key)
+}

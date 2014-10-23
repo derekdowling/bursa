@@ -9,6 +9,7 @@ import (
 	"bursa.io/controller"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
+	"github.com/spf13/viper"
 	"github.com/unrolled/secure"
 	"log"
 	"net/http"
@@ -44,15 +45,15 @@ func Start(production bool) {
 	router := buildRouter()
 
 	// Serve static assets that the website requests
+	paths := config.GetStringMapString("paths")
 	router.PathPrefix("/").Handler(
-		http.FileServer(http.Dir(config.GetString("server.Paths.Static"))),
+		http.FileServer(http.Dir(paths["static"])),
 	)
 
 	stack.UseHandler(router)
 
 	// port := config.GetString("server.Ports.Http")
-	var port = config.GetString("server")
-
+	port := viper.GetStringMapString("ports")["http"]
 	log.Printf("Listening for requests on %s", port)
 	log.Fatal(http.ListenAndServe(port, stack))
 	// Listen, Serve, Log

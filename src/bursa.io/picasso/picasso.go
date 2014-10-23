@@ -10,7 +10,8 @@ import (
 func Render(w http.ResponseWriter, layout string, view string, vars interface{}) {
 
 	// generate paths to our templates
-	template_dir := config.GetString("server.Paths.Templates")
+	paths := config.GetStringMapString("paths")
+	template_dir := paths["templates"]
 	layout_path := path.Join(template_dir, layout+".tmpl")
 	view_path := path.Join(template_dir, view+".tmpl")
 
