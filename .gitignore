@@ -40,8 +40,12 @@ Gemfile.lock
 .kitchen/
 .kitchen.local.yml
 
+# Go
+.godeps/*
+
+# Front End
 npm-debug.log
 node_modules/
 components/
-.godeps/*
-app/dist/*
+static/js/build.js
+static/css/build.css
