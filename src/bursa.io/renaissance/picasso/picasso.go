@@ -44,7 +44,7 @@ func (self *Picasso) Serve500(err error) {
 
 // Handles Serving and Error Handling of Templates
 func (self *Picasso) serveTemplate(view_name string, pass_ins map[string]string) {
-	base := path.Join("static", "layout.html")
+	layout := path.Join("static", "layout.html")
 	view := path.Join("static", "views", view_name)
 
 	// Handle 404's
@@ -60,7 +60,7 @@ func (self *Picasso) serveTemplate(view_name string, pass_ins map[string]string)
 		self.Serve404()
 	}
 
-	tmpl, err := template.ParseFiles(base, view)
+	tmpl, err := template.ParseFiles(layout, view)
 	if err != nil {
 		self.Serve500(err)
 	}

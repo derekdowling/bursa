@@ -14,7 +14,7 @@ type HomeController struct{}
 func (h *HomeController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Temporary command to get the ball rolling
 	picasso := picasso.New(w, r)
-	picasso.Render("index.html", nil)
+	picasso.Render("index.html", make(map[string]string))
 }
 
 // Creates a new user when they complete the signup process

@@ -8,6 +8,7 @@ server:
     - "bursa.io"
     - "blog.bursa.io"
     - "ssl.bursa.io"
+  Static_Path: "src/bursa.io/server/static"
 
 email:
   Mailchimp_Key: "4df049b873c7e2d5d08416ecfac6eee4-us9"
