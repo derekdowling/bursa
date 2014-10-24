@@ -1,7 +1,6 @@
-@import 'twbs/bootstrap@v3.2.0:dist/css/bootstrap.css';
+@import 'twbs/bootstrap@v3.2.0:dist/css/bootstrap.min.css';
+@import 'twbs/bootstrap@v3.2.0:dist/css/bootstrap.css.map';
 @import 'nghuuphuoc/bootstrapvalidator@v0.5.2:dist/css/bootstrapValidator.css';
 @import 'FortAwesome/Font-Awesome@v4.2.0:scss/font-awesome.scss';
-
-body {
-
-}
+@import 'thomaspark/bootswatch@v3.2.0+4:yeti/bootstrap.min.css';
+@import 'scss/marketing.scss';
