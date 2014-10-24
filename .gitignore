@@ -49,3 +49,6 @@ node_modules/
 components/
 static/js/build.js
 static/css/build.css
+
+# Local developer configuration options e.g. for ddns.
+bursa.local.yml
