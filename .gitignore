@@ -45,3 +45,6 @@ node_modules/
 components/
 .godeps/*
 app/dist/*
+
+# Local developer configuration options e.g. for ddns.
+bursa.local.yml
