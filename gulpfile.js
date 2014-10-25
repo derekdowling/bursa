@@ -1,12 +1,5 @@
 var gulp    = require('gulp')
-, gutil     = require('gulp-util')
-, shell     = require('gulp-shell')
-, yaml      = require('js-yaml')
-, Duo       = require('duo')
-, fs        = require('fs')
-, sass      = require('duosass')
-, cjsx      = require('gulp-cjsx')
-, duogulp  = require('duo-gulp');
+, shell     = require('gulp-shell');
 
 // builds all compilable assets
 gulp.task('build', [
@@ -27,7 +20,7 @@ gulp.task('site-js', shell.task([
 ]));     
    
 gulp.task('site-sass', shell.task([
-    'duo --use duosass assets/scss/marketing.scss > static/css/marketing.css'
+    'duo --use duo-sass assets/scss/marketing/main.scss > static/css/marketing.css'
 ]));
 
 // builds the app
@@ -43,5 +36,5 @@ gulp.task('app-js', shell.task([
 ]));  
 
 gulp.task('app-sass', shell.task([
-    'duo --use duosass assets/scss/marketing.scss > static/css/marketing.css'
+    'duo --use duo-sass assets/scss/app/main.scss > static/css/marketing.css'
 ]));
