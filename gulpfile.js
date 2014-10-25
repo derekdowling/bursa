@@ -20,9 +20,7 @@ gulp.task('site-js', shell.task([
 ]));     
    
 gulp.task('site-sass', shell.task([
-    'duo --use duosass assets/scss/util/base.scss > assets/scss/util/base.css',
-    'node-sass assets/scss/marketing/main.scss static/css/marketing.css',
-    'rm asset/scss/util/base.css'
+    'duo --use duosass assets/scss/marketing/main.scss > static/css/marketing.css'
 ]));
 
 // builds the app
@@ -38,7 +36,5 @@ gulp.task('app-js', shell.task([
 ]));  
 
 gulp.task('app-sass', shell.task([
-    'duo --use duosass assets/scss/util/base.scss > assets/scss/util/base.css',
-    'node-sass assets/scss/app/main.scss static/css/app.css',
-    'rm asset/scss/util/base.css'
+    'duo --use duosass assets/scss/app/main.scss > static/js/app.js'
 ]));
