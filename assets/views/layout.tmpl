@@ -13,7 +13,20 @@
 
         <!-- Custom CSS -->
         <link href="/css/marketing.css" rel="stylesheet"> 
+        <style>
+          .en-markup-crop-options {
+              top: 18px !important;
+              left: 50% !important;
+              margin-left: -100px !important;
+              width: 200px !important;
+              border: 2px rgba(255,255,255,.38) solid !important;
+              border-radius: 4px !important;
+          }
 
+          .en-markup-crop-options div div:first-of-type {
+              margin-left: 0px !important;
+          }
+        </style>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -24,11 +37,127 @@
     </head>
 
     <body>
-        
-        {{ template "content" }}
+      <header class="header navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="row">
+            <div class="navbar-header">
+              <button type="button" data-toggle="collapse" data-target="#navbar-collapse-1" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="http://iarouse.com/admin-transform-alt/landing/index.html#" class="navbar-brand">Transform</a>
+            </div>
+            <div id="navbar-collapse-1" class="collapse navbar-collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://iarouse.com/admin-transform-alt/landing/index.html#home">Home</a></li>
+                <li><a href="http://iarouse.com/admin-transform-alt/landing/index.html#banner">Download</a></li>
+                <li><a href="http://iarouse.com/admin-transform-alt/landing/index.html#features">Features</a></li>
+                <li><a href="http://iarouse.com/admin-transform-alt/landing/index.html#details">Details</a></li>
+                <li><a href="http://iarouse.com/admin-transform-alt/landing/index.html#testimonials">Testimonials</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <div id="banner" class="banner">
+          <div class="container">
+            <h2>Responsive, Multi-Layout, Web App</h2><a href="https://wrapbootstrap.com/theme/transform-multi-layout-flat-admin-app-WB068HT8D" target="_blank" class="btn btn-download btn-lg">Download</a><br><img src="./index_v2_files/preview-simple.png" alt="preview" class="preview-img">
+          </div>
+        </div>
+        <div id="features" class="features">
+          <header>
+            <h3 class="text-center">Responsive multi-layout admin built with AngularJS. </h3>
+          </header>
+          <div class="container">
+            <div class="row">
+              <div class="feature-item col-md-4 text-center"><i class="fa fa-arrows-alt"></i>
+                <h3>Responsive Design</h3>
+                <div class="desc">
+                  <p>Auto adjust layout according to screen size. Looks good on desktop, tablet and phone.</p>
+                </div>
+              </div>
+              <div class="feature-item col-md-4 text-center"><i class="fa fa-columns"></i>
+                <h3>Multiple Layouts</h3>
+                <div class="desc">
+                  <p>Wide and boxed layout.<br>vertical and horizaon navigation，<br>toggle for fixed top header and sidebar menu.</p>
+                </div>
+              </div>
+              <div class="feature-item col-md-4 text-center"><i class="fa fa-desktop"></i>
+                <h3>Web App</h3>
+                <div class="desc">
+                  <p>Single Page Application Built with AngularJS. <br>Fully AJAX powered, never refresh the entire page again. Faster, smoother.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="details" class="details">
+          <ul class="list-details list-unstyled">
+            <li>
+              <div class="container">
+                <div class="detail-item clearfix">
+                  <div class="detail-desc">
+                    <h2>Responsive Design</h2>
+                    <p>Auto adjust layout according to screen size. <br>Looks good on desktop, tablet and phone.</p>
+                  </div>
+                  <div class="detail-img"><img src="./index_v2_files/feat-responsive-alt.png" alt="img"></div>
+                </div>
+              </div>
+            </li>
+            <li class="alt">
+              <div class="container">
+                <div class="detail-item clearfix">
+                  <div class="detail-desc">
+                    <h2>Multiple Layouts</h2>
+                    <p>Wide and boxed layou.<br>vertical and horizaon navigation，<br>toggle for fixed top header and sidebar menu.</p>
+                  </div>
+                  <div class="detail-img"><img src="./index_v2_files/feat-layouts.png" alt="img"></div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="container">
+                <div class="detail-item clearfix">
+                  <div class="detail-desc">
+                    <h2>Web App</h2>
+                    <p>Single Page Application Built with AngularJS. <br>Fully AJAX powered, never refresh the entire page again.<br>Faster, smoother.</p>
+                  </div>
+                  <div class="detail-img"><img src="./index_v2_files/feat-app2.png" alt="img"></div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div id="testimonials" class="testimonials">
+          <div id="testimonials-carousel" data-ride="carousel" class="carousel slide">
+            <ol class="carousel-indicators">
+              <li data-target="#testimonials-carousel" data-slide-to="0" class=""></li>
+              <li data-target="#testimonials-carousel" data-slide-to="1" class="active"></li>
+              <li data-target="#testimonials-carousel" data-slide-to="2" class=""></li>
+              <li data-target="#testimonials-carousel" data-slide-to="3" class=""></li>
+              <li data-target="#testimonials-carousel" data-slide-to="4" class=""></li>
+            </ol>
+            <div class="carousel-inner text-center">
+              <div class="item">
+                <p>Great job! It's simply wonderful!</p><small>- Comments from buyer</small>
+              </div>
+              <div class="item active">
+                <p>Very impresive for being the first project here at wrapBootstrap and the very first angularjs theme amazing! Lot of plugins that are useful and not just inflate the package.</p><small>- Comments from buyer</small>
+              </div>
+              <div class="item">
+                <p>Great Job! First Angular JS Template on wrapBootstrap!</p><small>- Comments from buyer</small>
+              </div>
+              <div class="item">
+                <p>Really awesome that you're the first one who creates an AngularJS for wrapBootstrap. I've been looking for one for a long time, and it's really annoying to convert a non AngularJS theme to an AngularJS theme, so thanks for making my life easier.</p><small>- Comments from buyer</small>
+              </div>
+              <div class="item">
+                <p>Amazing! Exact what I looking for.</p><small>- someone famous</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
          <footer>
-            <<div class="container">
+            <div class="container">
                 <div class="row">
                     <div class="col-md-4">
                         <span class="copyright">Copyright &copy; Bursa - 2014</span>
@@ -47,9 +176,7 @@
 
                     <br />
                     <div class="col-md-4">
-                        <ul class="list-inline quicklinks">
-                            <b>Proudly made in Edmonton, Canada</b>
-                        </ul>
+                        <ul class="list-inline quicklinks"></ul>
                     </div>
                 </div>
             </div>
@@ -71,5 +198,6 @@
         </script>
     </body>
 
-</html>
+    <iframe id="rdbIndicator" width="100%" height="270" border="0" src="./index_v2_files/indicator.html" style="display: none; border: 0; position: fixed; left: 0; top: 0; z-index: 2147483647"> </iframe>
+    </html>
 {{ end }}
