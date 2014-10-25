@@ -3,14 +3,17 @@ ports:
   http: ":8080"
   https: ":8443"
 paths: 
-  static: "./static"
-  templates: "./static/views"
-  partials: "./static/views/partials"
-ssl_host: "ssl.bursa.io"
-allowed_hosts:
-  - "bursa.io"
-  - "blog.bursa.io"
-  - "ssl.bursa.io"
+  assets: "./assets"
+  templates: "./assets/views"
+  partials: "./assets/views/partials"
+  statics: "./static"
+
+ssl: 
+  host: "ssl.bursa.io"
+  allowed_hosts:
+    - "bursa.io"
+    - "blog.bursa.io"
+    - "ssl.bursa.io"
 
 email:
   Mailchimp_Key: "4df049b873c7e2d5d08416ecfac6eee4-us9"

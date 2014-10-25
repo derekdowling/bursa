@@ -73,7 +73,8 @@ include_recipe "nodejs"
 include_recipe "nodejs::npm"
 
 nodejs_npm "gulp"
-nodejs_npm "react-tools"
+nodejs_npm "coffee-react"
+nodejs_npm "duo"
 
 # BASIC TOOLS
 include_recipe "vim"
