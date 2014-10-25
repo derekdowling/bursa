@@ -2,13 +2,18 @@
 ports:
   http: ":8080"
   https: ":8443"
-paths: 
+paths:
   assets: "./assets"
   templates: "./assets/views"
   partials: "./assets/views/partials"
-  statics: "./static"
 
-ssl: 
+# Each key vaue pair represents the root url e.g. host.com/js
+# and the root-relative location on disk.
+static_routes:
+  /js: "static"
+  /css: "static"
+
+ssl:
   host: "ssl.bursa.io"
   allowed_hosts:
     - "bursa.io"
