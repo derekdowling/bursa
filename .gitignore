@@ -47,8 +47,8 @@ Gemfile.lock
 npm-debug.log
 node_modules/
 components/
-static/js/build.js
-static/css/build.css
+static/js/*
+static/css/*
 
 # Local developer configuration options e.g. for ddns.
 bursa.local.yml
