@@ -9,20 +9,11 @@ import (
 	shared_config "bursa.io/latinum/shared/config"
 	"bursa.io/latinum/vault"
 
-	"bursa.io/config"
+  _ "bursa.io/config"
 	"github.com/conformal/btcrpcclient"
 	"github.com/conformal/btcjson"
 	"github.com/conformal/btcutil"
-	"github.com/spf13/viper"
 )
-
-func init() {
-	// I feel like this piece should be part of some kind of applicatio kernel it
-	// would be nice to not have to load it while also avoiding becoming to dependent
-	// on said application kernel to establish a working state for the application
-	// - which tends to lead to annoying-to-test code.
-	config.LoadConfig()
-}
 
 // Not quite sure what we want here yet
 type TransferResponse struct {
@@ -41,32 +32,6 @@ type Latinum struct {
 	client *btcrpcclient.Client
 }
 
-func NewLatinum() *Latinum {
-	client, err := btcrpcclient.New(&btcrpcclient.ConnConfig{
-		// There appears to be a bug with nested booleans and viper.GetBool.
-		// HttpPostMode: viper.GetBool("bitcoin.HttpPostMode"),
-		HttpPostMode: true,
-		DisableTLS:   true,
-		Host:         viper.GetString("bitcoin.Host"),
-		User:         viper.GetString("bitcoin.User"),
-		Pass:         viper.GetString("bitcoin.Pass"),
-	}, nil)
-
-	// I usually like to connect explicitly in a Connect call.
-	// This kind of unexpected bailing is pretty side-effect-y IMO.
-	if err != nil{
-		log.Fatalf("Latinum could not create a new Bitcoin client.", err)
-	}
-
-	return &Latinum{client: client}
-}
-
-// Sends amt satoshis from `from_address` to `to_address`. Automatically
-// calculates change output. Uses a greedy strategy of using your smallest UTXO's
-// first.
-func (self *Latinum) Send(from_address string, to_adddress string, amt int) {
-}
-
 // Generates bitcoins and gives them to an address. Used only during testing
 // in regtest mode where setgenerate is actually functional.
 //
@@ -77,13 +42,13 @@ func (self *Latinum) Send(from_address string, to_adddress string, amt int) {
 // Amt shoult be set to > 101 in order to ensure we've confirmed some blocks.
 // to make the newly minted bitcoins spendable. Yes - we're "mining" here. The
 // 100 confirmations thing is to iron out blockchain forks.
-func GenerateInto(amt float64, encoded_address string) error {
-	// err := client.Get().SetGenerate(true, 100)
-	// if err != nil {
-	//   log.Fatalf("Couldn't generate bitcoins", err)
-	// }
+func GenerateInto(amt float64, src_private_key *btcutil.WIF, src_address btcutil.Address, encoded_address string) error {
+	var addresses []btcutil.Address
 
-	unspent, err := client.Get().ListUnspent()
+	addresses = append(addresses, src_address)
+
+	// Not sure what sensible values here are. The min confirmations shouldn't be
+	unspent, err := client.Get().ListUnspentMinMaxAddresses(10, 1000, addresses)
 
 	// Aggregate unspent transactions until we have more than then requested amount.
 	// Who needs ruby? Good old for loops.
@@ -92,11 +57,6 @@ func GenerateInto(amt float64, encoded_address string) error {
 	var amounts = make(map[btcutil.Address]btcutil.Amount)
 
 	for _, utxo := range unspent {
-		fmt.Println(utxo.Address)
-		if utxo.Address != "mnFWmpz1xYi1SeR8KkSyPD5es4TkY2LTto" {
-			continue
-		}
-
 		if current_amt > amt {
 			break
 		}
@@ -117,25 +77,24 @@ func GenerateInto(amt float64, encoded_address string) error {
 	// Calculate change to send back to ourselves.
 	change := current_amt - tx_fee - amt
 
-	src_address, err := client.Get().GetNewAddress()
-	if err != nil {
-		return err
-	}
-
 	fmt.Println("change", change)
 	fmt.Println("amt", amt)
 	fmt.Println("tx_fee", tx_fee)
-	fmt.Println("new address", src_address)
+	fmt.Println("new address", src_address.String())
 	fmt.Println("encoded address", encoded_address)
 
+	// All of these different address types are painful to juggle. We should settle
+	// on a common denominator - if possible. That may not be the case as some of
+	// the transformation are irreversible - e.g. if we pass along a public key
+	// hash, we can't derive the public key that generated it.
 	dest_address, err := btcutil.DecodeAddress(encoded_address, shared_config.BTCNet())
 	if err != nil {
 		log.Print("Couldn't decode destination address", err)
 		return err
 	}
 
-	amounts[src_address], _ = btcutil.NewAmount(amt)
-	amounts[dest_address], _ = btcutil.NewAmount(change)
+	amounts[src_address], _ = btcutil.NewAmount(change)
+	amounts[dest_address], _ = btcutil.NewAmount(amt)
 
 	unsigned_raw_tx, err := client.Get().CreateRawTransaction(inputs, amounts)
 
@@ -149,7 +108,11 @@ func GenerateInto(amt float64, encoded_address string) error {
 	}
 
 	// WIF is the format returned by bitcoin-cli dumpprivkey
-	signed, err := vault.SignWithEncodedWIFKey(unsigned_raw_tx, "cP1UYV2etniLmJAoEj9bE88P7PprMHGBCwUvSo6iqiEk3TVFCXWC")
+	signed, err := vault.SignWithEncodedWIFKey(
+		unsigned_raw_tx,
+		src_private_key.String(),
+	)
+
 	if err != nil {
 		log.Print("Couldn't sign the damn thing.", err)
 		return err
@@ -158,7 +121,87 @@ func GenerateInto(amt float64, encoded_address string) error {
 	fmt.Println("signed")
 	sha_hash, err := client.Get().SendRawTransaction(signed, false)
 
-	fmt.Println(sha_hash)
+	if err != nil {
+		log.Fatalf("Couldn't send the signed transaction.", err)
+	}
+
+	log.Println(sha_hash)
 
 	return err
+}
+
+// Sends `amount` bitcoin between the source bursa user and destination bursa
+// user.
+func SendBetween(amt float64, src_user_id int64, dest_user_id int64) error {
+	var addresses []btcutil.Address
+
+	src_address := vault.GetAddressForUser(src_user_id)
+	dest_address := vault.GetAddressForUser(dest_user_id)
+
+	addresses = append(addresses, src_address)
+
+	// Not sure what sensible values here are. The min confirmations shouldn't be
+	unspent, err := client.Get().ListUnspentMinMaxAddresses(10, 1000, addresses)
+
+	// Aggregate unspent transactions until we have more than then requested amount.
+	// Who needs ruby? Good old for loops.
+	// Functionify this.
+	current_amt := 0.0
+	var inputs []btcjson.TransactionInput
+	var amounts = make(map[btcutil.Address]btcutil.Amount)
+
+	for _, utxo := range unspent {
+		if current_amt > amt {
+			break
+		}
+
+		inputs = append(inputs, btcjson.TransactionInput{Txid: utxo.TxId, Vout: utxo.Vout})
+		current_amt += utxo.Amount
+	}
+
+	if (current_amt < amt) {
+		return errors.New("Insufficient funds in src wallet")
+	}
+
+	// Transaction fee is the difference between in/out.
+	tx_fee := 0.001
+
+	// Calculate change to send back to ourselves.
+	change := current_amt - tx_fee - amt
+
+	amounts[src_address], _ = btcutil.NewAmount(change)
+	amounts[dest_address], _ = btcutil.NewAmount(amt)
+
+	unsigned_raw_tx, err := client.Get().CreateRawTransaction(inputs, amounts)
+
+	fmt.Println(inputs)
+
+	// TODO we may want to return a new error rather than the descended one because
+	// it ends up leaking the underlying abstraction details to our caller.
+	if err != nil {
+		log.Print("Couldn't generate unsigned raw transaction", err)
+		return err
+	}
+
+	// WIF is the format returned by bitcoin-cli dumpprivkey
+	signed, err := vault.SignByUserId(
+		unsigned_raw_tx,
+		src_user_id,
+	)
+
+	if err != nil {
+		log.Print("Couldn't sign the damn thing.", err)
+		return err
+	}
+
+	sha_hash, err := client.Get().SendRawTransaction(signed, false)
+
+	if err != nil {
+		log.Fatalf("Couldn't send the signed transaction.", err)
+	}
+
+	log.Println(sha_hash)
+
+	return err
+
 }
