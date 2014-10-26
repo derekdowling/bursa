@@ -45,10 +45,14 @@ func Start(production bool) {
 	router := buildRouter()
 
 	// Serve static assets that the website requests
-	paths := config.GetStringMapString("paths")
-	router.PathPrefix("/").Handler(
-		http.FileServer(http.Dir(paths["static"])),
-	)
+	static_routes := config.GetStringMapString("static_routes")
+	for url, local := range static_routes {
+		log.Println("url is", url)
+		log.Println("root is", local)
+		router.PathPrefix(url).Handler(
+			http.FileServer(http.Dir(local)),
+		)
+	}
 
 	stack.UseHandler(router)
 

@@ -1,5 +1,4 @@
 # @cjsx React.DOM
-require("../../build.js")
 
 Car = React.createClass
     render: ->
