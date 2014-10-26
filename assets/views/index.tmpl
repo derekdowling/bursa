@@ -1,148 +1,111 @@
 {{ define "content" }}
-<div id="container">
-
-    <!-- Navigation -->
-    <nav class="navbar">
+<div class="main-content">
+    <div id="banner" class="banner">
         <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand page-scroll" href="#page-top">Bursa.io</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="hidden">
-                        <a href="#page-top"></a>
-                    </li>
-                    <li>
-                        <a href="/about">About</a>
-                    </li>
-                    <li>
-                        <a href="http://blog.bursa.io" target="_blank">Blog</a>
-                    </li>
-                    <li class="border">
-                        <a href="/signup">Sign Up</a>
-                    </li>
-                    <li>
-                        <a href="/signin">Sign In</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
+            <h2>Your Company + Bitcoin</h2>
+            </br>
+            </br>
+            <a href="/signup" class="btn btn-download btn-lg">Start Now</a><br>
         </div>
-        <!-- /.container-fluid -->
-    </nav>
-
-    <!-- Hook Section -->
-    <section id="hook">
-        <div class="jumbotron">
+    </div>
+    <div id="features" class="features">
+        <header>
+            <h3 class="text-center">Responsive multi-layout admin built with AngularJS. </h3>
+        </header>
+        <div class="container">
+            <div class="row">
+                <div class="feature-item col-md-4 text-center"><i class="fa fa-arrows-alt"></i>
+                    <h3>Automated Recurring Transactions</h3>
+                    <div class="desc">
+                        <p>Power your sales commissions, payroll, or outbound expenses with ease.</p>
+                    </div>
+                </div>
+                <div class="feature-item col-md-4 text-center"><i class="fa fa-columns"></i>
+                    <h3>Incredibly Flexibile Account Management</h3>
+                    <div class="desc">
+                        <p>Create, budget, and manage assets on a department, team, or per employee level with the click of a button.</p>
+                    </div>
+                </div>
+                <div class="feature-item col-md-4 text-center"><i class="fa fa-desktop"></i>
+                    <h3>Business Intelligence Tools</h3>
+                    <div class="desc">
+                        <p>Understand the flow of assets within your company through our comprehensive visualization tools.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="details" class="details">
+        <ul class="list-details list-unstyled">
+            <li>
             <div class="container">
-                <div class="col-lg-12 text-center">
-                    <h1 class="section-heading">Your Company + Bitcoin</h1>
-                    <h2 class="section-subheading text-muted">Manage payroll, assets, and company spending like a boss.</h2>
-                    </br></br></br></br>
-                    <p><a class="btn btn-primary btn-lg cta" href="/signup" role="button">Get Started Now</a></p>
+                <div class="detail-item clearfix">
+                    <div class="detail-desc">
+                        <h2></h2>
+                        <p>As adoption continues, it's become clear that businesses looking to take
+                        harness the power of Bitcoin need better tools to support them. That's where we come in.
+                        </p>
+                    </div>
+                    <div class="detail-img"><img src="" alt="img"></div>
                 </div>
             </div>
+            </li>
+            <li class="alt">
+                <div class="container">
+                    <div class="detail-item clearfix">
+                        <div class="detail-desc">
+                            <h2>The Power of Bitcoin</h2>
+                            <p> Bitcoin is an inherently powerful platform that can be harnessed
+                            to manage money in ways never before possible, with unparalleled flexibility, 
+                            and with speed far greater than anything before it.
+                            </p>
+                        </div>
+                        <div class="detail-img"><img src="/img/bitcoin.png" alt="img"></div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="container">
+                    <div class="detail-item clearfix">
+                        <div class="detail-desc">
+                            <h2></h2>
+                            <p>At Bursa, we're bringing the future to accounting by leveraging tools inspired by other
+                            cutting edge platforms and applying the to the world of business management.
+                            </p>
+                        </div>
+                        <div class="detail-img"><img src="" alt="img"></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="testimonials" class="testimonials">
+      <div id="testimonials-carousel" data-ride="carousel" class="carousel slide">
+        <ol class="carousel-indicators">
+          <li data-target="#testimonials-carousel" data-slide-to="0" class=""></li>
+          <li data-target="#testimonials-carousel" data-slide-to="1" class="active"></li>
+          <li data-target="#testimonials-carousel" data-slide-to="2" class=""></li>
+          <li data-target="#testimonials-carousel" data-slide-to="3" class=""></li>
+          <li data-target="#testimonials-carousel" data-slide-to="4" class=""></li>
+        </ol>
+        <div class="carousel-inner text-center">
+          <div class="item">
+            <p>Great job! It's simply wonderful!</p><small>- Comments from buyer</small>
+          </div>
+          <div class="item active">
+            <p>Very impresive for being the first project here at wrapBootstrap and the very first angularjs theme amazing! Lot of plugins that are useful and not just inflate the package.</p><small>- Comments from buyer</small>
+          </div>
+          <div class="item">
+            <p>Great Job! First Angular JS Template on wrapBootstrap!</p><small>- Comments from buyer</small>
+          </div>
+          <div class="item">
+            <p>Really awesome that you're the first one who creates an AngularJS for wrapBootstrap. I've been looking for one for a long time, and it's really annoying to convert a non AngularJS theme to an AngularJS theme, so thanks for making my life easier.</p><small>- Comments from buyer</small>
+          </div>
+          <div class="item">
+            <p>Amazing! Exact what I looking for.</p><small>- someone famous</small>
+          </div>
         </div>
-    </section>
-    <!-- /.section -->
-
-    <!-- Why Section -->
-    <section id="why">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md-4">
-                    <h3 class="service-heading">Automated Transactions</h3>
-                    <p class="text-muted">Run payroll, or provide automated sales insentives with easy to use schedule service management tools.</p>
-                </div>
-                <div class="col-md-4">
-                    <h3 class="service-heading">Asset Management</h3>
-                    <p class="text-muted">Manage department, team, and individual employee budgets with our easy to use ACL tools.</p>
-                </div>
-                <div class="col-md-4">
-                    <h3 class="service-heading"></h3>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2 class="section-heading">About</h2>
-                    <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <ul class="timeline">
-                        <li>
-                            <div class="timeline-panel">
-                                <div class="timeline-heading">
-                                    <h4>2009-2011</h4>
-                                    <h4 class="subheading">Our Humble Beginnings</h4>
-                                </div>
-                                <div class="timeline-body">
-                                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="timeline-inverted">
-                            <div class="timeline-panel">
-                                <div class="timeline-heading">
-                                    <h4>March 2011</h4>
-                                    <h4 class="subheading">An Agency is Born</h4>
-                                </div>
-                                <div class="timeline-body">
-                                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="timeline-panel">
-                                <div class="timeline-heading">
-                                    <h4>December 2012</h4>
-                                    <h4 class="subheading">Transition to Full Service</h4>
-                                </div>
-                                <div class="timeline-body">
-                                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="timeline-inverted">
-                            <div class="timeline-panel">
-                                <div class="timeline-heading">
-                                    <h4>July 2014</h4>
-                                    <h4 class="subheading">Phase Two Expansion</h4>
-                                </div>
-                                <div class="timeline-body">
-                                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="timeline-inverted">
-                            <div class="timeline-image">
-                                <h4>Be Part
-                                    <br>Of Our
-                                    <br>Story!</h4>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- ./section -->
-
-</div>
+      </div>
+    </div>
+  </div>
 {{ end }}

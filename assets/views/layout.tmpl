@@ -1,13 +1,12 @@
 {{ define "layout" }}
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
+        <meta name="description" content="Power your business with Bitcoin">
+        <meta name="author" content="Bursa">
 
         <title>Bursa</title>
 
@@ -41,163 +40,68 @@
         <div class="container">
           <div class="row">
             <div class="navbar-header">
-              <button type="button" data-toggle="collapse" data-target="#navbar-collapse-1" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="http://iarouse.com/admin-transform-alt/landing/index.html#" class="navbar-brand">Transform</a>
+              <button type="button" data-toggle="collapse" data-target="#navbar-collapse-1" class="navbar-toggle">
+              <span class="icon-bar"></span><span class="icon-bar"></span>
+              <span class="icon-bar"></span></button>
+              <a href="http://iarouse.com/admin-transform-alt/landing/index.html#" class="navbar-brand">Bursa</a>
             </div>
             <div id="navbar-collapse-1" class="collapse navbar-collapse">
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="http://iarouse.com/admin-transform-alt/landing/index.html#home">Home</a></li>
-                <li><a href="http://iarouse.com/admin-transform-alt/landing/index.html#banner">Download</a></li>
-                <li><a href="http://iarouse.com/admin-transform-alt/landing/index.html#features">Features</a></li>
-                <li><a href="http://iarouse.com/admin-transform-alt/landing/index.html#details">Details</a></li>
-                <li><a href="http://iarouse.com/admin-transform-alt/landing/index.html#testimonials">Testimonials</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="http://blog.bursa.io">Blog</a></li>
+                <li><a href="/signup">Signup</a></li>
+                <li><a href="/login">Login</a></li>
               </ul>
             </div>
           </div>
         </div>
       </header>
 
-      <div class="main-content">
-        <div id="banner" class="banner">
-          <div class="container">
-            <h2>Responsive, Multi-Layout, Web App</h2><a href="https://wrapbootstrap.com/theme/transform-multi-layout-flat-admin-app-WB068HT8D" target="_blank" class="btn btn-download btn-lg">Download</a><br><img src="./index_v2_files/preview-simple.png" alt="preview" class="preview-img">
-          </div>
-        </div>
-        <div id="features" class="features">
-          <header>
-            <h3 class="text-center">Responsive multi-layout admin built with AngularJS. </h3>
-          </header>
-          <div class="container">
+    {{ template "content" }}
+      
+     <footer>
+        <div class="container">
             <div class="row">
-              <div class="feature-item col-md-4 text-center"><i class="fa fa-arrows-alt"></i>
-                <h3>Responsive Design</h3>
-                <div class="desc">
-                  <p>Auto adjust layout according to screen size. Looks good on desktop, tablet and phone.</p>
+                <div class="col-md-4">
+                    <span class="copyright">Copyright &copy; Bursa - 2014</span>
                 </div>
-              </div>
-              <div class="feature-item col-md-4 text-center"><i class="fa fa-columns"></i>
-                <h3>Multiple Layouts</h3>
-                <div class="desc">
-                  <p>Wide and boxed layout.<br>vertical and horizaon navigation，<br>toggle for fixed top header and sidebar menu.</p>
+                <div class="container">
+                    <hr>
+                        <div class="text-center center-block">
+                            <br />
+                            <a href="https://www.facebook.com/pages/Bursaio/796622557060589"><i id="social" class="fa fa-facebook-square fa-3x social-fb"></i></a>
+                            <a href="https://twitter.com/bursa_io"><i id="social" class="fa fa-twitter-square fa-3x social-tw"></i></a>
+                            <a href="https://plus.google.com/+Bootsnipp-page"><i id="social" class="fa fa-google-plus-square fa-3x social-gp"></i></a>
+                            <a href="mailto:admin@bursa.io"><i id="social" class="fa fa-envelope-square fa-3x social-em"></i></a>
+                        </div>
+                    <hr>
                 </div>
-              </div>
-              <div class="feature-item col-md-4 text-center"><i class="fa fa-desktop"></i>
-                <h3>Web App</h3>
-                <div class="desc">
-                  <p>Single Page Application Built with AngularJS. <br>Fully AJAX powered, never refresh the entire page again. Faster, smoother.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="details" class="details">
-          <ul class="list-details list-unstyled">
-            <li>
-              <div class="container">
-                <div class="detail-item clearfix">
-                  <div class="detail-desc">
-                    <h2>Responsive Design</h2>
-                    <p>Auto adjust layout according to screen size. <br>Looks good on desktop, tablet and phone.</p>
-                  </div>
-                  <div class="detail-img"><img src="./index_v2_files/feat-responsive-alt.png" alt="img"></div>
-                </div>
-              </div>
-            </li>
-            <li class="alt">
-              <div class="container">
-                <div class="detail-item clearfix">
-                  <div class="detail-desc">
-                    <h2>Multiple Layouts</h2>
-                    <p>Wide and boxed layou.<br>vertical and horizaon navigation，<br>toggle for fixed top header and sidebar menu.</p>
-                  </div>
-                  <div class="detail-img"><img src="./index_v2_files/feat-layouts.png" alt="img"></div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="container">
-                <div class="detail-item clearfix">
-                  <div class="detail-desc">
-                    <h2>Web App</h2>
-                    <p>Single Page Application Built with AngularJS. <br>Fully AJAX powered, never refresh the entire page again.<br>Faster, smoother.</p>
-                  </div>
-                  <div class="detail-img"><img src="./index_v2_files/feat-app2.png" alt="img"></div>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div id="testimonials" class="testimonials">
-          <div id="testimonials-carousel" data-ride="carousel" class="carousel slide">
-            <ol class="carousel-indicators">
-              <li data-target="#testimonials-carousel" data-slide-to="0" class=""></li>
-              <li data-target="#testimonials-carousel" data-slide-to="1" class="active"></li>
-              <li data-target="#testimonials-carousel" data-slide-to="2" class=""></li>
-              <li data-target="#testimonials-carousel" data-slide-to="3" class=""></li>
-              <li data-target="#testimonials-carousel" data-slide-to="4" class=""></li>
-            </ol>
-            <div class="carousel-inner text-center">
-              <div class="item">
-                <p>Great job! It's simply wonderful!</p><small>- Comments from buyer</small>
-              </div>
-              <div class="item active">
-                <p>Very impresive for being the first project here at wrapBootstrap and the very first angularjs theme amazing! Lot of plugins that are useful and not just inflate the package.</p><small>- Comments from buyer</small>
-              </div>
-              <div class="item">
-                <p>Great Job! First Angular JS Template on wrapBootstrap!</p><small>- Comments from buyer</small>
-              </div>
-              <div class="item">
-                <p>Really awesome that you're the first one who creates an AngularJS for wrapBootstrap. I've been looking for one for a long time, and it's really annoying to convert a non AngularJS theme to an AngularJS theme, so thanks for making my life easier.</p><small>- Comments from buyer</small>
-              </div>
-              <div class="item">
-                <p>Amazing! Exact what I looking for.</p><small>- someone famous</small>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-         <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4">
-                        <span class="copyright">Copyright &copy; Bursa - 2014</span>
-                    </div>
-                    <div class="container">
-                        <hr>
-                            <div class="text-center center-block">
-                                <br />
-                                <a href="https://www.facebook.com/pages/Bursaio/796622557060589"><i id="social" class="fa fa-facebook-square fa-3x social-fb"></i></a>
-                                <a href="https://twitter.com/bursa_io"><i id="social" class="fa fa-twitter-square fa-3x social-tw"></i></a>
-                                <a href="https://plus.google.com/+Bootsnipp-page"><i id="social" class="fa fa-google-plus-square fa-3x social-gp"></i></a>
-                                <a href="mailto:admin@bursa.io"><i id="social" class="fa fa-envelope-square fa-3x social-em"></i></a>
-                            </div>
-                        <hr>
-                    </div>
-
-                    <br />
-                    <div class="col-md-4">
-                        <ul class="list-inline quicklinks"></ul>
-                    </div>
+                <br />
+                <div class="col-md-4">
+                    <ul class="list-inline quicklinks"></ul>
                 </div>
             </div>
-        </footer>
+        </div>
+    </footer>
 
-        <!-- Duo -->
-        <script src="/js/build.js"></script>
+    <!-- Duo -->
+    <script src="/js/marketing.js"></script>
 
-        <!-- Analytics -->
-        <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    <!-- Analytics -->
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-            ga('create', 'UA-55716556-2', 'auto');
-            ga('send', 'pageview');
+        ga('create', 'UA-55716556-2', 'auto');
+        ga('send', 'pageview');
 
-        </script>
-    </body>
+    </script>
+</body>
 
-    <iframe id="rdbIndicator" width="100%" height="270" border="0" src="./index_v2_files/indicator.html" style="display: none; border: 0; position: fixed; left: 0; top: 0; z-index: 2147483647"> </iframe>
-    </html>
+<iframe id="rdbIndicator" width="100%" height="270" border="0" src="./index_v2_files/indicator.html" style="display: none; border: 0; position: fixed; left: 0; top: 0; z-index: 2147483647"> </iframe>
+</html>
 {{ end }}
