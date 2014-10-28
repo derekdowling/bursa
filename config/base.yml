@@ -12,6 +12,7 @@ paths:
 static_routes:
   /js: "static"
   /css: "static"
+  /components: "components"
 
 ssl:
   host: "ssl.bursa.io"
