@@ -50,6 +50,7 @@ assets/coffee/components/*
 static/js/*
 static/css/*
 static/components/*
+assets/components/*
 
 # Local developer configuration options e.g. for ddns.
 bursa.local.yml
