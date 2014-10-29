@@ -6,7 +6,8 @@ package kernel
 
 import (
 	"bursa.io/config"
-	"bursa.io/controller"
+	"bursa.io/controller/app"
+	"bursa.io/controller/home"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
@@ -83,24 +84,21 @@ func buildRouter() *mux.Router {
 
 	// Add them to the router
 	for route, handler := range routes {
-		router.Handle(route, handler)
+		router.HandleFunc(route, handler)
 	}
 
 	return router
 }
 
 // Initializes routes for the router
-func defineRoutes() map[string]http.Handler {
+func defineRoutes() map[string]http.HandlerFunc {
 
-	routes := make(map[string]http.Handler)
-
-	// Initialize Controllers Here
-	walletController := new(controller.WalletController)
-	homeController := new(controller.HomeController)
+	routes := make(map[string]http.HandlerFunc)
 
 	// Website Routes
-	routes["/"] = homeController
-	routes["/wallet/create"] = walletController
+	routes["/"] = home.HandleIndex
+	routes["/app"] = app.HandleIndex
+
 	return routes
 }
 
