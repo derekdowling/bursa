@@ -2,7 +2,6 @@ package picasso
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 	"path"
 
