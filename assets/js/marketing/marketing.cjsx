@@ -1,0 +1,1 @@
+mailer = require './marketing/mailer'

@@ -46,9 +46,9 @@ func Start(production bool) {
 
 	// Serve static assets that the website requests
 	static_routes := config.GetStringMapString("static_routes")
+	log.Println("Loading static assets:")
 	for url, local := range static_routes {
-		log.Println("url is", url)
-		log.Println("root is", local)
+		log.Println("route:", url, "- path:", local)
 		router.PathPrefix(url).Handler(
 			http.FileServer(http.Dir(local)),
 		)

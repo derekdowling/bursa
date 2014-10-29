@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 source gvp
 gpm install
-cd app
-./build-app
-cd ../src/bursa-io/kernel
-go run AppKernel.go
+./app-build
+go run src/bursa.io/server/server.go
