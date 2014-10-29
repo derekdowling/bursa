@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"path"
-	"os"
 
 	"bursa.io/config"
 )
@@ -18,18 +17,10 @@ func Render(w http.ResponseWriter, layout string, view string, vars interface{})
 	layout_path := path.Join(template_dir, layout+".tmpl")
 	view_path := path.Join(template_dir, view+".tmpl")
 
-	log.Println(view_path)
-	log.Println(layout_path)
-	if _, err := os.Stat(layout_path); err != nil {
-		log.Fatalf("Damnit", err)
+	temp := template.Must(template.ParseFiles(layout_path, view_path))
+
+	// Provides some visibility into template execution errors.
+	if err := temp.Execute(w, vars); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	if _, err := os.Stat(view_path); err != nil {
-		log.Fatalf("Damnit", err)
-	}
-
-	temp := template.Must(template.New("view").ParseFiles(layout_path))
-
-	log.Println(temp)
-
-	temp.ExecuteTemplate(w, layout, vars)
 }
