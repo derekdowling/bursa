@@ -6,7 +6,7 @@ import (
 
 // Loads our app configuration files into place
 func LoadConfig() {
-	viper.SetConfigName("base")
+	viper.SetConfigName("../../base")
 	viper.AddConfigPath("config/")
 	viper.ReadInConfig()
 }
