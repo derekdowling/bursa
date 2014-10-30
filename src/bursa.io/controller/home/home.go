@@ -1,4 +1,4 @@
-package controller
+package home
 
 // This handles rendering our unauthenticated user facing static web pages.
 
@@ -9,15 +9,13 @@ import (
 	"net/http"
 )
 
-type HomeController struct{}
-
-func (h *HomeController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Temporary command to get the ball rolling
-	picasso.Render(w, "layout", "index", nil)
+	picasso.Render(w, "marketing/layout", "marketing/index", nil)
 }
 
 // Creates a new user when they complete the signup process
-func (h *HomeController) CreateUser(w http.ResponseWriter, r *http.Request) {
+func HandleCreateUser(w http.ResponseWriter, r *http.Request) {
 
 	// get email/password from the form
 	email, pass := getCredentials(r)
@@ -32,7 +30,7 @@ func (h *HomeController) CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // validates a user's login credentials
-func (h *HomeController) Login(w http.ResponseWriter, r *http.Request) {
+func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	// get email/password from the form
 	email, password := getCredentials(r)

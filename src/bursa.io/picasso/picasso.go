@@ -1,10 +1,11 @@
 package picasso
 
 import (
-	"bursa.io/config"
 	"html/template"
 	"net/http"
 	"path"
+
+	"bursa.io/config"
 )
 
 func Render(w http.ResponseWriter, layout string, view string, vars interface{}) {
@@ -15,7 +16,10 @@ func Render(w http.ResponseWriter, layout string, view string, vars interface{})
 	layout_path := path.Join(template_dir, layout+".tmpl")
 	view_path := path.Join(template_dir, view+".tmpl")
 
-	temp := template.Must(template.New("view").ParseFiles(layout_path, view_path))
+	temp := template.Must(template.ParseFiles(layout_path, view_path))
 
-	temp.ExecuteTemplate(w, layout, vars)
+	// Provides some visibility into template execution errors.
+	if err := temp.Execute(w, vars); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
