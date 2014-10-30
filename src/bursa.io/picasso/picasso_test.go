@@ -2,20 +2,14 @@ package picasso
 
 import (
 	"bursa.io/config"
-	"fmt"
 	. "github.com/smartystreets/goconvey/convey"
-	"os"
 	"path"
-	"path/filepath"
 	"testing"
 )
 
 func TestSpec(t *testing.T) {
 
 	Convey("Picasso Tests", t, func() {
-
-		serverFile, _ := filepath.Abs(os.Args[0])
-		fmt.Printf(serverFile)
 
 		Convey("getTemplateRoot", func() {
 			temp := getTemplateRoot()

@@ -1,13 +1,26 @@
 package config
 
 import (
+	"fmt"
 	"github.com/spf13/viper"
+	"path"
+	"runtime"
 )
+
+func init() {
+	LoadConfig()
+}
 
 // Loads our app configuration files into place
 func LoadConfig() {
-	viper.SetConfigName("../../base")
-	viper.AddConfigPath("config/")
+
+	// Some magic to get the abs path of the file
+	_, filename, _, _ := runtime.Caller(1)
+	filepath := path.Join(path.Dir(filename), "../../../config")
+	viper.AddConfigPath(filepath)
+
+	// looking for base.yml
+	viper.SetConfigName("base")
 	viper.ReadInConfig()
 }
 
