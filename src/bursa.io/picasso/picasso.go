@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 
 	"bursa.io/config"
+	"fmt"
 )
 
 func Render(w http.ResponseWriter, layout string, view string, vars interface{}) {
@@ -40,6 +41,7 @@ func findPartials(layout_path string) []string {
 
 	expected_partial_dir := path.Join(path.Dir(layout_path), "partials")
 	files, err := filepath.Glob(expected_partial_dir)
+	fmt.Printf("%s", files)
 	if err != nil {
 		files = make([]string, 2)
 	}

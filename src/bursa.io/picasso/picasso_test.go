@@ -30,6 +30,15 @@ func TestSpec(t *testing.T) {
 
 				So(partials, ShouldNotBeNil)
 				So(len(partials), ShouldBeGreaterThan, "../../dist/")
+				So(partials[0], ShouldEqual, "signup.tmpl")
+			})
+
+			Convey("not explode on an empty route", func() {
+				layout := path.Join(template_path, "notreal/layout")
+				partials := findPartials(layout)
+
+				So(partials, ShouldNotBeNil)
+				So(len(partials), ShouldBe, 0)
 			})
 		})
 	})
