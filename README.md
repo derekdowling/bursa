@@ -5,19 +5,28 @@
 Assuming you have already installed chef/kitchen below:
 	
   * Go to Bursa Root, then set Go Paths:
-	source gvp
+  
+		source gvp
 
   * Install Go Deps:
   
     	gpm install
-
-  * Run or test(from file's folder):
+  
+  * Install node depencies()frontend asset management)
     
-    	go (run/test) <file_name>.go
+		npm install
+
+  * Build our assets
+  
+		gulp duo
+
+  * To launch the web server
+  
+		go run src/bursa.io/server/server.go
     
   * To run all the tests:
     
-    	go test bursa-io/backend
+    	go test bursa-io
 
 ### Running the Convey Test Server
 
