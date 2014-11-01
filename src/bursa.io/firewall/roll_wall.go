@@ -16,7 +16,7 @@ import (
 //		ROLE_N
 // )
 //
-// Each route can have multiple rows assigned to it. By assigning roles to bit flags,
+// Each route can have multiple rolls assigned to it. By assigning roles to bit flags,
 // it allows us to check all rows much quicker
 type Role int
 
@@ -25,11 +25,19 @@ type Rollwall struct {
 }
 
 // Implements our Mechanism Inteface for Davinci
-func (self *Rollwall) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (self *Rollwall) ServeHTTP(w http.ResponseWriter, r *http.Request, next http.Handler) {
+	// TODO: but seriously, parse out the route
+	route := "blah"
+	authorized := self.checkRoles(route)
+
+	if authorized {
+		next(r, w)
+	}
 
 }
 
 // Checks our route rules vs what our session currently tells us about the user
-func (self *Rollwall) Check(r *http.Request) {
-
+func (self *Rollwall) checkRoles(route string) bool {
+	flags := self.routeRolls[route]
+	// TODO: compare flags
 }
