@@ -37,7 +37,7 @@ func Start(production bool) {
 	// define our list of production middleware here for now
 	if production {
 		// Turns on production API Keys
-		config.Set(production, true)
+		config.Set("production", true)
 		// Secure middleware has a Negroni integration, hence the wonky syntax
 		stack.Use(negroni.HandlerFunc(secureMiddleware().HandlerFuncWithNext))
 	} else {

@@ -9,9 +9,15 @@ import (
 	"net/http"
 )
 
+type Form struct {
+	Email string
+}
+
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Temporary command to get the ball rolling
-	picasso.Render(w, "marketing/layout", "marketing/index", nil)
+	// form := Form{email: r.PostFormValue("email")}
+	form := Form{"test@email.com"}
+	picasso.Render(w, "marketing/layout", "marketing/index", form)
 }
 
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
@@ -19,7 +25,8 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	if email == "" {
 		// TODO: make this redirect back to the signup page
 	}
-	return models.SubscribeToMail(email)
+	models.SubscribeToMail(email)
+	http.Redirect(w, r, "/signup_success", 200)
 }
 
 // Creates a new user when they complete the signup process
