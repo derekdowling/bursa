@@ -11,3 +11,4 @@ github.com/conformal/btcjson *
 github.com/spf13/viper *
 github.com/unrolled/secure *
 github.com/codegangsta/negroni *
+github.com/mattbaird/gochimp *

@@ -1,9 +1,9 @@
 package testutils
 
-import(
+import (
 	"fmt"
-	"time"
 	"strings"
+	"time"
 )
 
 var test_id string
@@ -20,5 +20,10 @@ func TestId() string {
 }
 
 func SuffixedId(suffix string) string {
-	return strings.Join([]string{"test",TestId(), suffix},":")
+	return strings.Join([]string{"test", TestId(), suffix}, ":")
+}
+
+// Returns an email safe suffixed test id
+func EmailSuffixedId(suffix string) string {
+	return strings.Join([]string{"test", TestId(), suffix}, "_")
 }

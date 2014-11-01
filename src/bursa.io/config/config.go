@@ -41,3 +41,11 @@ func GetStringSlice(key string) []string {
 func GetStringMapString(key string) map[string]string {
 	return viper.GetStringMapString(key)
 }
+
+func IsSet(key string) bool {
+	return viper.IsSet(key)
+}
+
+func Set(key string, value interface{}) {
+	viper.Set(key, value)
+}

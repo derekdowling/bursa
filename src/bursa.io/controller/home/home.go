@@ -14,6 +14,14 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	picasso.Render(w, "marketing/layout", "marketing/index", nil)
 }
 
+func HandleSignup(w http.ResponseWriter, r *http.Request) {
+	email := r.PostFormValue("email")
+	if email == "" {
+		// TODO: make this redirect back to the signup page
+	}
+	return models.SubscribeToMail(email)
+}
+
 // Creates a new user when they complete the signup process
 func HandleCreateUser(w http.ResponseWriter, r *http.Request) {
 
