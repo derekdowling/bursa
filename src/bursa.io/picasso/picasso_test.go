@@ -4,6 +4,9 @@ import (
 	"bursa.io/config"
 	. "github.com/smartystreets/goconvey/convey"
 	"path"
+	"path/filepath"
+	"sort"
+	"strings"
 	"testing"
 )
 
@@ -12,9 +15,12 @@ func TestSpec(t *testing.T) {
 	Convey("Picasso Tests", t, func() {
 
 		Convey("getTemplateRoot", func() {
-			temp := getTemplateRoot()
-			So(temp, ShouldNotBeNil)
-			So(path.Base(temp), ShouldEqual, "views")
+			template_root := getTemplateRoot()
+			So(template_root, ShouldNotBeNil)
+			So(path.Base(template_root), ShouldEqual, "views")
+
+			files, _ := filepath.Glob(template_root + "/*")
+			So(len(files), ShouldBeGreaterThan, 0)
 		})
 
 		Convey("findPartials()", func() {
@@ -28,17 +34,21 @@ func TestSpec(t *testing.T) {
 				layout := path.Join(template_path, layout_path)
 				partials := findPartials(layout)
 
+				partial_count := len(partials)
+
 				So(partials, ShouldNotBeNil)
-				So(len(partials), ShouldBeGreaterThan, "../../dist/")
-				So(partials[0], ShouldEqual, "signup.tmpl")
+				So(partial_count, ShouldBeGreaterThan, 0)
+
+				// ensure that signup is actually a partial
+				signup_index := sort.Search(partial_count, func(i int) bool { return strings.HasSuffix(partials[i], "signup.tmpl") })
+				So(signup_index, ShouldNotEqual, partial_count)
 			})
 
 			Convey("not explode on an empty route", func() {
 				layout := path.Join(template_path, "notreal/layout")
 				partials := findPartials(layout)
 
-				So(partials, ShouldNotBeNil)
-				So(len(partials), ShouldBe, 0)
+				So(len(partials), ShouldEqual, 0)
 			})
 		})
 	})

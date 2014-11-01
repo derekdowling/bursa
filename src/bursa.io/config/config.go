@@ -23,7 +23,7 @@ func LoadConfig() {
 	viper.ReadInConfig()
 }
 
-// Little wrapper so we don't have to load both viper & the config in places,
+// Some wrappers so we don't have to load both viper & the config in places,
 // also decouples us slightly
 
 func GetString(key string) string {

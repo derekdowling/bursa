@@ -1,6 +1,5 @@
 // This package handles the building of layouts, partials, and templates
 // into a renderable package which can then be written to an HTTP response.
-
 package picasso
 
 import (
@@ -10,7 +9,7 @@ import (
 	"path/filepath"
 
 	"bursa.io/config"
-	"fmt"
+	"runtime"
 )
 
 func Render(w http.ResponseWriter, layout string, view string, vars interface{}) {
@@ -29,9 +28,11 @@ func Render(w http.ResponseWriter, layout string, view string, vars interface{})
 	}
 }
 
-// Load our config set path to the templates root
+// Creates a relative path to our templates folder
 func getTemplateRoot() string {
-	return config.GetStringMapString("paths")["templates"]
+	_, filename, _, _ := runtime.Caller(1)
+	filepath := path.Join(path.Dir(filename), "../../../")
+	return path.Join(filepath, config.GetStringMapString("paths")["templates"])
 }
 
 // Searches the folder that the layout is defined in for a "/partials" folder
@@ -40,8 +41,9 @@ func getTemplateRoot() string {
 func findPartials(layout_path string) []string {
 
 	expected_partial_dir := path.Join(path.Dir(layout_path), "partials")
-	files, err := filepath.Glob(expected_partial_dir)
-	fmt.Printf("%s", files)
+
+	// now do a dir listing
+	files, err := filepath.Glob(expected_partial_dir + "/*")
 	if err != nil {
 		files = make([]string, 2)
 	}
