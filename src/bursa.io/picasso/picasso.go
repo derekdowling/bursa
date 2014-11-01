@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"bursa.io/config"
+	"fmt"
 	"runtime"
 )
 
@@ -16,6 +17,8 @@ import (
 func Render(w http.ResponseWriter, layout string, view string, vars interface{}) {
 
 	template := buildTemplate(layout, view)
+
+	fmt.Printf("%s", vars)
 
 	// Provides some visibility into template execution errors.
 	if err := template.Execute(w, vars); err != nil {

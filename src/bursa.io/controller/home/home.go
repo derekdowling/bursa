@@ -11,12 +11,13 @@ import (
 
 type Form struct {
 	Email string
+	Name  string
 }
 
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Temporary command to get the ball rolling
 	// form := Form{email: r.PostFormValue("email")}
-	form := Form{"test@email.com"}
+	form := Form{Email: "test@email.com", Name: "Derek"}
 	picasso.Render(w, "marketing/layout", "marketing/index", form)
 }
 
