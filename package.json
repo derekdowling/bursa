@@ -10,7 +10,7 @@
     "gulp-shell": "^0.2.10",
     "coffee-react": "^1.0.3",
     "js-yaml": "^3.2.2",
-    "node-sass": "^1.0.3"
+    "node-sass": "~1.1"
   },
   "repository": {
     "type": "git",
