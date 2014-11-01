@@ -1,9 +1,9 @@
 package testutils
 
-import(
+import (
 	"fmt"
-	"time"
 	"strings"
+	"time"
 )
 
 var test_id string
@@ -19,6 +19,7 @@ func TestId() string {
 	return test_id
 }
 
+// Returns a nicely formatted test id to help identify/keep tests separate
 func SuffixedId(suffix string) string {
-	return strings.Join([]string{"test",TestId(), suffix},":")
+	return strings.Join([]string{"test", TestId(), suffix}, "_")
 }

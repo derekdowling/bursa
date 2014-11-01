@@ -3,6 +3,7 @@ package home
 // This handles rendering our unauthenticated user facing static web pages.
 
 import (
+	"bursa.io/email"
 	"bursa.io/models"
 	"bursa.io/picasso"
 	"bursa.io/renaissance/session"
@@ -12,6 +13,14 @@ import (
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Temporary command to get the ball rolling
 	picasso.Render(w, "marketing/layout", "marketing/index", nil)
+}
+
+func HandleSignup(w http.ResponseWriter, r *http.Request) {
+	email := r.PostFormValue("email")
+	if email == "" {
+		// TODO: make this redirect back to the signup page
+	}
+	return email.Subscribe(email)
 }
 
 // Creates a new user when they complete the signup process
