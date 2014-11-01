@@ -17,3 +17,4 @@ depends "postgresql"
 depends "nodejs"
 depends 'magic_shell'
 depends 'vim'
+depends 'apt'
