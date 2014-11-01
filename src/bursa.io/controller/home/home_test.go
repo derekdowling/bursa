@@ -18,7 +18,7 @@ func TestSpec(t *testing.T) {
 			test_email := "test"
 
 			query := url.Values{"email": {test_email}}
-			req, err := http.PostForm("http://localhost:8080/signup", query)
+			req, err := http.NewRequest("http://localhost:8080/signup", query)
 			if err != nil {
 				log.Fatal(err)
 			}

@@ -10,7 +10,6 @@ import (
 	"bursa.io/controller/home"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
-	"github.com/spf13/viper"
 	"github.com/unrolled/secure"
 	"log"
 	"net/http"
@@ -30,6 +29,32 @@ func init() {
 // middleware.
 func Start(production bool) {
 
+	// get our stack rolling
+	stack := buildStack(production)
+
+	// figure out what port we need to be on
+	port := config.GetStringMapString("ports")["http"]
+
+	// output to help notify that the server is loaded
+	log.Printf("Ready and waiting for requests on %s", port)
+
+	// start and log server output
+	log.Fatal(http.ListenAndServe(port, stack))
+
+	// TODO: get below working when we want HTTPS in prod
+	// Listen, Serve, Log
+	// log.Fatal(
+	// http.ListenAndServeTLS(
+	// config.GetString("server.Https_Port"),
+	// "src/bursa.io/server/certs/cert.pem",
+	// "src/bursa.io/server/certs/key.pem",
+	// stack,
+	// ),
+	// )
+}
+
+// Handle's putting the whole stack together
+func buildStack(production bool) *negroni.Negroni {
 	// Build our contraption middleware and add the router
 	// as the last piece
 	stack := negroni.New()
@@ -58,20 +83,7 @@ func Start(production bool) {
 	}
 
 	stack.UseHandler(router)
-
-	// port := config.GetString("server.Ports.Http")
-	port := viper.GetStringMapString("ports")["http"]
-	log.Printf("Listening for requests on %s", port)
-	log.Fatal(http.ListenAndServe(port, stack))
-	// Listen, Serve, Log
-	// log.Fatal(
-	// http.ListenAndServeTLS(
-	// config.GetString("server.Https_Port"),
-	// "src/bursa.io/server/certs/cert.pem",
-	// "src/bursa.io/server/certs/key.pem",
-	// stack,
-	// ),
-	// )
+	return stack
 }
 
 // Builds our routes
