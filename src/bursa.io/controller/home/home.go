@@ -3,6 +3,7 @@ package home
 // This handles rendering our unauthenticated user facing static web pages.
 
 import (
+	"bursa.io/email"
 	"bursa.io/models"
 	"bursa.io/picasso"
 	"bursa.io/renaissance/session"
@@ -19,7 +20,7 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	if email == "" {
 		// TODO: make this redirect back to the signup page
 	}
-	return models.SubscribeToMail(email)
+	return email.Subscribe(email)
 }
 
 // Creates a new user when they complete the signup process

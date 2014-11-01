@@ -24,9 +24,8 @@ ssl:
 
 email:
   mailchimp_key: "4df049b873c7e2d5d08416ecfac6eee4-us9"
-mail_list:
-  dev: "ddb450e3b1"
-  prod: "7307fced3a"
+  list_id: "ddb450e3b1"
+  enabled: false
 
 bitcoin:
   HttpPostMode: true
