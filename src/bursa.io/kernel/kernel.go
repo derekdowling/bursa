@@ -80,6 +80,7 @@ func buildRouter() *mux.Router {
 
 	// Create a Gorilla Mux Router
 	router := mux.NewRouter()
+	router.NotFoundHandler = http.HandlerFunc(home.Handle404)
 
 	// Get our mapped routes
 	routes := defineRoutes()

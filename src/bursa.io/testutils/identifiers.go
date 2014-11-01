@@ -19,11 +19,7 @@ func TestId() string {
 	return test_id
 }
 
+// Returns a nicely formatted test id to help identify/keep tests separate
 func SuffixedId(suffix string) string {
-	return strings.Join([]string{"test", TestId(), suffix}, ":")
-}
-
-// Returns an email safe suffixed test id
-func EmailSuffixedId(suffix string) string {
 	return strings.Join([]string{"test", TestId(), suffix}, "_")
 }

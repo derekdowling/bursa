@@ -9,7 +9,7 @@ package vault
 import (
 	"bursa.io/latinum/vault/store"
 	"bursa.io/latinum/backend/client"
-	"bursa.io/latinum/shared/config"
+	shared_config "bursa.io/latinum/shared/config"
 
 	"github.com/conformal/btcutil/hdkeychain"
 	"github.com/conformal/btcwire"
@@ -17,24 +17,30 @@ import (
 	"log"
 )
 
-func GetPublicKey(username string) string {
-	return "Stub"
-}
-
 // Sign signs a transaction with the private key specified. Once signed,
 // a transaction may be ready for processing unless additional signatures are
 // required.
-//
-// TODO passing the latinum client wrapper is just a crappy side effect of wanting
-// to make this work for now. This should be isolated from the network and needing
-// an rpc call to bitcoind in order to sign a transaction input is extremely MEH.
 func SignByUserId(tx *btcwire.MsgTx, user_id int64) (*btcwire.MsgTx, error) {
-	// TODO error checking
-	encoded_key, _ := store.Retrieve(user_id)
+	encoded_key, err := store.Retrieve(user_id)
+
+	if err != nil {
+		log.Fatalf("Failed to retreive pk for user", err)
+	}
 
 	return SignWithEncodedExtendedKey(tx, encoded_key)
 }
 
+// Signs a pending transfer with an encoded HD Private Key.
+func SignWithEncodedWIFKey(tx *btcwire.MsgTx, encoded_key string) (*btcwire.MsgTx, error) {
+	wif_key, err := btcutil.DecodeWIF(encoded_key)
+	if err != nil {
+		log.Fatalf("Couldn't decode encoded wif key", err)
+	}
+
+	return signWithWIFKey(tx, wif_key)
+}
+
+// Signs a pending transfer with Wallet Import Format private key.
 func signWithWIFKey(tx *btcwire.MsgTx, wif_key *btcutil.WIF) (*btcwire.MsgTx, error) {
 	// TODO I really wanted to just do this in-line.
 	var private_keys []string
@@ -47,19 +53,11 @@ func signWithWIFKey(tx *btcwire.MsgTx, wif_key *btcutil.WIF) (*btcwire.MsgTx, er
 	return response, err
 }
 
-func SignWithEncodedWIFKey(tx *btcwire.MsgTx, encoded_key string) (*btcwire.MsgTx, error) {
-	wif_key, err := btcutil.DecodeWIF(encoded_key)
-	if err != nil {
-		log.Fatalf("Couldn't decode encoded wif key", err)
-	}
 
-	return signWithWIFKey(tx, wif_key)
-}
-
+// Signs a pending transfer with an encoded extended private key.
 func SignWithEncodedExtendedKey(tx *btcwire.MsgTx, encoded_key string) (*btcwire.MsgTx, error) {
 	// This beautiful sequence converts the encoded private key into a
 	// Wallet Import Format (WIF) private key that the rpc client can use.
-	// The API, as you can see, is garbage.
 	extended_key, err := hdkeychain.NewKeyFromString(encoded_key)
 	if err != nil {
 		log.Fatalf("Couldn't create extended key", err)
@@ -72,7 +70,7 @@ func SignWithEncodedExtendedKey(tx *btcwire.MsgTx, encoded_key string) (*btcwire
 
 	wif_key, err := btcutil.NewWIF(
 		private_key,
-		config.BTCNet(),
+		shared_config.BTCNet(),
 		true,
 	)
 
@@ -110,6 +108,9 @@ func NewMaster() (string, error) {
 	return key.String(), nil
 }
 
+
+// PRIVATE-KEY RETRIEVAL AND CONVERSION
+
 // Currently does not take advantage of HD functionality. We simply return
 // a public key associated with the master private key and convert it to a base58
 // encoded bitcoin address.
@@ -144,7 +145,7 @@ func GetEncodedAddress(encoded_base_58_key string) string {
 		log.Fatalf("Failed to decode key", err)
 	}
 
-	address, err := key.Address(config.BTCNet())
+	address, err := key.Address(shared_config.BTCNet())
 	if err != nil {
 		log.Fatalf("Failed to decode key", err)
 	}
@@ -154,4 +155,26 @@ func GetEncodedAddress(encoded_base_58_key string) string {
 	// TODO How are addresses different from public keys, or what makes a public
 	// key into a valid address?
 	return address.String()
+}
+
+// Returns a P2PKH Address for a user's private key. Note that the expectation
+// for privacy conscious users is to have many such addresses, derivable from
+// a single HD private key.
+func GetAddressForUser(user_id int64) *btcutil.AddressPubKeyHash {
+	encoded_key, err := store.Retrieve(user_id)
+	if err != nil {
+		log.Fatalf("Could not decode key", err)
+	}
+
+	extended_key, err := hdkeychain.NewKeyFromString(encoded_key)
+	if err != nil {
+		log.Fatalf("Couldn't create extended key", err)
+	}
+
+	address, err := extended_key.Address(shared_config.BTCNet())
+	if err != nil {
+		log.Fatalf("Failed to obtain address from key", err)
+	}
+
+	return address
 }

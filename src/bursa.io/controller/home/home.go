@@ -3,6 +3,7 @@ package home
 // This handles rendering our unauthenticated user facing static web pages.
 
 import (
+	"bursa.io/email"
 	"bursa.io/models"
 	"bursa.io/picasso"
 	"bursa.io/renaissance/session"
@@ -22,11 +23,13 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
-	email := r.PostFormValue("email")
-	if email == "" {
+	formEmail := r.PostFormValue("email")
+	if formEmail == "" {
 		// TODO: make this redirect back to the signup page
 	}
-	models.SubscribeToMail(email)
+
+	// TODO: use throw away return value to store email info on user
+	email.Subscribe(formEmail)
 	http.Redirect(w, r, "/signup_success", 200)
 }
 
@@ -62,6 +65,10 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	// direct the user to the app if login successful
 	http.Redirect(w, r, "/app", http.StatusOK)
+}
+
+func Handle404(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/404", nil)
 }
 
 // Used to fetch the a username/password from an input form

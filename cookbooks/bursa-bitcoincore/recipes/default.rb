@@ -32,3 +32,7 @@ service "bitcoin-server" do
   provider Chef::Provider::Service::Upstart
   action :start
 end
+
+magic_shell_alias "rt" do
+  command 'bitcoin-cli -regtest'
+end
