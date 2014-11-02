@@ -7,3 +7,17 @@
         height: 100vh;
     }
 }
+
+.mugshot {
+  margin: 1em;
+}
+
+.mugshots img {
+}
+
+.blurb {
+  // Account for the heading in the adjacent column and shift the text down.
+  margin-top: 4em;
+  font-size: 1.1em;
+  line-height: 2;
+}
