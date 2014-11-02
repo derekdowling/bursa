@@ -10,12 +10,11 @@ func TestSpec(t *testing.T) {
 
 	Convey("Email Tests", t, func() {
 
-		test_id := testutils.SuffixedId("user")
-		email := "admin+" + test_id + "@bursa.io"
+		email := testutils.TestEmail("user")
 
 		Convey("Subscribe()", func() {
 			result := Subscribe(email)
-			So(result, ShouldEqual, email)
+			So(result, ShouldBeTrue)
 		})
 	})
 }

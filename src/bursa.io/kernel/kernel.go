@@ -112,6 +112,8 @@ func defineRoutes() map[string]http.HandlerFunc {
 
 	// Website Routes
 	routes["/"] = home.HandleIndex
+	routes["/signup"] = home.HandleSignup
+	routes["/signup_success"] = home.HandleSignupSuccess
 	routes["/app"] = app.HandleIndex
 
 	return routes

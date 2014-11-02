@@ -1,30 +1,45 @@
 package home
 
 import (
+	"bursa.io/testutils"
 	. "github.com/smartystreets/goconvey/convey"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
 )
 
+func urlForm(path string, form url.Values) string {
+	url := url.URL{
+		Host:     "localhost:8080",
+		Path:     path,
+		RawQuery: form.Encode(),
+	}
+
+	return url.String()
+}
+
 func TestSpec(t *testing.T) {
 
-	Convey("Config Tests", t, func() {
+	Convey("Home Tests", t, func() {
+
+		test_email := testutils.TestEmail("homecontroller")
 
 		Convey("HandleSignup()", func() {
 
-			test_email := "test"
+			Convey("should work with a valid email", func() {
+				form := url.Values{"email": {test_email}}
 
-			query := url.Values{"email": {test_email}}
-			req, err := http.NewRequest("http://localhost:8080/signup", query)
-			if err != nil {
-				log.Fatal(err)
-			}
+				rec := httptest.NewRecorder()
+				url := urlForm("/signup", form)
+				req, err := http.NewRequest("GET", url, nil)
 
-			w := httptest.NewRecorder()
-			HandleSignup(w, req)
+				So(err, ShouldBeNil)
+
+				HandleSignup(rec, req)
+				So(rec.Code, ShouldEqual, 200)
+				// So(w, ShouldEqual, "14")
+			})
 		})
 
 	})

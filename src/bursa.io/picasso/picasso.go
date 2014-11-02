@@ -9,19 +9,18 @@ import (
 	"path/filepath"
 
 	"bursa.io/config"
-	"fmt"
 	"runtime"
 )
 
-// Call this to render a template via a Response Writer
-func Render(w http.ResponseWriter, layout string, view string, vars interface{}) {
+// Call this to render a template via a Response Writer.
+// This automatically sets headers to return http.StatusOK
+func Render(w http.ResponseWriter, layout string, view string, pipeline interface{}) {
 
 	template := buildTemplate(layout, view)
 
-	fmt.Printf("%s", vars)
-
 	// Provides some visibility into template execution errors.
-	if err := template.Execute(w, vars); err != nil {
+	if err := template.Execute(w, pipeline); err != nil {
+		//TODO: render a 500 with Picasso
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

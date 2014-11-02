@@ -1,13 +1,14 @@
+// This handles rendering all of our unauthenticated user facing static web pages
 package home
-
-// This handles rendering our unauthenticated user facing static web pages.
 
 import (
 	"bursa.io/email"
 	"bursa.io/models"
 	"bursa.io/picasso"
 	"bursa.io/renaissance/session"
+	"log"
 	"net/http"
+	"net/url"
 )
 
 type Form struct {
@@ -22,15 +23,22 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	picasso.Render(w, "marketing/layout", "marketing/index", form)
 }
 
+// Completes a user signup. Assumes that the values being provided from the
+// front-end have already been validated
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
+	
 	formEmail := r.PostFormValue("email")
-	if formEmail == "" {
-		// TODO: make this redirect back to the signup page
-	}
+	println(formEmail)
 
 	// TODO: use throw away return value to store email info on user
-	email.Subscribe(formEmail)
-	http.Redirect(w, r, "/signup_success", 200)
+	decodedEmail, err := url.QueryUnescape(formEmail)
+	log.Println(decodedEmail)
+	if err != nil {
+		log.Fatal(err)
+	}
+	email.Subscribe(decodedEmail)
+
+	picasso.Render(w, "marketing/layout", "marketing/success", nil)
 }
 
 // Creates a new user when they complete the signup process
