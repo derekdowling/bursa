@@ -22,6 +22,10 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	picasso.Render(w, "marketing/layout", "marketing/index", form)
 }
 
+func HandleAbout(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/about", struct{}{})
+}
+
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	formEmail := r.PostFormValue("email")
 	if formEmail == "" {
