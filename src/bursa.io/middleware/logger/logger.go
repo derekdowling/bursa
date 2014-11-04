@@ -1,5 +1,8 @@
 package logger
 
+// A request/response logger for our Middleware. Records the start of a request,
+// and some basic information after it has been finished
+
 import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/negroni"

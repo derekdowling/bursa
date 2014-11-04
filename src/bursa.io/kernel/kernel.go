@@ -14,6 +14,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/unrolled/secure"
 	"net/http"
+	"bursa.io/middleware/logtext"
 )
 
 func init() {
@@ -27,6 +28,9 @@ func init() {
 		log.SetFormatter(&log.JSONFormatter{})
 		// log.SetOutput(logstash)
 	}
+
+	// gives our logger file/line/stack traces
+	log.SetFormatter(logtext.NewLogtext(new(log.TextFormatter), true))
 }
 
 // This handles starting up our web kernel. It'll load our routes, controllers, and

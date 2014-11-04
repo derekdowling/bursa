@@ -62,7 +62,6 @@ func getTemplateRoot() string {
 func findPartials(layout_path string) []string {
 
 	expected_partial_dir := path.Join(path.Dir(layout_path), "partials")
-	println(expected_partial_dir)
 
 	// now do a dir listing
 	files, err := filepath.Glob(expected_partial_dir + "/*")
