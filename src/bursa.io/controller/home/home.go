@@ -10,17 +10,31 @@ import (
 	"net/http"
 )
 
+type Form struct {
+	Email string
+	Name  string
+}
+
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Temporary command to get the ball rolling
-	picasso.Render(w, "marketing/layout", "marketing/index", nil)
+	// form := Form{email: r.PostFormValue("email")}
+	form := Form{Email: "test@email.com", Name: "Derek"}
+	picasso.Render(w, "marketing/layout", "marketing/index", form)
+}
+
+func HandleAbout(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/about", struct{}{})
 }
 
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
-	email := r.PostFormValue("email")
-	if email == "" {
+	formEmail := r.PostFormValue("email")
+	if formEmail == "" {
 		// TODO: make this redirect back to the signup page
 	}
-	return email.Subscribe(email)
+
+	// TODO: use throw away return value to store email info on user
+	email.Subscribe(formEmail)
+	http.Redirect(w, r, "/signup_success", 200)
 }
 
 // Creates a new user when they complete the signup process
@@ -55,6 +69,10 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	// direct the user to the app if login successful
 	http.Redirect(w, r, "/app", http.StatusOK)
+}
+
+func Handle404(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/404", nil)
 }
 
 // Used to fetch the a username/password from an input form
