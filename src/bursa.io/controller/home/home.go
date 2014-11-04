@@ -26,17 +26,22 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 // Completes a user signup. Assumes that the values being provided from the
 // front-end have already been validated
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
-	
+
 	formEmail := r.PostFormValue("email")
-	println(formEmail)
+	log.Println(formEmail)
 
 	// TODO: use throw away return value to store email info on user
 	decodedEmail, err := url.QueryUnescape(formEmail)
 	log.Println(decodedEmail)
 	if err != nil {
 		log.Fatal(err)
+		picasso.Render(w, "marketing/layout", "marketing/index", decodedEmail)
 	}
-	email.Subscribe(decodedEmail)
+	success := email.Subscribe(decodedEmail)
+i	if success == false {
+		log.Fatal(err)
+		picasso.Render(w, "marketing/layout", "marketing/success", decodedEmail)
+	}
 
 	picasso.Render(w, "marketing/layout", "marketing/success", nil)
 }

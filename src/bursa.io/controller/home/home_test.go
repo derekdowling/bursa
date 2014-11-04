@@ -32,6 +32,7 @@ func TestSpec(t *testing.T) {
 
 				rec := httptest.NewRecorder()
 				url := urlForm("/signup", form)
+				println(url)
 				req, err := http.NewRequest("GET", url, nil)
 
 				So(err, ShouldBeNil)
