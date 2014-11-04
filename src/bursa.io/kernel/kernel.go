@@ -9,12 +9,12 @@ import (
 	"bursa.io/controller/app"
 	"bursa.io/controller/home"
 	"bursa.io/middleware/logger"
+	"bursa.io/middleware/logtext"
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/unrolled/secure"
 	"net/http"
-	"bursa.io/middleware/logtext"
 )
 
 func init() {
@@ -27,10 +27,15 @@ func init() {
 		// Log as JSON instead of the default ASCII formatter.
 		log.SetFormatter(&log.JSONFormatter{})
 		// log.SetOutput(logstash)
+	} else {
+
+		log.SetLevel(log.DebugLevel)
+
+		// gives our logger file/line/stack traces
+		log.SetFormatter(logtext.NewLogtext(new(log.TextFormatter), true))
+
 	}
 
-	// gives our logger file/line/stack traces
-	log.SetFormatter(logtext.NewLogtext(new(log.TextFormatter), true))
 }
 
 // This handles starting up our web kernel. It'll load our routes, controllers, and
@@ -115,6 +120,8 @@ func buildRouter() *mux.Router {
 		router.HandleFunc(route, handler)
 	}
 
+	router.HandleFunc("/signup", home.HandleSignup).Methods("POST")
+
 	return router
 }
 
@@ -125,7 +132,7 @@ func defineRoutes() map[string]http.HandlerFunc {
 
 	// Website Routes
 	routes["/"] = home.HandleIndex
-	routes["/signup"] = home.HandleSignup
+	// routes["/signup"] = home.HandleSignup
 	routes["/signup_success"] = home.HandleSignupSuccess
 	routes["/app"] = app.HandleIndex
 

@@ -29,7 +29,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
 
 	formEmail := r.PostFormValue("email")
-	log.Debug(formEmail)
+	log.WithFields(log.Fields{"req": r, "email": formEmail}).Warn("post form")
 
 	// TODO: use throw away return value to store email info on user
 	decodedEmail, err := url.QueryUnescape(formEmail)
@@ -42,7 +42,7 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	success := email.Subscribe(decodedEmail)
 
 	if !success {
-		log.Fatal(err)
+		log.Error(err)
 		picasso.Render(w, "marketing/layout", "marketing/index", decodedEmail)
 	}
 
