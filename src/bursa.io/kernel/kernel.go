@@ -134,6 +134,7 @@ func defineRoutes() map[string]http.HandlerFunc {
 	routes["/"] = home.HandleIndex
 	// routes["/signup"] = home.HandleSignup
 	routes["/signup_success"] = home.HandleSignupSuccess
+	routes["/about"] = home.HandleAbout
 	routes["/app"] = app.HandleIndex
 
 	return routes

@@ -18,7 +18,12 @@ Assuming you have already installed chef/kitchen below:
 
   * Build our assets
   
-		gulp duo
+		gulp css:vendor
+    	gulp css:main
+
+   	Also - Live compile assets with:
+    
+	    gulp watch
 
   * To launch the web server
   

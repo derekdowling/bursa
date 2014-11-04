@@ -26,6 +26,10 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 
 // Completes a user signup. Assumes that the values being provided from the
 // front-end have already been validated
+func HandleAbout(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/about", struct{}{})
+}
+
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
 
 	formEmail := r.PostFormValue("email")
