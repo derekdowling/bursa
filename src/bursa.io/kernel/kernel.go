@@ -8,6 +8,7 @@ import (
 	"bursa.io/config"
 	"bursa.io/controller/app"
 	"bursa.io/controller/home"
+	"bursa.io/middleware/logger"
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
@@ -69,7 +70,7 @@ func buildStack(production bool) *negroni.Negroni {
 		// Secure middleware has a Negroni integration, hence the wonky syntax
 		stack.Use(negroni.HandlerFunc(secureMiddleware().HandlerFuncWithNext))
 	} else {
-		stack.Use(negroni.NewLogger())
+		stack.Use(logger.NewLogger())
 	}
 
 	// Builds our router and gives it routes
