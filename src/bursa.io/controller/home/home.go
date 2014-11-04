@@ -6,7 +6,7 @@ import (
 	"bursa.io/models"
 	"bursa.io/picasso"
 	"bursa.io/renaissance/session"
-	"log"
+	log "github.com/Sirupsen/logrus"
 	"net/http"
 	"net/url"
 )
@@ -16,6 +16,7 @@ type Form struct {
 	Name  string
 }
 
+// Handles loading the main page of the website
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Temporary command to get the ball rolling
 	// form := Form{email: r.PostFormValue("email")}
@@ -28,19 +29,21 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
 
 	formEmail := r.PostFormValue("email")
-	log.Println(formEmail)
+	log.Debug(formEmail)
 
 	// TODO: use throw away return value to store email info on user
 	decodedEmail, err := url.QueryUnescape(formEmail)
-	log.Println(decodedEmail)
+	log.Debug(decodedEmail)
 	if err != nil {
-		log.Fatal(err)
+		log.Warn(err)
 		picasso.Render(w, "marketing/layout", "marketing/index", decodedEmail)
 	}
+
 	success := email.Subscribe(decodedEmail)
-i	if success == false {
+
+	if !success {
 		log.Fatal(err)
-		picasso.Render(w, "marketing/layout", "marketing/success", decodedEmail)
+		picasso.Render(w, "marketing/layout", "marketing/index", decodedEmail)
 	}
 
 	picasso.Render(w, "marketing/layout", "marketing/success", nil)
@@ -78,6 +81,10 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	// direct the user to the app if login successful
 	http.Redirect(w, r, "/app", http.StatusOK)
+}
+
+func HandleSignupSuccess(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/success", nil)
 }
 
 func Handle404(w http.ResponseWriter, r *http.Request) {
