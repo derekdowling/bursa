@@ -1,0 +1,23 @@
+{
+  "name": "bursa",
+  "version": "0.0.1",
+  "description": "Github for Bitcoin",
+  "dependencies": {
+    "coffee-react": "^1.0.3",
+    "duo": "^0.8.8",
+    "duosass": "^1.1.1",
+    "gulp-watch": "^1.1.0",
+    "js-yaml": "^3.2.2",
+    "node-sass": "~1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/derekdowling/bursa.git"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "full"
+}

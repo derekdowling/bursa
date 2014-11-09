@@ -1,0 +1,106 @@
+{{ define "content" }}
+<div class="main-content">
+    <div class="above-fold">
+        <div id="banner" class="banner">
+            <div class="container">
+                <h2>Your Company + Bitcoin</h2>
+                </br>
+                </br>
+                {{ template "signup" .Email }}
+                </br>
+                </br>
+                </br>
+            </div>
+        </div>
+        <div id="features" class="features">
+            <div class="container">
+                <div class="row">
+                    <div class="feature-item col-md-4 text-center"><i class="fa fa-calendar"></i>
+                        <h3>Automated Recurring Transactions</h3>
+                        <div class="desc">
+                            <p>Power your sales commissions, payroll, or outbound expenses with ease.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item col-md-4 text-center"><i class="fa fa-users fa-4x"></i>
+                        <h3>Multi-User Support</h3>
+                        <div class="desc">
+                            <p>Create budgets and manage assets on a department, team, or per employee level with the click of a button.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item col-md-4 text-center"><i class="fa fa-area-chart"></i>
+                        <h3>Business Intelligence Tools</h3>
+                        <div class="desc">
+                            <p>Understand the flow of assets within your company through our comprehensive visualization tools.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="details" class="details">
+        <ul class="list-details list-unstyled">
+            <li>
+                <div class="container">
+                    <div class="detail-item clearfix">
+                        <div class="col-sm-6 detail-desc">
+                            <h2>The First Of It's Kind</h2>
+                            <p>We've harnessed the power of Bitcoin allowing you 
+                            to manage money in ways never before possible,
+                            with unparalleled flexibility at unmatched speed.
+                            </p>
+                            </br>
+                            <div class="text-center">
+                                <a href="/signup" class="btn btn-download btn-lg">Click To Begin</a><br>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 detail-img"><img src="/img/bitcoin.png" style="width: 250px;" alt="img"></div>
+                    </div>
+                </div>
+            </li>
+            <li class="alt">
+                <div class="container">
+                    <div class="detail-item clearfix">
+                        <div class="detail-desc">
+                          <h2>Functional. Simple.</h2>
+                          <p>We've brought the future to accounting by leveraging tools
+                          and techniques from other cutting-edge, distributed platforms
+                          and introduced them to the world of accounting.</p>
+                        </div>
+                        <div class="detail-img"><img src="" alt="img"></div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="container">
+                    <div class="detail-item clearfix">
+                        <div class="detail-desc">
+                            <h2>Re-imagine Money</h2>
+                            <p>Share, combine, and audit the flow of money at multiple levels.
+                            Reframe money as potential energy and direct it towards it's 
+                            true purpose without the encumbrance of excessive 
+                            transaction fees and international barriers.</p> 
+                        </div>
+                        <div class="detail-img"><img src="" width="250px" alt="img"></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="testimonials" class="testimonials">
+        <div id="testimonials-carousel" data-ride="carousel" class="carousel slide">
+            <ol class="carousel-indicators">
+                <li data-target="#testimonials-carousel" data-slide-to="0" class=""></li>
+                <li data-target="#testimonials-carousel" data-slide-to="1" class="active"></li>
+            </ol>
+            <div class="carousel-inner text-center">
+                <div class="item">
+                  <p>Awesome!</p><small>- Customer</small>
+                </div>
+                <div class="item active">
+                  <p>I never realized how amazing bitcoin could be.</p><small>- Customer</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}

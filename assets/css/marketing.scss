@@ -1,0 +1,23 @@
+@import "./marketing/transform-theme.css";
+@import "./util/colors.scss";
+
+@media (min-height: 500px) {
+    .above-fold {
+        /* makes this class expand to 100 of the vertical screen height */
+        height: 100vh;
+    }
+}
+
+.mugshot {
+  margin: 1em;
+}
+
+.mugshots img {
+}
+
+.blurb {
+  // Account for the heading in the adjacent column and shift the text down.
+  margin-top: 4em;
+  font-size: 1.1em;
+  line-height: 2;
+}
