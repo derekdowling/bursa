@@ -18,6 +18,9 @@ default_attributes(
       },
       "marvel" => {
         "url" => "http://download.elasticsearch.org/elasticsearch/marvel/marvel-latest.zip"
+      },
+      "kibana" => {
+        "url" => "https://download.elasticsearch.org/kibana/kibana/kibana-3.1.1.zip"
       }
     }
   },
