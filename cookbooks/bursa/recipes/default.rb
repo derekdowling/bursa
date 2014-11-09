@@ -10,13 +10,6 @@ include_recipe "bursa-duojs"
 include_recipe "bursa::ruby"
 include_recipe "bursa-bitcoincore"
 
-# FUTURE ELASTICSEARCH SERVER
-# Until we start provisioning different types of production servers, this will be
-# sufficient. Otherwise, these cookbooks are better suited to specific run lists
-# that are determined by the role played by node.
-include_recipe "java"
-include_recipe "elasticsearch::default"
-
 # FUTURE POSTGRESQL SERVER
 include_recipe "database"
 include_recipe "database::postgresql"
