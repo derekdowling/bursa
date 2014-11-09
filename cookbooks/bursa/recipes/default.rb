@@ -10,22 +10,6 @@ include_recipe "bursa-duojs"
 include_recipe "bursa::ruby"
 include_recipe "bursa-bitcoincore"
 
-# ELASTICSEARCH SERVER
-# Until we start provisioning different types of production servers, this will be
-# sufficient. Otherwise, these cookbooks are better suited to specific run lists
-# that are determined by the role played by node.
-include_recipe "java"
-include_recipe "elasticsearch::default"
-include_recipe "ufw"
-include_recipe "firewall"
-
-firewall_rule "es" do
-    protocol :tcp
-    ports [9200, 9300]
-    action :allow
-    notifies :enable, 'firewall[ufw]'
-end
-
 # FUTURE POSTGRESQL SERVER
 include_recipe "database"
 include_recipe "database::postgresql"
