@@ -2,13 +2,11 @@
 package home
 
 import (
-	"bursa.io/email"
-	"bursa.io/models"
-	"bursa.io/picasso"
-	"bursa.io/renaissance/session"
-	log "github.com/Sirupsen/logrus"
+	"github.com/derekdowling/bursa/email"
+	"github.com/derekdowling/bursa/models"
+	"github.com/derekdowling/bursa/picasso"
+	"github.com/derekdowling/bursa/renaissance/session"
 	"net/http"
-	"net/url"
 )
 
 type Form struct {
@@ -18,10 +16,7 @@ type Form struct {
 
 // Handles loading the main page of the website
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
-	// Temporary command to get the ball rolling
-	// form := Form{email: r.PostFormValue("email")}
-	form := Form{Email: "test@email.com", Name: "Derek"}
-	picasso.Render(w, "marketing/layout", "marketing/index", form)
+	picasso.Render(w, "marketing/layout", "marketing/index", nil)
 }
 
 // Completes a user signup. Assumes that the values being provided from the
@@ -32,22 +27,11 @@ func HandleAbout(w http.ResponseWriter, r *http.Request) {
 
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
 
-	formEmail := r.PostFormValue("email")
-	log.WithFields(log.Fields{"req": r, "email": formEmail}).Warn("post form")
-
-	// TODO: use throw away return value to store email info on user
-	userEmail, err := r.Form.Get("email")
-	log.Debug(userEmail)
-	if err != nil {
-		log.Warn(err)
-		picasso.Render(w, "marketing/layout", "marketing/index", decodedEmail)
-	}
-
-	success := email.Subscribe(decodedEmail)
+	userEmail := r.FormValue("email")
+	success := email.Subscribe(userEmail)
 
 	if !success {
-		log.Error(err)
-		picasso.Render(w, "marketing/layout", "marketing/index", decodedEmail)
+		picasso.RenderWithCode(w, "marketing/layout", "marketing/index", userEmail, http.StatusBadRequest)
 	}
 
 	picasso.Render(w, "marketing/layout", "marketing/success", nil)

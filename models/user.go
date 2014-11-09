@@ -4,7 +4,7 @@ package models
 // attributes, and deleting them
 
 import (
-	"bursa.io/renaissance/authentication"
+	"github.com/derekdowling/bursa/renaissance/authentication"
 )
 
 type Role int

@@ -1,11 +1,11 @@
 package vault
 
 import (
-	"bursa.io/models"
-	"bursa.io/testutils"
+	"github.com/derekdowling/bursa/models"
+	"github.com/derekdowling/bursa/testutils"
 	. "github.com/smartystreets/goconvey/convey"
-	"testing"
 	"log"
+	"testing"
 )
 
 func TestSpec(t *testing.T) {
@@ -36,7 +36,7 @@ func TestSpec(t *testing.T) {
 
 				// public_key = GetEncodedAddress(master)
 				// So(public_key, ShouldNotEqual, master)
-			});
+			})
 		})
 	})
 }

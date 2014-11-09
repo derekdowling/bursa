@@ -4,7 +4,7 @@
 package email
 
 import (
-	"bursa.io/email/mailchimp"
+	"github.com/derekdowling/bursa/email/mailchimp"
 )
 
 // Returns the user's email if successful, nil if not

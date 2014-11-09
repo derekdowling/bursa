@@ -3,7 +3,7 @@ package session
 // Handles all session interactions
 
 import (
-	"bursa.io/config"
+	"github.com/derekdowling/bursa/config"
 	"github.com/gorilla/sessions"
 	"net/http"
 )

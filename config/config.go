@@ -15,8 +15,7 @@ func LoadConfig() {
 
 	// Some magic to get the abs path of the file
 	_, filename, _, _ := runtime.Caller(1)
-	filepath := path.Join(path.Dir(filename), "../../../config")
-	viper.AddConfigPath(filepath)
+	viper.AddConfigPath(path.Dir(filename))
 
 	// looking for base.yml
 	viper.SetConfigName("base")

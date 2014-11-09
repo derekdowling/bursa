@@ -1,15 +1,15 @@
 package backend
 
 import (
-	"bursa.io/klutz"
-	"bursa.io/latinum/backend/client"
 	shared_config "bursa.io/latinum/shared/config"
-	"bursa.io/latinum/vault"
-	"bursa.io/models"
-	"bursa.io/testutils"
 	"bytes"
 	"github.com/conformal/btcjson"
 	"github.com/conformal/btcutil"
+	"github.com/derekdowing/bursa/klutz"
+	"github.com/derekdowing/bursa/latinum/backend/client"
+	"github.com/derekdowing/bursa/latinum/vault"
+	"github.com/derekdowing/bursa/models"
+	"github.com/derekdowing/bursa/testutils"
 	. "github.com/smartystreets/goconvey/convey"
 	"log"
 	"os/exec"
@@ -17,9 +17,8 @@ import (
 	"time"
 )
 
-
 func init() {
-	log.SetFlags(log.Llongfile | log.Ldate | log.Ltime )
+	log.SetFlags(log.Llongfile | log.Ldate | log.Ltime)
 }
 
 // Runs a command and bails if it fails.
@@ -149,10 +148,10 @@ func TestSpec(t *testing.T) {
 			Convey("Should send bitcoins between users", func() {
 				var err error
 
-				 _, err = vault.NewMasterForUser(user_a.Id)
+				_, err = vault.NewMasterForUser(user_a.Id)
 				So(err, ShouldBeNil)
 
-				 _, err = vault.NewMasterForUser(user_b.Id)
+				_, err = vault.NewMasterForUser(user_b.Id)
 				So(err, ShouldBeNil)
 
 				SendBetween(0.5, user_a.Id, user_b.Id)

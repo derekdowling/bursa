@@ -1,7 +1,7 @@
 package picasso
 
 import (
-	"bursa.io/config"
+	"github.com/derekdowling/bursa/config"
 	. "github.com/smartystreets/goconvey/convey"
 	"path"
 	"path/filepath"

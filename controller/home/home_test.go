@@ -1,23 +1,13 @@
 package home
 
 import (
-	"bursa.io/testutils"
+	"github.com/derekdowling/bursa/testutils"
 	. "github.com/smartystreets/goconvey/convey"
-	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
+	"net/http"
 )
-
-func urlForm(path string, form url.Values) string {
-	url := url.URL{
-		Host:     "localhost:8080",
-		Path:     path,
-		RawQuery: form.Encode(),
-	}
-
-	return url.String()
-}
 
 func TestSpec(t *testing.T) {
 
@@ -30,16 +20,23 @@ func TestSpec(t *testing.T) {
 			Convey("should work with a valid email", func() {
 				form := url.Values{"email": {test_email}}
 
+				req, err := testutils.FormPostRequest("/signup", form)
 				rec := httptest.NewRecorder()
-				url := urlForm("/signup", form)
-				println(url)
-				req, err := http.NewRequest("GET", url, nil)
 
 				So(err, ShouldBeNil)
-
 				HandleSignup(rec, req)
-				So(rec.Code, ShouldEqual, 200)
-				So(rec.Code, ShouldEqual, "14")
+				So(rec.Code, ShouldEqual, http.StatusOK)
+			})
+
+			Convey("should gracefully handle a bad email", func() {
+				form := url.Values{"email": {"bad_email@blah"}}
+
+				req, err := testutils.FormPostRequest("/signup", form)
+				rec := httptest.NewRecorder()
+
+				So(err, ShouldBeNil)
+				HandleSignup(rec, req)
+				So(rec.Code, ShouldEqual, http.StatusBadRequest)
 			})
 		})
 

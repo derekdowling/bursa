@@ -1,8 +1,8 @@
 package mailchimp
 
 import (
-	"bursa.io/config"
 	log "github.com/Sirupsen/logrus"
+	"github.com/derekdowling/bursa/config"
 	"github.com/mattbaird/gochimp"
 	"strconv"
 )

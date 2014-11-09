@@ -1,8 +1,8 @@
 package store
 
 import (
-	"bursa.io/models"
-	"bursa.io/testutils"
+	"github.com/derekdowing/bursa/models"
+	"github.com/derekdowling/bursa/testutils"
 	"log"
 
 	. "github.com/smartystreets/goconvey/convey"

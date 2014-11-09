@@ -1,7 +1,7 @@
 package email
 
 import (
-	"bursa.io/testutils"
+	"github.com/derekdowling/bursa/testutils"
 	. "github.com/smartystreets/goconvey/convey"
 	"testing"
 )

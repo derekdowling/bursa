@@ -8,23 +8,30 @@ import (
 	"path"
 	"path/filepath"
 
-	"bursa.io/config"
+	"github.com/derekdowling/bursa/config"
 	"runtime"
 )
 
 // Call this to render a template via a Response Writer.
 // This automatically sets headers to return http.StatusOK
 func Render(w http.ResponseWriter, layout string, view string, pipeline interface{}) {
+	RenderWithCode(w, layout, view, pipeline, http.StatusOK)
+}
 
+func RenderWithCode(w http.ResponseWriter, layout string, view string, pipeline interface{}, status int) {
+	
 	template := buildTemplate(layout, view)
 
+	// if the user has provided a non-success code, manually fire the header
+	if status != http.StatusOK {
+		w.WriteHeader(status)
+	}
 	// Provides some visibility into template execution errors.
 	if err := template.Execute(w, pipeline); err != nil {
 		//TODO: render a 500 with Picasso
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
-
 // Handles the magic of creating a template
 func buildTemplate(layout string, view string) *template.Template {
 
@@ -52,7 +59,7 @@ func combineTemplates(layout string, view string, partials []string) *template.T
 // Creates a relative path to our templates folder
 func getTemplateRoot() string {
 	_, filename, _, _ := runtime.Caller(1)
-	filepath := path.Join(path.Dir(filename), "../../../")
+	filepath := path.Join(path.Dir(filename), "/../")
 	return path.Join(filepath, config.GetStringMapString("paths")["templates"])
 }
 
