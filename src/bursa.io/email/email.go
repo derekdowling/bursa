@@ -8,6 +8,6 @@ import (
 )
 
 // Returns the user's email if successful, nil if not
-func Subscribe(email string) string {
+func Subscribe(email string) bool {
 	return mailchimp.SubscribeToChimp(email)
 }

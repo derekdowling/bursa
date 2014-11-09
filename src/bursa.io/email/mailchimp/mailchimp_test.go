@@ -10,12 +10,11 @@ func TestSpec(t *testing.T) {
 
 	Convey("Mailchimp Tests", t, func() {
 
-		test_id := testutils.SuffixedId("user")
-		email := "admin+" + test_id + "@bursa.io"
+		email := testutils.TestEmail("mailchimp")
 
 		Convey("SubscribeToChimp()", func() {
 			result := SubscribeToChimp(email)
-			So(result, ShouldEqual, email)
+			So(result, ShouldBeTrue)
 		})
 	})
 }

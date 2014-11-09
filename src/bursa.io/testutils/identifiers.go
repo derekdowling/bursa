@@ -23,3 +23,7 @@ func TestId() string {
 func SuffixedId(suffix string) string {
 	return strings.Join([]string{"test", TestId(), suffix}, "_")
 }
+
+func TestEmail(suffix string) string {
+	return "admin+" + SuffixedId(suffix) + "@bursa.io"
+}

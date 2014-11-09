@@ -35,13 +35,9 @@ Assuming you have already installed chef/kitchen below:
 
 ### Running the Convey Test Server
 
-  * Build convey (from Bursa root):
-	
-		go build smartystreets/goconvey -o .godeps/bin/goconvey \ github.com/smartystreets/goconvey
+  * Simply run the script
 
-  * Run Convey:
-	
-		./.godeps/bin/goconvey
+		./test-server
 
 ### Chef/Kitchen Requirements
 

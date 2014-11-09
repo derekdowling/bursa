@@ -1,13 +1,14 @@
+// This handles rendering all of our unauthenticated user facing static web pages
 package home
-
-// This handles rendering our unauthenticated user facing static web pages.
 
 import (
 	"bursa.io/email"
 	"bursa.io/models"
 	"bursa.io/picasso"
 	"bursa.io/renaissance/session"
+	log "github.com/Sirupsen/logrus"
 	"net/http"
+	"net/url"
 )
 
 type Form struct {
@@ -15,6 +16,7 @@ type Form struct {
 	Name  string
 }
 
+// Handles loading the main page of the website
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Temporary command to get the ball rolling
 	// form := Form{email: r.PostFormValue("email")}
@@ -22,19 +24,33 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	picasso.Render(w, "marketing/layout", "marketing/index", form)
 }
 
+// Completes a user signup. Assumes that the values being provided from the
+// front-end have already been validated
 func HandleAbout(w http.ResponseWriter, r *http.Request) {
 	picasso.Render(w, "marketing/layout", "marketing/about", struct{}{})
 }
 
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
+
 	formEmail := r.PostFormValue("email")
-	if formEmail == "" {
-		// TODO: make this redirect back to the signup page
-	}
+	log.WithFields(log.Fields{"req": r, "email": formEmail}).Warn("post form")
 
 	// TODO: use throw away return value to store email info on user
-	email.Subscribe(formEmail)
-	http.Redirect(w, r, "/signup_success", 200)
+	userEmail, err := r.Form.Get("email")
+	log.Debug(userEmail)
+	if err != nil {
+		log.Warn(err)
+		picasso.Render(w, "marketing/layout", "marketing/index", decodedEmail)
+	}
+
+	success := email.Subscribe(decodedEmail)
+
+	if !success {
+		log.Error(err)
+		picasso.Render(w, "marketing/layout", "marketing/index", decodedEmail)
+	}
+
+	picasso.Render(w, "marketing/layout", "marketing/success", nil)
 }
 
 // Creates a new user when they complete the signup process
@@ -69,6 +85,10 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	// direct the user to the app if login successful
 	http.Redirect(w, r, "/app", http.StatusOK)
+}
+
+func HandleSignupSuccess(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/success", nil)
 }
 
 func Handle404(w http.ResponseWriter, r *http.Request) {

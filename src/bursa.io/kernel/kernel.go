@@ -8,21 +8,34 @@ import (
 	"bursa.io/config"
 	"bursa.io/controller/app"
 	"bursa.io/controller/home"
+	"bursa.io/middleware/logger"
+	"bursa.io/middleware/logtext"
+	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/unrolled/secure"
-	"log"
 	"net/http"
-	"os"
 )
 
 func init() {
 
-	// set log output path
-	log.SetOutput(os.Stdout)
-
 	// loads our config into Viper so it can be used anywhere
 	config.LoadConfig()
+
+	log_mode := config.GetStringMapString("logging")["mode"]
+	if log_mode == "production" {
+		// Log as JSON instead of the default ASCII formatter.
+		log.SetFormatter(&log.JSONFormatter{})
+		// log.SetOutput(logstash)
+	} else {
+
+		log.SetLevel(log.DebugLevel)
+
+		// gives our logger file/line/stack traces
+		log.SetFormatter(logtext.NewLogtext(new(log.TextFormatter), true))
+
+	}
+
 }
 
 // This handles starting up our web kernel. It'll load our routes, controllers, and
@@ -36,7 +49,7 @@ func Start(production bool) {
 	port := config.GetStringMapString("ports")["http"]
 
 	// output to help notify that the server is loaded
-	log.Printf("Ready and waiting for requests on %s", port)
+	log.WithFields(log.Fields{"port": port}).Info("Ready for requests with:")
 
 	// start and log server output
 	log.Fatal(http.ListenAndServe(port, stack))
@@ -66,7 +79,7 @@ func buildStack(production bool) *negroni.Negroni {
 		// Secure middleware has a Negroni integration, hence the wonky syntax
 		stack.Use(negroni.HandlerFunc(secureMiddleware().HandlerFuncWithNext))
 	} else {
-		stack.Use(negroni.NewLogger())
+		stack.Use(logger.NewLogger())
 	}
 
 	// Builds our router and gives it routes
@@ -74,9 +87,14 @@ func buildStack(production bool) *negroni.Negroni {
 
 	// Serve static assets that the website requests
 	static_routes := config.GetStringMapString("static_routes")
-	log.Println("Loading static assets:")
+
 	for url, local := range static_routes {
-		log.Println("route:", url, "- path:", local)
+
+		log.WithFields(log.Fields{
+			"route": url,
+			"path":  local,
+		}).Info("Asset Path:")
+
 		router.PathPrefix(url).Handler(
 			http.FileServer(http.Dir(local)),
 		)
@@ -102,6 +120,8 @@ func buildRouter() *mux.Router {
 		router.HandleFunc(route, handler)
 	}
 
+	router.HandleFunc("/signup", home.HandleSignup).Methods("POST")
+
 	return router
 }
 
@@ -112,8 +132,9 @@ func defineRoutes() map[string]http.HandlerFunc {
 
 	// Website Routes
 	routes["/"] = home.HandleIndex
+	// routes["/signup"] = home.HandleSignup
+	routes["/signup_success"] = home.HandleSignupSuccess
 	routes["/about"] = home.HandleAbout
-
 	routes["/app"] = app.HandleIndex
 
 	return routes

@@ -2,13 +2,13 @@ package mailchimp
 
 import (
 	"bursa.io/config"
+	log "github.com/Sirupsen/logrus"
 	"github.com/mattbaird/gochimp"
-	"log"
 	"strconv"
 )
 
 // Adds a user, via their email, to one of our MailChimp mailing lists
-func SubscribeToChimp(userEmail string) string {
+func SubscribeToChimp(userEmail string) bool {
 	chimp := getMailChimp()
 	request := gochimp.ListsSubscribe{
 		ListId:         getMailListId(),
@@ -18,11 +18,14 @@ func SubscribeToChimp(userEmail string) string {
 		SendWelcome:    sendWelcomeEmail(),
 	}
 
-	resp, err := chimp.ListsSubscribe(request)
+	_, err := chimp.ListsSubscribe(request)
 	if err != nil {
-		log.Println(err.Error())
+		log.WithFields(log.Fields{
+			"email": userEmail,
+		}).Error(err.Error())
+		return false
 	}
-	return resp.Email
+	return true
 }
 
 // Checks whether or not we are in production to avoid spamming ourselves

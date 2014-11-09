@@ -12,3 +12,5 @@ github.com/spf13/viper *
 github.com/unrolled/secure *
 github.com/codegangsta/negroni *
 github.com/mattbaird/gochimp *
+github.com/Sirupsen/logrus *
+code.google.com/p/go.tools/cmd/cover *

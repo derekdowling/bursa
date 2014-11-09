@@ -9,6 +9,9 @@ driver:
     memory: 512
     cpus: 2
 
+driver_config:
+    require_chef_omnibus: true
+
 provisioner:
   name: chef_solo
   solo_rb:
