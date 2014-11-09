@@ -54,4 +54,7 @@ assets/components/*
 
 # Local developer configuration options e.g. for ddns.
 bursa.local.yml
-.sass-cache
+.sass-cache/
+.tmp/
+bower_components/
+**/transform/dist
