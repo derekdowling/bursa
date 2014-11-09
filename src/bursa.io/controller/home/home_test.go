@@ -39,7 +39,7 @@ func TestSpec(t *testing.T) {
 
 				HandleSignup(rec, req)
 				So(rec.Code, ShouldEqual, 200)
-				// So(w, ShouldEqual, "14")
+				So(rec.Code, ShouldEqual, "14")
 			})
 		})
 

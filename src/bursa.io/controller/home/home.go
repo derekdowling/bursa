@@ -36,8 +36,8 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	log.WithFields(log.Fields{"req": r, "email": formEmail}).Warn("post form")
 
 	// TODO: use throw away return value to store email info on user
-	decodedEmail, err := url.QueryUnescape(formEmail)
-	log.Debug(decodedEmail)
+	userEmail, err := r.Form.Get("email")
+	log.Debug(userEmail)
 	if err != nil {
 		log.Warn(err)
 		picasso.Render(w, "marketing/layout", "marketing/index", decodedEmail)
