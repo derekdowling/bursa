@@ -1,25 +1,7 @@
-var gulp = require('gulp');
-var shell = require('gulp-shell');
-
-gulp.task('watch', function () {
-  gulp.watch('assets/**/*.scss', ['css:main']);
-});
-
-gulp.task('css:vendor', function() {
-    shell(['duo --use duosass --root assets --copy --output ../static css/vendor.scss']);
-});
-
-gulp.task('css:main',
-  shell.task(
-    'duo --use duosass --root assets --copy --output ../static css/app.scss css/marketing.scss js/build.js'
-  )
-);
-
-// Slightly Stripped Rubix CSS
-
 var del = require('del');
 var path = require('path');
 var gulp = require('gulp');
+var shell = require('gulp-shell');
 
 var flip = require('css-flip');
 var map = require('map-stream');
@@ -54,7 +36,7 @@ var paths = {
   // index: ['src/jsx/'+defaultAppName+'/index.html', 'service.js'],
   // l20n: ['src/global/vendor/l20n/*.jsx'],
   jsx: ['src/jsx/*.jsx', 'src/global/requires/*.js', 'src/jsx/**/*.jsx', 'src/jsx/**/**/*.jsx', 'src/jsx/**/**/**/*.jsx', '!src/global/vendor/l20n/*.jsx', '!src/global/vendor/bootstrap/*.jsx'],
-  scss: ['assets/css/transform/**/*.scss'],
+  scss: ['assets/css/app/**/*.scss', 'assets/css/marketing/**/.*scss'],
   // bootstrap: ['src/global/vendor/bootstrap/*.jsx'],
   // ttf: ['public/fonts/dropbox/'+defaultAppName+'/*.ttf']
 };
@@ -74,11 +56,53 @@ function logData(data) {
 
 logData('Environment : '+ (production ? 'Production':'Development'));
 
+// Loads dependecies via duo
+gulp.task('duo', function() {
+    shell(['duo --use duosass --root assets --copy --output ../static css/vendor.scss js/build.js']);
+});
+
+// Doesn't work
+gulp.task('watch', function () {
+  gulp.watch('assets/**/*.scss', ['sass:marketing']);
+});
+
+/* ---------------------------------- */
+/* --------- BEGIN MARKETING:SASS ---------- */
+/* ---------------------------------- */
+gulp.task('sass:marketing', function() {
+  return gulp.src('./assets/css/marketing/main.scss')
+          .pipe(sass({
+            // sourceComments: 'normal' // uncomment when https://github.com/sass/node-sass/issues/337 is fixed
+          }))
+          .pipe(autoprefixer('last 2 versions', '> 1%', 'ie 9'))
+          .pipe(insert.prepend(banner()+'\n'))
+          .pipe(insert.prepend('@charset "UTF-8";\n'))
+          .pipe(gulp.dest('static/css/marketing'));
+});
+
+gulp.task('minifycss:marketing', function() {
+  return gulp.src(['static/css/marketing'])
+          .pipe(minifycss())
+          .pipe(gulp.dest('static/css/marketing'));
+})
+
+gulp.task('bless:marketing', function() {
+  return gulp.src('static/css/marketing/*.css')
+          .pipe(bless())
+          .pipe(insert.prepend(banner()+'\n'))
+          .pipe(insert.prepend('@charset "UTF-8";\n'))
+          .pipe(gulp.dest('static/css/marketing/blessed'));
+});
+
+/* -------------------------------- */
+/* --------- END MARKETING:SASS ---------- */
+/* -------------------------------- */
+
 /* ---------------------------------- */
 /* --------- BEGIN APP:SASS ---------- */
 /* ---------------------------------- */
 gulp.task('sass:app', function() {
-  return gulp.src('./assets/css/transform/main.scss')
+  return gulp.src('./assets/css/app/main.scss')
           .pipe(sass({
             // sourceComments: 'normal' // uncomment when https://github.com/sass/node-sass/issues/337 is fixed
           }))
@@ -109,14 +133,17 @@ gulp.task('bless:app', function() {
 /* ------------------------------ */
 /* --------- GULP TASKS --------- */
 /* ------------------------------ */
-gulp.task('sass', ['sass:app']);
-gulp.task('minifycss', ['minifycss:app']);
-gulp.task('bless', ['bless:app']);
+gulp.task('build:app', ['duo', 'sass:app']);
+gulp.task('build:marketing', ['duo', 'sass:marketing']);
 
-gulp.task('build:css', ['sass']);
-gulp.task('build:app', ['app']);
+//This doesn't use the above tasks to avoid running the duo
+//command multiple times per build
+gulp.task('build', ['duo', 'sass:app', 'sass:marketing']);
 
-gulp.task('build:dist', ['minifycss', 'bless', 'uglify']);
+// For Production Builds
+gulp.task('bless', ['bless:app', 'bless:marketing']);
+gulp.task('minifycss', ['minifycss:app', 'minifycss:marketing']);
+gulp.task('build:dist', ['minifycss', 'bless']);
 
 /*BEGIN: ALIASES FOR CERTAIN TASKS (for Watch)*/
 gulp.task('build:app:watch', ['build:app'], ready);

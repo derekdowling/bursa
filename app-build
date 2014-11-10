@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-echo "Installing dependencies via NPM"
-npm install
-echo "Compiling Assets"
-cjsx --output static/js -c assets/js/marketing/marketing.cjsx
-cjsx --output static/js -c assets/js/app/app.cjsx
-duo --use duosass --root assets --output ../static css/app.scss css/marketing.scss js/build.js
-echo "Done"
-echo "You can now run the app via 'go run src/bursa.io/server/server.go'"

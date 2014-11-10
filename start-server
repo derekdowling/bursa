@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+./build-site
+go run server/server.go
