@@ -9,10 +9,13 @@
 
         <title>Bursa</title>
 
+        <link rel="icon" type="image/png" href="/img/favicon.png">
+
         <!-- Vendor CSS -->
         <link href="/css/vendor.css" rel="stylesheet">
+
         <!-- Custom CSS -->
-        <link href="/css/marketing.css" rel="stylesheet"> 
+        <link href="/css/marketing/main.css" rel="stylesheet"> 
 
         <style>
           .en-markup-crop-options {
@@ -28,16 +31,12 @@
               margin-left: 0px !important;
           }
         </style>
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
     </head>
 
     <body>
+        <!--[if lt IE 9]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
         <header class="header navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="row">
@@ -59,9 +58,7 @@
                 </div>
             </div>
         </header>
-
         {{ template "content" }}
-          
          <footer class="footer text-center">
             <div class="container">
                 <div class="row">
