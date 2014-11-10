@@ -2,9 +2,7 @@
 	"ImportPath": "github.com/derekdowling/bursa",
 	"GoVersion": "go1.3.3",
 	"Packages": [
-		"./latinum/backend/",
-		"./latinum/shared/",
-		"./latinum/vault/"
+		"./..."
 	],
 	"Deps": [
 		{
@@ -38,8 +36,18 @@
 			"Rev": "3883ac1ce943878302255f538fce319d23226223"
 		},
 		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.6.0-5-gf92b795",
+			"Rev": "f92b7950b372b1db80bd3527e4d40e42555fe6c2"
+		},
+		{
 			"ImportPath": "github.com/armon/consul-api",
 			"Rev": "1b81c8e0c4cbf1d382310e4c0dc11221632e79d1"
+		},
+		{
+			"ImportPath": "github.com/codegangsta/negroni",
+			"Comment": "v0.1-34-gae96f1c",
+			"Rev": "ae96f1c1ac9eb11be7dff4fe4cb42f6846b93d77"
 		},
 		{
 			"ImportPath": "github.com/conformal/btcec",
@@ -103,6 +111,22 @@
 			"Rev": "6fe04d580dfb71c9e34cbce2f4df9eefd1e1241e"
 		},
 		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "14f550f51af52180c2eefed15e5fd18d63c0a64a"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Rev": "e444e69cbd2e2e3e0749a2f3c717cec491552bbf"
+		},
+		{
+			"ImportPath": "github.com/gorilla/securecookie",
+			"Rev": "1b0c7f6e9ab3d7f500fd7d50c7ad835ff428139b"
+		},
+		{
+			"ImportPath": "github.com/gorilla/sessions",
+			"Rev": "aa5e036e6c44aec69a32eb41097001978b29ad31"
+		},
+		{
 			"ImportPath": "github.com/jinzhu/gorm",
 			"Rev": "a29ac54e484be3c027d28090b59118be79dd4864"
 		},
@@ -122,6 +146,10 @@
 		{
 			"ImportPath": "github.com/lib/pq",
 			"Rev": "7175accbed18058468c07811f76440d6e8d7cf19"
+		},
+		{
+			"ImportPath": "github.com/mattbaird/gochimp",
+			"Rev": "e93b6eb7ec8b8f44d9b73efc2568460a525b247c"
 		},
 		{
 			"ImportPath": "github.com/mitchellh/mapstructure",
@@ -147,6 +175,10 @@
 		{
 			"ImportPath": "github.com/spf13/viper",
 			"Rev": "77144270da4a139bc4554f0488514f4212312ac3"
+		},
+		{
+			"ImportPath": "github.com/unrolled/secure",
+			"Rev": "e5f5dae29182c4fb690db4b00b0773be2c9fce93"
 		},
 		{
 			"ImportPath": "github.com/xordataexchange/crypt/backend",

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 echo "Installing build dependecies"
 npm install
+godep restore
 echo "Compiling Assets"
 gulp build
 echo "Done, launch the server with: 'go run server/server.go'"
