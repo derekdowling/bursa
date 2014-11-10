@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/derekdowing/bursa/models"
+	"github.com/derekdowling/bursa/models"
 	"github.com/derekdowling/bursa/testutils"
 	"log"
 
