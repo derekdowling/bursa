@@ -1,18 +1,18 @@
 package backend
 
 import (
-	"log"
-	"fmt"
 	"errors"
+	"fmt"
+	"log"
 
-	"bursa.io/latinum/backend/client"
-	shared_config "bursa.io/latinum/shared/config"
-	"bursa.io/latinum/vault"
+	"github.com/derekdowling/bursa/latinum/backend/client"
+	shared_config "github.com/derekdowling/bursa/latinum/shared/config"
+	"github.com/derekdowling/bursa/latinum/vault"
 
-  _ "bursa.io/config"
-	"github.com/conformal/btcrpcclient"
 	"github.com/conformal/btcjson"
+	"github.com/conformal/btcrpcclient"
 	"github.com/conformal/btcutil"
+	_ "github.com/derekdowling/bursa/config"
 )
 
 // Not quite sure what we want here yet
@@ -65,7 +65,7 @@ func GenerateInto(amt float64, src_private_key *btcutil.WIF, src_address btcutil
 		current_amt += utxo.Amount
 	}
 
-	if (current_amt < amt) {
+	if current_amt < amt {
 		return errors.New("Insufficient funds in server wallet")
 	}
 
@@ -159,7 +159,7 @@ func SendBetween(amt float64, src_user_id int64, dest_user_id int64) error {
 		current_amt += utxo.Amount
 	}
 
-	if (current_amt < amt) {
+	if current_amt < amt {
 		return errors.New("Insufficient funds in src wallet")
 	}
 

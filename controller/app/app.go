@@ -5,7 +5,7 @@ package app
 import (
 	"net/http"
 
-	"bursa.io/picasso"
+	"github.com/derekdowling/bursa/picasso"
 )
 
 func HandleIndex(w http.ResponseWriter, r *http.Request) {

@@ -7,13 +7,13 @@
 package vault
 
 import (
-	"bursa.io/latinum/vault/store"
-	"bursa.io/latinum/backend/client"
-	shared_config "bursa.io/latinum/shared/config"
+	"github.com/derekdowling/bursa/latinum/backend/client"
+	shared_config "github.com/derekdowling/bursa/latinum/shared/config"
+	"github.com/derekdowling/bursa/latinum/vault/store"
 
+	"github.com/conformal/btcutil"
 	"github.com/conformal/btcutil/hdkeychain"
 	"github.com/conformal/btcwire"
-	"github.com/conformal/btcutil"
 	"log"
 )
 
@@ -52,7 +52,6 @@ func signWithWIFKey(tx *btcwire.MsgTx, wif_key *btcutil.WIF) (*btcwire.MsgTx, er
 	response, _, err := client.Get().SignRawTransaction3(tx, nil, private_keys)
 	return response, err
 }
-
 
 // Signs a pending transfer with an encoded extended private key.
 func SignWithEncodedExtendedKey(tx *btcwire.MsgTx, encoded_key string) (*btcwire.MsgTx, error) {
@@ -108,7 +107,6 @@ func NewMaster() (string, error) {
 	return key.String(), nil
 }
 
-
 // PRIVATE-KEY RETRIEVAL AND CONVERSION
 
 // Currently does not take advantage of HD functionality. We simply return
@@ -123,7 +121,7 @@ func NewMaster() (string, error) {
 // The use case for non-hardened might be auditing it seems? Share a public key
 // at a given depth in the organization with an auditor and they can see all
 // transactions made to any descended public key, but cannot spend your money?
-func GetEncodedAddressForUser(user_id int64) (string) {
+func GetEncodedAddressForUser(user_id int64) string {
 	encoded_key, err := store.Retrieve(user_id)
 
 	// TODO this is harsh. It will happen if the user simply doesn't have a key.

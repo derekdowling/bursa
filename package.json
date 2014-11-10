@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "description": "Github for Bitcoin",
   "dependencies": {
-    "coffee-react": "^1.0.3",
-    "duo": "^0.8.8",
-    "duosass": "^1.1.1",
+    "coffee-react": "^2.0.0",
+    "duo": "^0.8.9",
+    "duosass": "^1.2.1",
     "gulp-watch": "^1.1.0",
     "js-yaml": "^3.2.2",
     "node-sass": "~1.1"

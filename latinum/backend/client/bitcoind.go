@@ -1,8 +1,8 @@
 package client
 
-import(
-	_ "bursa.io/config"
+import (
 	"github.com/conformal/btcrpcclient"
+	_ "github.com/derekdowling/bursa/config"
 	// TODO how to ensure our config is loaded?
 	"github.com/spf13/viper"
 )
@@ -29,4 +29,3 @@ func Get() *btcrpcclient.Client {
 	}
 	return g_client
 }
-

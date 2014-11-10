@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
-source gvp
-gpm install
 ./app-build
 go run src/bursa.io/server/server.go

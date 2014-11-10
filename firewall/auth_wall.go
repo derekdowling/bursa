@@ -3,8 +3,8 @@
 package firewall
 
 import (
-	"bursa.io/config"
-	"bursa.io/renaissance/session"
+	"github.com/derekdowling/bursa/config"
+	"github.com/derekdowling/bursa/renaissance/session"
 	"net/http"
 )
 

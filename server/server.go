@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bursa.io/kernel"
 	"flag"
+	"github.com/derekdowling/bursa/kernel"
 )
 
 var production = flag.Bool("prod", false, "Starts the server in production mode")

@@ -6,4 +6,4 @@ cjsx --output static/js -c assets/js/marketing/marketing.cjsx
 cjsx --output static/js -c assets/js/app/app.cjsx
 duo --use duosass --root assets --output ../static css/app.scss css/marketing.scss js/build.js
 echo "Done"
-echo "You can now run the app via 'go run src/bursa.io/server/server.go'"
+echo "You can now run the app via 'go run src/bursa/server/server.go'"

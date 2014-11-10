@@ -3,7 +3,7 @@ package store
 import (
 	"log"
 
-	"bursa.io/models"
+	"github.com/derekdowling/bursa/models"
 	_ "github.com/lib/pq"
 )
 

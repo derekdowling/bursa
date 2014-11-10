@@ -1,15 +1,15 @@
 package backend
 
 import (
-	shared_config "bursa.io/latinum/shared/config"
 	"bytes"
 	"github.com/conformal/btcjson"
 	"github.com/conformal/btcutil"
-	"github.com/derekdowing/bursa/klutz"
-	"github.com/derekdowing/bursa/latinum/backend/client"
-	"github.com/derekdowing/bursa/latinum/vault"
-	"github.com/derekdowing/bursa/models"
-	"github.com/derekdowing/bursa/testutils"
+	"github.com/derekdowling/bursa/klutz"
+	"github.com/derekdowling/bursa/latinum/backend/client"
+	shared_config "github.com/derekdowling/bursa/latinum/shared/config"
+	"github.com/derekdowling/bursa/latinum/vault"
+	"github.com/derekdowling/bursa/models"
+	"github.com/derekdowling/bursa/testutils"
 	. "github.com/smartystreets/goconvey/convey"
 	"log"
 	"os/exec"

@@ -5,13 +5,13 @@ package kernel
 // loaded into Viper so they can be used from anywhere after the Kernel loads.
 
 import (
-	"bursa.io/config"
-	"bursa.io/controller/app"
-	"bursa.io/controller/home"
-	"bursa.io/middleware/logger"
-	"bursa.io/middleware/logtext"
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/negroni"
+	"github.com/derekdowling/bursa/config"
+	"github.com/derekdowling/bursa/controller/app"
+	"github.com/derekdowling/bursa/controller/home"
+	"github.com/derekdowling/bursa/middleware/logger"
+	"github.com/derekdowling/bursa/middleware/logtext"
 	"github.com/gorilla/mux"
 	"github.com/unrolled/secure"
 	"net/http"
