@@ -12,3 +12,7 @@ Godeps/_workspace/*
 
 # Local developer configuration options e.g. for ddns.
 config/local.yml
+.sass-cache/
+.tmp/
+bower_components/
+**/transform/dist

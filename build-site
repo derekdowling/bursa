@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+echo "Installing build dependecies"
+npm install
+echo "Compiling Assets"
+gulp build
+echo "Done, launch the server with: 'go run server/server.go'"
