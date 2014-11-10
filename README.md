@@ -1,4 +1,6 @@
-# Making Bursa Work
+# Bursa
+
+![Build Status](https://magnum.travis-ci.com/derekdowling/bursa.svg?token=iq92sEsRxzbuqGK3drsX&branch=master)
 
 ### Running The Website
 
