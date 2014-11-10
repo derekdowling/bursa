@@ -3,35 +3,14 @@
 ### Running The Website
 
 Assuming you have already installed chef/kitchen below:
-	
-  * Go to Bursa Root, then set Go Paths:
-  
-		source gvp
-
-  * Install Go Deps:
-  
-    	gpm install
-  
-  * Install node depencies()frontend asset management)
-    
-		npm install
-
-  * Build our assets
-  
-		gulp css:vendor
-    	gulp css:main
-
-   	Also - Live compile assets with:
-    
-	    gulp watch
 
   * To launch the web server
   
-		go run src/bursa.io/server/server.go
+		go run src/bursa.io/server/server.go or ./start-server
     
   * To run all the tests:
     
-    	go test bursa-io
+    	go test
 
 ### Running the Convey Test Server
 

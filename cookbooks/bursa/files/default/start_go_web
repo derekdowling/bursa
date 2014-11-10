@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+bundle install
+npm install
+gulp build
+source gvp in
+gpm install
+$GOPATH/src go run main.go&
