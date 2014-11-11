@@ -3,12 +3,22 @@
   "version": "0.0.1",
   "description": "Github for Bitcoin",
   "dependencies": {
+    "bluebird": "^2.3.11",
+    "bootstrap": "^3.3.0",
+    "browserify": "^6.3.2",
     "coffee-react": "^1.0.3",
+    "coffee-reactify": "^2.0.0",
     "duo": "^0.8.8",
     "duosass": "^1.1.1",
+    "gulp-cjsx": "^2.0.0",
+    "gulp-concat": "^2.4.1",
     "gulp-watch": "^1.1.0",
+    "jquery": "^2.1.1",
     "js-yaml": "^3.2.2",
-    "node-sass": "~1.1"
+    "node-sass": "~1.1",
+    "react": "^0.12.0",
+    "reactify": "^0.15.2",
+    "watchify": "^2.1.1"
   },
   "repository": {
     "type": "git",
@@ -38,7 +48,6 @@
     "jsx-loader": "^0.11.0",
     "map-stream": "^0.1.0",
     "raw-loader": "^0.5.1",
-    "react": "^0.11.1",
     "run-sequence": "^0.3.6",
     "through": "^2.3.4",
     "transform-loader": "^0.2.1",

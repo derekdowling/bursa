@@ -1,20 +1,6 @@
 var gulp = require('gulp');
 var shell = require('gulp-shell');
 
-gulp.task('watch', function () {
-  gulp.watch('assets/**/*.scss', ['css:main']);
-});
-
-gulp.task('css:vendor', function() {
-    shell(['duo --use duosass --root assets --copy --output ../static css/vendor.scss']);
-});
-
-gulp.task('css:main',
-  shell.task(
-    'duo --use duosass --root assets --copy --output ../static css/app.scss css/marketing.scss js/build.js'
-  )
-);
-
 // Slightly Stripped Rubix CSS
 
 var del = require('del');
@@ -29,6 +15,7 @@ var child_process = require('child_process');
 
 var argv = require('yargs').argv;
 
+var cjsx = require('gulp-cjsx');
 var sass = require('gulp-sass');
 var gutil = require('gulp-util');
 var bless = require('gulp-bless');
@@ -51,18 +38,18 @@ var production = argv.production ? true : false;
 
 /* file patterns to watch */
 var paths = {
-  // index: ['src/jsx/'+defaultAppName+'/index.html', 'service.js'],
   // l20n: ['src/global/vendor/l20n/*.jsx'],
   jsx: ['src/jsx/*.jsx', 'src/global/requires/*.js', 'src/jsx/**/*.jsx', 'src/jsx/**/**/*.jsx', 'src/jsx/**/**/**/*.jsx', '!src/global/vendor/l20n/*.jsx', '!src/global/vendor/bootstrap/*.jsx'],
-  scss: ['assets/css/transform/**/*.scss'],
-  // bootstrap: ['src/global/vendor/bootstrap/*.jsx'],
-  // ttf: ['public/fonts/dropbox/'+defaultAppName+'/*.ttf']
+  cjsx: ['assets/cjsx/**/*.cjsx'],
+  scss: ['assets/css/transform/**/*.scss']
 };
 
-var banner = function() {
+// UTILITY
+function banner()
+{
   return '/*! '+package.name+' - v'+package.version+' - '+gutil.date(new Date(), "yyyy-mm-dd")+
           ' [copyright: '+package.copyright+']'+' */';
-};
+}
 
 function logData(data) {
   gutil.log(
@@ -72,11 +59,19 @@ function logData(data) {
   );
 }
 
+function ready() {
+  gutil.log(
+    gutil.colors.bgMagenta(
+      gutil.colors.red(
+        gutil.colors.bold('[          STATUS: READY          ]')
+      )
+    )
+  );
+}
+
 logData('Environment : '+ (production ? 'Production':'Development'));
 
-/* ---------------------------------- */
-/* --------- BEGIN APP:SASS ---------- */
-/* ---------------------------------- */
+// SASS TASKS
 gulp.task('sass:app', function() {
   return gulp.src('./assets/css/transform/main.scss')
           .pipe(sass({
@@ -102,39 +97,54 @@ gulp.task('bless:app', function() {
           .pipe(gulp.dest('static/css/app/blessed'));
 });
 
-/* -------------------------------- */
-/* --------- END APP:SASS ---------- */
-/* -------------------------------- */
+// VENDOR CSS
+gulp.task('css:vendor', function() {
+    shell(['duo --use duosass --root assets --copy --output ../static css/vendor.scss']);
+});
 
-/* ------------------------------ */
-/* --------- GULP TASKS --------- */
-/* ------------------------------ */
+// CJSX
+gulp.task('cjsx', function() {
+  gulp.src(paths.cjsx)
+    .pipe(cjsx({bare: true}).on('error', gutil.log))
+    .pipe(concat('views.js'), gutil.log)
+    .pipe(gulp.dest('static/views'), gutil.log);
+});
+
+gulp.task('uglify:cjsx', function() {
+  gulp.src('static/views/*.js')
+    .pipe(cjsx({bare: true}).on('error', gutil.log))
+    .pipe(gulp.dest('static/views'), gutil.log);
+});
+
+// APP JS
+gulp.task('js:app',
+  shell.task(
+    'duo --root assets --copy --output ../static js/app/app.coffee'
+  )
+);
+
+// META TASKS
+
+// CSS Related
 gulp.task('sass', ['sass:app']);
 gulp.task('minifycss', ['minifycss:app']);
 gulp.task('bless', ['bless:app']);
 
+// JS Related
+gulp.task('uglify', ['uglify:cjsx']);
+
 gulp.task('build:css', ['sass']);
-gulp.task('build:app', ['app']);
+gulp.task('build:js', ['cjsx', 'js:app']);
+gulp.task('build', ['build:css', 'build:js']);
 
 gulp.task('build:dist', ['minifycss', 'bless', 'uglify']);
 
-/*BEGIN: ALIASES FOR CERTAIN TASKS (for Watch)*/
-gulp.task('build:app:watch', ['build:app'], ready);
+// WATCHING
 gulp.task('build:css:watch', ['build:css'], ready);
+gulp.task('build:js:watch', ['build:js'], ready);
 gulp.task('react-bootstrap:watch', ['react-bootstrap'], ready);
-/*END: ALIASES*/
 
 gulp.task('watch', function() {
-  // gulp.watch(paths.jsx, ['build:app:watch']);
-  gulp.watch(paths.scss, ['rebuild:css']);
+  gulp.watch(paths.scss, ['build:css:watch']);
+  gulp.watch(paths.cjsx, ['build:js:watch']);
 });
-
-function ready() {
-  gutil.log(
-    gutil.colors.bgMagenta(
-      gutil.colors.red(
-        gutil.colors.bold('[          STATUS: READY          ]')
-      )
-    )
-  );
-}
