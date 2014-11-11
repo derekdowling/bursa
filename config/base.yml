@@ -36,3 +36,6 @@ bitcoin:
 
 app:
   Login_Url: "/login"
+
+logging:
+  mode: "dev"

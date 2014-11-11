@@ -1,0 +1,63 @@
+@import "transform"
+, "colors";
+
+$bitcoin-orange: #F69619;
+
+body {
+  min-height: 100vh;
+}
+
+.banner {
+  a {
+    margin: 2.5em;
+  }
+  h2 {
+    font-size: 50px;
+  }
+}
+
+.features {
+  padding-top: 50px;
+  padding-bottom: 0px;
+}
+
+// For helping vertically center images
+.helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.detail-img img {
+  padding-top: 45px;
+}
+
+.bitcoin {
+  color: $bitcoin-orange;
+}
+
+.fa-20x {
+  font-size: 20em;
+}
+
+.mugshot {
+  margin: 1em;
+}
+
+.mugshots img {
+}
+
+.blurb {
+  // Account for the heading in the adjacent column and shift the text down.
+  margin-top: 4em;
+  font-size: 1.1em;
+  line-height: 2;
+}
+
+footer {
+  width:100%;
+  height:80px;
+  position:absolute;
+  bottom:0;
+  left:0;
+}
