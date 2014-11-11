@@ -15,6 +15,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/unrolled/secure"
 	"net/http"
+	"strings"
 )
 
 func init() {
@@ -117,10 +118,9 @@ func buildRouter() *mux.Router {
 
 	// Add them to the router
 	for route, handler := range routes {
-		router.HandleFunc(route, handler)
+		parts := strings.Split(route, ":")
+		router.HandleFunc(parts[0], handler).Methods(parts[1])
 	}
-
-	router.HandleFunc("/signup", home.HandleSignup).Methods("POST")
 
 	return router
 }
@@ -130,12 +130,19 @@ func defineRoutes() map[string]http.HandlerFunc {
 
 	routes := make(map[string]http.HandlerFunc)
 
-	// Website Routes
-	routes["/"] = home.HandleIndex
-	// routes["/signup"] = home.HandleSignup
-	routes["/signup_success"] = home.HandleSignupSuccess
-	routes["/about"] = home.HandleAbout
-	routes["/app"] = app.HandleIndex
+	// Market Site Routes
+	routes["/:GET"] = home.HandleIndex
+	routes["/about:GET"] = home.HandleAbout
+	routes["/login:GET"] = home.HandleLogin
+	routes["/login:POST"] = home.HandlePostLogin
+	routes["/signup:GET"] = home.HandleSignup
+	routes["/signup:POST"] = home.HandlePostSignup
+	routes["/forgot-password:GET"] = home.HandleForgotPassword
+	routes["/404:GET"] = home.Handle404
+	routes["/500:GET"] = home.Handle500
+
+	// App Routes
+	routes["/app:GET"] = app.HandleIndex
 
 	return routes
 }

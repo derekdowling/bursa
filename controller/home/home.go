@@ -6,6 +6,7 @@ import (
 	"github.com/derekdowling/bursa/models"
 	"github.com/derekdowling/bursa/picasso"
 	"github.com/derekdowling/bursa/renaissance/session"
+	"log"
 	"net/http"
 )
 
@@ -25,13 +26,26 @@ func HandleAbout(w http.ResponseWriter, r *http.Request) {
 	picasso.Render(w, "marketing/layout", "marketing/about", struct{}{})
 }
 
-func HandleSignup(w http.ResponseWriter, r *http.Request) {
+func HandleLogin(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/login", struct{}{})
+}
 
+func HandleSignup(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/signup", struct{}{})
+}
+
+func HandleForgotPassword(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/forgot-password", struct{}{})
+}
+
+func HandlePostSignup(w http.ResponseWriter, r *http.Request) {
+
+	log.Print(r)
 	userEmail := r.FormValue("email")
 	success := email.Subscribe(userEmail)
 
 	if !success {
-		picasso.RenderWithCode(w, "marketing/layout", "marketing/index", userEmail, http.StatusBadRequest)
+		picasso.RenderWithCode(w, "marketing/layout", "marketing/404", userEmail, http.StatusBadRequest)
 	}
 
 	picasso.Render(w, "marketing/layout", "marketing/success", nil)
@@ -53,7 +67,7 @@ func HandleCreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // validates a user's login credentials
-func HandleLogin(w http.ResponseWriter, r *http.Request) {
+func HandlePostLogin(w http.ResponseWriter, r *http.Request) {
 
 	// get email/password from the form
 	email, password := getCredentials(r)
@@ -71,12 +85,12 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/app", http.StatusOK)
 }
 
-func HandleSignupSuccess(w http.ResponseWriter, r *http.Request) {
-	picasso.Render(w, "marketing/layout", "marketing/success", nil)
-}
-
 func Handle404(w http.ResponseWriter, r *http.Request) {
 	picasso.Render(w, "marketing/layout", "marketing/404", nil)
+}
+
+func Handle500(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/500", nil)
 }
 
 // Used to fetch the a username/password from an input form

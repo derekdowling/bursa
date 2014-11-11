@@ -1,20 +1,21 @@
 {{ define "content" }}
-<div id="content" class="err-container content-container">
-    <div class="text-center">
-        <div class="err-status">
-            <h1>500</h1>
-        </div>
-        <div class="err-message">
-            <h2>Whoops, looks like a malfunction!</h2>
-            <p>Hit the back button and try again. If you think your action should be
-                working, feel free to send us an <a href="mailto:support@bursa.io">email</a>
-                and we'll try to sort this out as quick as possible.
-            </p>
-        </div>
-        <div class="err-body">
-            <a href="/" class="btn btn-lg btn-goback"><span class="glyphicon glyphicon-home"></span><span class="space"></span>Go Back to Home Page</a>
+<div class="page-err err-500">
+    <div class="err-container">
+        <div class="text-center">
+            <div class="err-status">
+                 <h1>500</h1>
+            </div>
+            <div class="err-message">
+                <h2>Something's wrong with server</h2>
+            </div>
+            <div class="err-body">
+                <a href="/app" class="btn btn-lg btn-goback btn-info">
+                    <span class="glyphicon glyphicon-home"></span>
+                    <span class="space"></span>
+                    Go Back to Home Page
+                </a>
+            </div>
         </div>
     </div>
 </div>
-<div class="footer text-center ng-binding">Copyright 2014 Bursa</div>
 {{ end }}
