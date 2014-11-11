@@ -17,6 +17,8 @@
         <!-- Custom CSS -->
         <link href="/css/marketing/main.css" rel="stylesheet"> 
 
+        <link href="/css/app/main.css" rel="stylesheet">
+
         <style>
           .en-markup-crop-options {
               top: 18px !important;
@@ -44,13 +46,14 @@
                         <button type="button" data-toggle="collapse" data-target="#navbar-collapse-1" class="navbar-toggle">
                         <span class="icon-bar"></span><span class="icon-bar"></span>
                         <span class="icon-bar"></span></button>
-                        <a href="http://iarouse.com/admin-transform-alt/landing/index.html#" class="navbar-brand">Bursa</a>
+                    <a href="/" class="navbar-brand"><img alt="Bursa" src="/img/bursa-full-logo.png" height="28" width="110"></a>
                     </div>
                     <div id="navbar-collapse-1" class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="/">Home</a></li>
                             <li><a href="/about">About</a></li>
                             <li><a href="http://blog.bursa.io">Blog</a></li>
+                            <li><a href="/login">Login</a></li>
                             <li><a href="/signup">Signup</a></li>
                             <!--<li><a href="/login">Login</a></li>-->
                         </ul>
@@ -58,7 +61,7 @@
                 </div>
             </div>
         </header>
-        {{ template "content" }}
+        {{ template "content" . }}
          <footer class="footer text-center">
             <div class="container">
                 <div class="row">

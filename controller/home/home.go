@@ -2,10 +2,12 @@
 package home
 
 import (
+	log "github.com/Sirupsen/logrus"
 	"github.com/derekdowling/bursa/email"
 	"github.com/derekdowling/bursa/models"
 	"github.com/derekdowling/bursa/picasso"
 	"github.com/derekdowling/bursa/renaissance/session"
+	"github.com/gorilla/schema"
 	"net/http"
 )
 
@@ -25,13 +27,47 @@ func HandleAbout(w http.ResponseWriter, r *http.Request) {
 	picasso.Render(w, "marketing/layout", "marketing/about", struct{}{})
 }
 
-func HandleSignup(w http.ResponseWriter, r *http.Request) {
+func HandleLogin(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/login", struct{}{})
+}
 
-	userEmail := r.FormValue("email")
-	success := email.Subscribe(userEmail)
+func HandleSignup(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/signup", struct{}{})
+}
+
+func HandleForgotPassword(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/forgot-password", struct{}{})
+}
+
+type Signup struct {
+	Email    string
+	Password string
+	Company  string
+}
+
+func HandlePostSignup(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+
+	if err != nil {
+		log.Error(err)
+	}
+
+	log.Print(r)
+	decoder := schema.NewDecoder()
+	signup := new(Signup)
+	err = decoder.Decode(signup, r.PostForm)
+
+	if err != nil {
+		log.Error(err)
+	}
+
+	success := email.Subscribe(signup.Email)
+
+	// company := r.FormValue("company")
 
 	if !success {
-		picasso.RenderWithCode(w, "marketing/layout", "marketing/index", userEmail, http.StatusBadRequest)
+		picasso.RenderWithCode(w, "marketing/layout", "marketing/signup", signup.Email, http.StatusBadRequest)
+		return
 	}
 
 	picasso.Render(w, "marketing/layout", "marketing/success", nil)
@@ -53,7 +89,7 @@ func HandleCreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // validates a user's login credentials
-func HandleLogin(w http.ResponseWriter, r *http.Request) {
+func HandlePostLogin(w http.ResponseWriter, r *http.Request) {
 
 	// get email/password from the form
 	email, password := getCredentials(r)
@@ -64,19 +100,19 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	if user == nil {
 		// TODO: include attempted email for auto-fill
 		// TODO: add login fail flag for login failure alert
-		http.Redirect(w, r, "/index.html", http.StatusUnauthorized)
+		http.Redirect(w, r, "/login", http.StatusUnauthorized)
 	}
 
 	// direct the user to the app if login successful
 	http.Redirect(w, r, "/app", http.StatusOK)
 }
 
-func HandleSignupSuccess(w http.ResponseWriter, r *http.Request) {
-	picasso.Render(w, "marketing/layout", "marketing/success", nil)
-}
-
 func Handle404(w http.ResponseWriter, r *http.Request) {
 	picasso.Render(w, "marketing/layout", "marketing/404", nil)
+}
+
+func Handle500(w http.ResponseWriter, r *http.Request) {
+	picasso.Render(w, "marketing/layout", "marketing/500", nil)
 }
 
 // Used to fetch the a username/password from an input form

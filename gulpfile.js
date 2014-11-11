@@ -61,11 +61,6 @@ gulp.task('duo', function() {
     shell(['duo --use duosass --root assets --copy --output ../static css/vendor.scss js/build.js']);
 });
 
-// Doesn't work
-gulp.task('watch', function () {
-  gulp.watch('assets/**/*.scss', ['sass:marketing']);
-});
-
 /* ---------------------------------- */
 /* --------- BEGIN MARKETING:SASS ---------- */
 /* ---------------------------------- */
