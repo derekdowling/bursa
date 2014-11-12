@@ -111,6 +111,11 @@
 			"Rev": "6fe04d580dfb71c9e34cbce2f4df9eefd1e1241e"
 		},
 		{
+			"ImportPath": "github.com/derekdowling/mamba",
+			"Comment": "0.1-1-g35ec462",
+			"Rev": "35ec462c69671710f620b0b9a4642a1741e3ad52"
+		},
+		{
 			"ImportPath": "github.com/gorilla/context",
 			"Rev": "14f550f51af52180c2eefed15e5fd18d63c0a64a"
 		},
