@@ -31,17 +31,17 @@ func SubscribeToChimp(userEmail string) bool {
 // Checks whether or not we are in production to avoid spamming ourselves
 // with email
 func sendWelcomeEmail() bool {
-	val, _ := strconv.ParseBool(config.GetStringMapString("email")["enabled"])
+	val, _ := strconv.ParseBool(config.Server.GetStringMapString("email")["enabled"])
 	return val
 }
 
 // Sets up the MailChimp API
 func getMailChimp() *gochimp.ChimpAPI {
-	api_key := config.GetStringMapString("email")["mailchimp_key"]
+	api_key := config.Server.GetStringMapString("email")["mailchimp_key"]
 	return gochimp.NewChimp(api_key, true)
 }
 
 // Determines which mailing list to add user to based on context
 func getMailListId() string {
-	return config.GetStringMapString("email")["list_id"]
+	return config.Server.GetStringMapString("email")["list_id"]
 }

@@ -60,7 +60,7 @@ func combineTemplates(layout string, view string, partials []string) *template.T
 func getTemplateRoot() string {
 	_, filename, _, _ := runtime.Caller(1)
 	filepath := path.Join(path.Dir(filename), "/../")
-	return path.Join(filepath, config.GetStringMapString("paths")["templates"])
+	return path.Join(filepath, config.Server.GetStringMapString("paths")["templates"])
 }
 
 // Searches the folder that the layout is defined in for a "/partials" folder
