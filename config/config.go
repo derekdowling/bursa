@@ -11,20 +11,28 @@ func init() {
 	LoadConfig()
 }
 
+// Publicly accessible Mamba Configs
 var Server *mamba.Config
-var DB     *mamba.Config
+var DB *mamba.Config
+
+// So we don't overwrite our existing configs
+var loaded = false
 
 // Loads our app configuration files into place
 func LoadConfig() {
 
-	// Get Load Path
-	baseDir := getLoadPath()
+	if loaded == false {
+		// Get Load Path
+		baseDir := getLoadPath()
 
-	// LOAD APP CONFIG
-	Server = LoadServer(baseDir)
+		// LOAD APP CONFIG
+		Server = LoadServer(baseDir)
 
-	// LOAD DB CONFIG
-	DB = LoadDB(baseDir)
+		// LOAD DB CONFIG
+		DB = LoadDB(baseDir)
+
+		loaded = true
+	}
 }
 
 func getLoadPath() string {
