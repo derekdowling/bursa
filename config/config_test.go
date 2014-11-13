@@ -25,7 +25,7 @@ func TestSpec(t *testing.T) {
 
 			Convey("LoadServer()", func() {
 				config := LoadServer(path)
-				
+
 				So(config, ShouldNotBeNil)
 				So(config, ShouldHaveSameTypeAs, new(mamba.Config))
 				asset_path := config.GetStringMapString("paths")["assets"]
@@ -37,6 +37,11 @@ func TestSpec(t *testing.T) {
 				LoadConfig()
 				So(Server, ShouldHaveSameTypeAs, new(mamba.Config))
 				So(DB, ShouldHaveSameTypeAs, new(mamba.Config))
+
+				// test reload prevention
+				Server.Set("test123", "woo")
+				LoadConfig()
+				So(Server.Get("test123"), ShouldEqual, "woo")
 			})
 		})
 	})
