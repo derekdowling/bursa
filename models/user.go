@@ -5,6 +5,7 @@ package models
 
 import (
 	"github.com/derekdowling/bursa/renaissance/authentication"
+	"time"
 )
 
 type Role int
@@ -14,6 +15,17 @@ const (
 	Visitor Role = 1 << iota
 	Authenticated
 )
+
+type User struct {
+	Id        int64
+	Name      string `sql:"size:255"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Password  string `sql:"size:255"`
+	Salt      string `sql:"size:64"`
+
+	Email string `sql:"size:255"`
+}
 
 func CreateUser(email string, password string) {
 

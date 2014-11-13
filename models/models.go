@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"time"
 
+	"github.com/derekdowling/bursa/config"
 	_ "github.com/lib/pq"
 )
 
@@ -21,17 +22,6 @@ const (
 const (
 	CodeSuccess = 200
 )
-
-type User struct {
-	Id        int64
-	Name      string `sql:"size:255"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Password  string `sql:"size:255"`
-	Salt      string `sql:"size:64"`
-
-	Email string `sql:"size:255"`
-}
 
 type Transfer struct {
 	// TODO Refer to bitcoin protocol.
@@ -87,6 +77,8 @@ func Initialize() {
 }
 
 func Connect() (gorm.DB, error) {
-	// TODO use config for these variables.
-	return gorm.Open("postgres", "user=bursa password=securemebaby dbname=bursa sslmode=disable host=localhost")
+	dbConf := config.DB.GetStringMapString("orm")
+
+	println(dbConf["adapter"])
+	return gorm.Open(dbConf["adapter"], dbConf["settings"])
 }

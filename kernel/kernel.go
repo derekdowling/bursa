@@ -23,7 +23,7 @@ func init() {
 	// loads our config into Viper so it can be used anywhere
 	config.LoadConfig()
 
-	log_mode := config.GetStringMapString("logging")["mode"]
+	log_mode := config.Server.GetStringMapString("logging")["mode"]
 	if log_mode == "production" {
 		// Log as JSON instead of the default ASCII formatter.
 		log.SetFormatter(&log.JSONFormatter{})
@@ -47,7 +47,7 @@ func Start(production bool) {
 	stack := buildStack(production)
 
 	// figure out what port we need to be on
-	port := config.GetStringMapString("ports")["http"]
+	port := config.Server.GetStringMapString("ports")["http"]
 
 	// output to help notify that the server is loaded
 	log.WithFields(log.Fields{"port": port}).Info("Ready for requests with:")
@@ -59,7 +59,7 @@ func Start(production bool) {
 	// Listen, Serve, Log
 	// log.Fatal(
 	// http.ListenAndServeTLS(
-	// config.GetString("server.Https_Port"),
+	// config.Server.GetString("server.Https_Port"),
 	// "src/bursa.io/server/certs/cert.pem",
 	// "src/bursa.io/server/certs/key.pem",
 	// stack,
@@ -76,7 +76,7 @@ func buildStack(production bool) *negroni.Negroni {
 	// define our list of production middleware here for now
 	if production {
 		// Turns on production API Keys
-		config.Set("production", true)
+		config.Server.Set("production", true)
 		// Secure middleware has a Negroni integration, hence the wonky syntax
 		stack.Use(negroni.HandlerFunc(secureMiddleware().HandlerFuncWithNext))
 	} else {
@@ -87,7 +87,7 @@ func buildStack(production bool) *negroni.Negroni {
 	router := buildRouter()
 
 	// Serve static assets that the website requests
-	static_routes := config.GetStringMapString("static_routes")
+	static_routes := config.Server.GetStringMapString("static_routes")
 
 	for url, local := range static_routes {
 
@@ -150,9 +150,9 @@ func defineRoutes() map[string]http.HandlerFunc {
 // Sets our secure middleware based on what mode we are in
 func secureMiddleware() *secure.Secure {
 	secureMiddleware := secure.New(secure.Options{
-		AllowedHosts:          config.GetStringSlice("server.Allowed_Hosts"),
+		AllowedHosts:          config.Server.GetStringSlice("server.Allowed_Hosts"),
 		SSLRedirect:           true,
-		SSLHost:               config.GetString("server.SSL_Host"),
+		SSLHost:               config.Server.GetString("server.SSL_Host"),
 		SSLProxyHeaders:       map[string]string{"X-Forwarded-Proto": "https"},
 		STSSeconds:            315360000,
 		STSIncludeSubdomains:  true,
