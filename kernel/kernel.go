@@ -119,7 +119,11 @@ func buildRouter() *mux.Router {
 	// Add them to the router
 	for route, handler := range routes {
 		parts := strings.Split(route, ":")
-		router.HandleFunc(parts[0], handler).Methods(parts[1])
+		if len(parts) == 3 {
+			router.HandleFunc(parts[0], handler).Methods(parts[1])
+		} else {
+			router.HandleFunc(parts[0], handler).Methods(parts[1])
+		}
 	}
 
 	return router
@@ -130,11 +134,13 @@ func defineRoutes() map[string]http.HandlerFunc {
 
 	routes := make(map[string]http.HandlerFunc)
 
+	//TODO: add support for queries
+
 	// Market Site Routes
 	routes["/:GET"] = home.HandleIndex
 	routes["/about:GET"] = home.HandleAbout
 	routes["/login:GET"] = home.HandleLogin
-	routes["/login:POST"] = home.HandlePostLogin
+	routes["/login:POST:email"] = home.HandlePostLogin
 	routes["/signup:GET"] = home.HandleSignup
 	routes["/signup:POST"] = home.HandlePostSignup
 	routes["/forgot-password:GET"] = home.HandleForgotPassword
