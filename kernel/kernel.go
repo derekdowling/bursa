@@ -15,7 +15,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/unrolled/secure"
 	"net/http"
-	"strings"
 )
 
 func init() {
@@ -111,46 +110,27 @@ func buildRouter() *mux.Router {
 
 	// Create a Gorilla Mux Router
 	router := mux.NewRouter()
+
+	router.Queries("email", "")
+
+	// Website Routes
+	router.HandleFunc("/", home.HandleIndex).Methods("GET")
+	router.HandleFunc("/app", app.HandleIndex).Methods("GET")
+	router.HandleFunc("/about", home.HandleAbout).Methods("GET")
+	router.HandleFunc("/login", home.HandleLogin).Methods("GET")
+	router.HandleFunc("/login", home.HandlePostLogin).Methods("POST")
+	router.HandleFunc("/signup", home.HandleSignup).Methods("GET")
+	router.HandleFunc("/signup", home.HandlePostSignup).Methods("POST")
+	router.HandleFunc("/forgot-password", home.HandleForgotPassword).Methods("GET")
+	// router.HandleFunc("/forgot-password", home.HandlePostSignup).Methods("POST").Queries("email", "")
+
+	// Our 404 Handler
 	router.NotFoundHandler = http.HandlerFunc(home.Handle404)
 
-	// Get our mapped routes
-	routes := defineRoutes()
-
-	// Add them to the router
-	for route, handler := range routes {
-		parts := strings.Split(route, ":")
-		if len(parts) == 3 {
-			router.HandleFunc(parts[0], handler).Methods(parts[1])
-		} else {
-			router.HandleFunc(parts[0], handler).Methods(parts[1])
-		}
-	}
+	// API Routes
+	// TODO: Rest Layer
 
 	return router
-}
-
-// Initializes routes for the router
-func defineRoutes() map[string]http.HandlerFunc {
-
-	routes := make(map[string]http.HandlerFunc)
-
-	//TODO: add support for queries
-
-	// Market Site Routes
-	routes["/:GET"] = home.HandleIndex
-	routes["/about:GET"] = home.HandleAbout
-	routes["/login:GET"] = home.HandleLogin
-	routes["/login:POST:email"] = home.HandlePostLogin
-	routes["/signup:GET"] = home.HandleSignup
-	routes["/signup:POST"] = home.HandlePostSignup
-	routes["/forgot-password:GET"] = home.HandleForgotPassword
-	routes["/404:GET"] = home.Handle404
-	routes["/500:GET"] = home.Handle500
-
-	// App Routes
-	routes["/app:GET"] = app.HandleIndex
-
-	return routes
 }
 
 // Sets our secure middleware based on what mode we are in
