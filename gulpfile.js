@@ -12,6 +12,7 @@ var map = require('map-stream');
 var through = require('through');
 var transform = require('vinyl-transform');
 var child_process = require('child_process');
+var browserSync = require('browser-sync');
 
 var argv = require('yargs').argv;
 
@@ -30,6 +31,11 @@ var cssfont64 = require('gulp-cssfont64');
 var minifycss = require('gulp-minify-css');
 var autoprefixer = require('gulp-autoprefixer');
 
+var watchify = require('watchify');
+var browserify = require('browserify');
+var coffee_reactify = require('coffee-reactify');
+var source = require('vinyl-source-stream');
+
 var runSequence = require('run-sequence');
 
 var package = require('./package.json');
@@ -39,9 +45,12 @@ var production = argv.production ? true : false;
 /* file patterns to watch */
 var paths = {
   // l20n: ['src/global/vendor/l20n/*.jsx'],
-  jsx: ['src/jsx/*.jsx', 'src/global/requires/*.js', 'src/jsx/**/*.jsx', 'src/jsx/**/**/*.jsx', 'src/jsx/**/**/**/*.jsx', '!src/global/vendor/l20n/*.jsx', '!src/global/vendor/bootstrap/*.jsx'],
-  cjsx: ['assets/cjsx/**/*.cjsx'],
-  scss: ['assets/css/transform/**/*.scss']
+  scss: ['assets/css/app/**/*.scss'],
+  // Ignore bourbon and bootstrap when watching because they're huge.
+  watch_scss: ['assets/css/app/**/*.scss', '!assets/css/app/bootstrap-sass/**', '!assets/css/app/bourbon/**'],
+
+  js: ['assets/js/**/*.js', 'assets/js/**/*.coffee', 'assets/js/**/*.cjsx'],
+  entrypoints: ['./assets/js/app/app.coffee']
 };
 
 // UTILITY
@@ -72,24 +81,26 @@ function ready() {
 logData('Environment : '+ (production ? 'Production':'Development'));
 
 // SASS TASKS
-gulp.task('sass:app', function() {
-  return gulp.src('./assets/css/transform/main.scss')
+gulp.task('app:sass', function() {
+  return gulp.src('./assets/css/app/main.scss')
           .pipe(sass({
+            errLogToConsole: true
             // sourceComments: 'normal' // uncomment when https://github.com/sass/node-sass/issues/337 is fixed
           }))
           .pipe(autoprefixer('last 2 versions', '> 1%', 'ie 9'))
           .pipe(insert.prepend(banner()+'\n'))
           .pipe(insert.prepend('@charset "UTF-8";\n'))
-          .pipe(gulp.dest('static/css/app'));
+          .pipe(gulp.dest('static/css/app'))
+          .pipe(browserSync.reload({stream:true}));
 });
 
-gulp.task('minifycss:app', function() {
+gulp.task('app:minifycss', function() {
   return gulp.src(['static/css/app'])
           .pipe(minifycss())
           .pipe(gulp.dest('static/css/app'));
 });
 
-gulp.task('bless:app', function() {
+gulp.task('app:bless', function() {
   return gulp.src('static/css/app/*.css')
           .pipe(bless())
           .pipe(insert.prepend(banner()+'\n'))
@@ -98,53 +109,75 @@ gulp.task('bless:app', function() {
 });
 
 // VENDOR CSS
-gulp.task('css:vendor', function() {
-    shell(['duo --use duosass --root assets --copy --output ../static css/vendor.scss']);
-});
-
-// CJSX
-gulp.task('cjsx', function() {
-  gulp.src(paths.cjsx)
-    .pipe(cjsx({bare: true}).on('error', gutil.log))
-    .pipe(concat('views.js'), gutil.log)
-    .pipe(gulp.dest('static/views'), gutil.log);
-});
-
-gulp.task('uglify:cjsx', function() {
-  gulp.src('static/views/*.js')
-    .pipe(cjsx({bare: true}).on('error', gutil.log))
-    .pipe(gulp.dest('static/views'), gutil.log);
-});
+gulp.task('vendor:css',shell.task(['duo --use duosass --root assets --copy --output ../static css/vendor.scss']));
 
 // APP JS
-gulp.task('js:app',
-  shell.task(
-    'duo --root assets --copy --output ../static js/app/app.coffee'
-  )
-);
+// If this breaks - it feels brittle there's always:
+// watchify -t coffee-reactify -t reactify assets/js/app/app.coffee -o static/js/build.js -d
+var bundlejs = function(watch) {
+  return function() {
+    var bundler, rebundle;
+
+    bundler = browserify(paths.entrypoints, {
+      basedir: path.join(__dirname),
+      debug: true,
+      cache: {}, // required for watchify
+      packageCache: {}, // required for watchify
+      fullPaths: watch, // required to be true only for watchify
+    });
+
+    if(watch) {
+      bundler = watchify(bundler);
+    }
+
+    bundler.transform(coffee_reactify);
+
+    rebundle = function() {
+      return bundler.bundle()
+        .on('error', gutil.log.bind(gutil,'Browserify error'))
+        .pipe(source('build.js'))
+        .pipe(gulp.dest('static/js'))
+        .pipe(browserSync.reload({stream:true}));
+    };
+
+    bundler.on('update', rebundle);
+
+    return rebundle();
+  };
+};
+
+gulp.task('js:app', bundlejs(false));
+gulp.task('js:app:watch', bundlejs(true));
 
 // META TASKS
 
 // CSS Related
-gulp.task('sass', ['sass:app']);
-gulp.task('minifycss', ['minifycss:app']);
-gulp.task('bless', ['bless:app']);
+gulp.task('sass', ['app:sass']);
+gulp.task('minifycss', ['app:minifycss']);
+gulp.task('bless', ['app:bless']);
 
-// JS Related
-gulp.task('uglify', ['uglify:cjsx']);
+gulp.task('app:css', ['app:sass']);
 
-gulp.task('build:css', ['sass']);
-gulp.task('build:js', ['cjsx', 'js:app']);
+gulp.task('build:css', ['app:css', 'vendor:css']);
+gulp.task('build:js', ['js:app']);
 gulp.task('build', ['build:css', 'build:js']);
 
 gulp.task('build:dist', ['minifycss', 'bless', 'uglify']);
 
 // WATCHING
-gulp.task('build:css:watch', ['build:css'], ready);
-gulp.task('build:js:watch', ['build:js'], ready);
+gulp.task('build:css:watch', ['app:css'], ready);
+gulp.task('build:js:watch', ['js:app:watch'], ready);
 gulp.task('react-bootstrap:watch', ['react-bootstrap'], ready);
 
-gulp.task('watch', function() {
-  gulp.watch(paths.scss, ['build:css:watch']);
-  gulp.watch(paths.cjsx, ['build:js:watch']);
+gulp.task('watch:all', function() {
+  gulp.watch(paths.watch_scss, ['build:css:watch']);
+  gulp.watch(paths.js, ['build:js:watch']);
+});
+
+gulp.task('watch', ['watch:all', 'browser-sync']);
+
+gulp.task('browser-sync', function() {
+  browserSync({
+    proxy: "localhost:8080"
+  });
 });

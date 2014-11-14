@@ -2,6 +2,8 @@
 window.jQuery = jQuery = require 'jquery'
 
 React      = require "react"
-bootstrap  = require "bootstrap"
+kootstrap  = require "bootstrap"
 dispatcher = require "./dispatcher/dispatcher.coffee"
+
 Nav        = require './cjsx/nav.cjsx'
+Hud        = require './cjsx/hud.cjsx'

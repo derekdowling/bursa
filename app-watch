@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-echo "Watching assets..."
-duo -w --use duosass --root assets --output ../static css/marketing.scss
-watchify -t coffee-reactify -t reactify assets/js/app/app.coffee -o static/js/build.js -d
