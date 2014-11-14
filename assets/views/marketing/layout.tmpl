@@ -11,13 +11,10 @@
 
         <link rel="icon" type="image/png" href="/img/favicon.png">
 
-        <!-- Vendor CSS -->
+        <!-- CSS -->
         <link href="/css/vendor.css" rel="stylesheet">
-
-        <!-- Custom CSS -->
-        <link href="/css/marketing/main.css" rel="stylesheet"> 
-
         <link href="/css/app/main.css" rel="stylesheet">
+        <link href="/css/marketing/main.css" rel="stylesheet"> 
 
         <style>
           .en-markup-crop-options {
@@ -53,7 +50,7 @@
                             <li><a href="/">Home</a></li>
                             <li><a href="/about">About</a></li>
                             <li><a href="http://blog.bursa.io">Blog</a></li>
-                            <li><a href="/login">Login</a></li>
+                            <!-- <li><a href="/login">Login</a></li> -->
                             <li><a href="/signup">Signup</a></li>
                             <!--<li><a href="/login">Login</a></li>-->
                         </ul>
@@ -62,21 +59,16 @@
             </div>
         </header>
         {{ template "content" . }}
-         <footer class="footer text-center">
+         <footer class="text-center">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-4">
                         <span class="copyright"><h4>Copyright &copy; Bursa - 2014</h4></span>
-                    </div>
-                    <div class="col-md-4 text-center center-block">
-                        <a href="https://www.facebook.com/bursa.io"><i id="social" class="fa fa-facebook-square social-fb"></i></a>
-                        <a href="https://twitter.com/bursa_io"><i id="social" class="fa fa-twitter-square social-tw"></i></a>
-                        <!--<a href="https://plus.google.com/+Bootsnipp-page"><i id="social" class="fa fa-google-plus-square fa-3x social-gp"></i></a>-->
-                        <a href="mailto:contact@bursa.io"><i id="social" class="fa fa-envelope-square social-em"></i></a>
-                    </div>
-                    <div class="col-md-4">
-                        <ul class="list-inline quicklinks"></ul>
-                    </div>
+                </div>
+                <div class="row">
+                        <a href="https://www.facebook.com/bursa.io"><i id="social" class="fa fa-facebook-square fa-4x"></i></a>
+                        <a href="https://twitter.com/bursa_io"><i id="social" class="fa fa-twitter-square social-tw fa-4x"></i></a>
+                        <!--<a href="https://plus.google.com/+Bootsnipp-page"><i id="social" class="fa fa-google-plus-square fa-3x social-gp fa-4x"></i></a>-->
+                        <a href="mailto:contact@bursa.io"><i id="social" class="fa fa-envelope-square social-em fa-4x"></i></a>
                 </div>
             </div>
         </footer>

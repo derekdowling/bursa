@@ -46,13 +46,14 @@ type Signup struct {
 }
 
 func HandlePostSignup(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
 
+	// parse out our query vars
+	err := r.ParseForm()
 	if err != nil {
 		log.Error(err)
 	}
 
-	log.Print(r)
+	// marshal over to a struct
 	decoder := schema.NewDecoder()
 	signup := new(Signup)
 	err = decoder.Decode(signup, r.PostForm)
@@ -62,9 +63,6 @@ func HandlePostSignup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	success := email.Subscribe(signup.Email)
-
-	// company := r.FormValue("company")
-
 	if !success {
 		picasso.RenderWithCode(w, "marketing/layout", "marketing/signup", signup.Email, http.StatusBadRequest)
 		return
