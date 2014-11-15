@@ -1,8 +1,0 @@
-{
-  "prebuild/scaffold/sass/theme.scss": {
-    "id": "prebuild/scaffold/sass/theme.scss",
-    "type": "scss",
-    "mtime": 1410435234000,
-    "entry": true
-  }
-}

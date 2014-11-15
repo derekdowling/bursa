@@ -57,6 +57,38 @@ html {
             box-shadow: 0 0 2px rgba(0,0,0,.2);
         }
 
+        > .hud-container {
+            padding: 15px;
+            width: 220px;
+            border-bottom: 1px dotted darken($sidebar_bg, 10%);
+
+            h4 {
+              text-align: center;
+            }
+
+            .fa {
+              display: inline-block;
+              vertical-align: middle;
+              width: 60px;
+            }
+
+            .balance {
+              width: 130px;
+              padding: 10px;
+              font-size: 1.5em;
+              display: inline-block;
+              border: 1px solid darken($sidebar_bg, 10%);
+              border-radius: 5px;
+              color: white;
+              background: darken($sidebar_bg, 70%);
+
+              &:before {
+                content: "\f15a  ";
+                font-family: "FontAwesome";
+              }
+            }
+        }
+
         > .nav-container {
             display: none;
             z-index: 11; // should be highter than top header
