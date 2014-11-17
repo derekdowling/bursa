@@ -35,7 +35,8 @@
             background-color: darken($dark, 5%);
             color: $bright;
             line-height: $header_height;
-            text-align: center;
+            text-align: left;
+            padding-left: 15px;
             @media (min-width: $screen-sm) {
                 display: inline-block;
                 width: 220px;

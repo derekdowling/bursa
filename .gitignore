@@ -5,6 +5,7 @@ assets/coffee/components/*
 static/js/*
 static/css/*
 static/components/*
+static/fonts/*
 assets/components/*
 
 #Godeps
@@ -16,3 +17,4 @@ config/local.yml
 .tmp/
 bower_components/
 **/transform/dist
+.build

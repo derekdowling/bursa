@@ -1,0 +1,62 @@
+$arrow_offset:4em;
+$arrow_restore:-3em;
+
+.wallet {
+    margin-bottom: $arrow_offset;
+
+    > abbr {
+        text-overflow: ellipsis;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        white-space: nowrap;
+        display: inline-block;
+    }
+
+    > .ancestor-arrow {
+        display: none;
+        text-align: center;
+    }
+
+    &.ancestor > .ancestor-arrow {
+        margin-bottom: $arrow_restore;
+        display: block;
+        opacity: 0.2;
+    }
+
+    // The next two distribute elements evenly.
+    .panel-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        align-content: center;
+
+        > * {
+            display: flex;
+            align-items: center;
+        }
+
+        > .balance {
+            width: 25%;
+            justify-content: center;
+        }
+    }
+
+    // Progressive disclosure of button clutter.
+    > .panel > .panel-footer button {
+       /* visibility: hidden; */
+    }
+    > &.active .panel > .panel-footer button {
+       /* visibility: visible; */
+    }
+
+    // Progressive disclsoure of lower-level wallets.
+    &.preview {
+        opacity: 0.7;
+    }
+}
+
+.wallets {
+    > .wallet-level {
+    }
+}
