@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-echo "Watching assets..."
-cjsx -cjw --output static/js assets/js/marketing.cjsx
-cjsx -cjw --output static/js assets/js/app.cjsx
-duo -w --use duosass --root assets --output ../static css/app.scss css/marketing.scss js/build.js
