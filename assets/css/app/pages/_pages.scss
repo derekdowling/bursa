@@ -11,3 +11,14 @@
         margin: 0;
     }
 }
+
+// For pages that don't have much content and could use some vertical centering.
+.page-simple {
+  .main-content {
+    display: flex;
+    flex: 1;
+
+    .err-container {
+    }
+  }
+}
