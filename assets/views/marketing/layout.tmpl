@@ -12,9 +12,8 @@
         <link rel="icon" type="image/png" href="/img/favicon.png">
 
         <!-- CSS -->
-        <link href="/css/vendor.css" rel="stylesheet">
-        <link href="/css/app/main.css" rel="stylesheet">
-        <link href="/css/marketing/main.css" rel="stylesheet"> 
+        <link href="/css/fonts.css" rel="stylesheet">
+        <link href="/css/app.css" rel="stylesheet">
 
         <style>
           .en-markup-crop-options {
@@ -32,7 +31,7 @@
         </style>
     </head>
 
-    <body>
+    <body class="marketing {{ template "bodyclass" }}">
         <!--[if lt IE 9]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -58,24 +57,20 @@
                 </div>
             </div>
         </header>
-        {{ template "content" . }}
+        <div class="main-content">
+          {{ template "content" . }}
+        </div>
          <footer class="text-center">
             <div class="container">
                 <div class="row">
-                        <span class="copyright"><h4>Copyright &copy; Bursa - 2014</h4></span>
-                </div>
-                <div class="row">
-                        <a href="https://www.facebook.com/bursa.io"><i id="social" class="fa fa-facebook-square fa-4x"></i></a>
-                        <a href="https://twitter.com/bursa_io"><i id="social" class="fa fa-twitter-square social-tw fa-4x"></i></a>
-                        <!--<a href="https://plus.google.com/+Bootsnipp-page"><i id="social" class="fa fa-google-plus-square fa-3x social-gp fa-4x"></i></a>-->
-                        <a href="mailto:contact@bursa.io"><i id="social" class="fa fa-envelope-square social-em fa-4x"></i></a>
+                  <span class="copyright">Copyright &copy; Bursa - 2014</span>
+                  <a href="https://www.facebook.com/bursa.io"><i id="social" class="fa fa-facebook fa-3x"></i></a>
+                  <a href="https://twitter.com/bursa_io"><i id="social" class="fa fa-twitter social-tw fa-3x"></i></a>
+                  <!--<a href="https://plus.google.com/+Bootsnipp-page"><i id="social" class="fa fa-google-plus-square fa-3x social-gp fa-4x"></i></a>-->
+                  <a href="mailto:contact@bursa.io"><i id="social" class="fa fa-envelope social-em fa-3x"></i></a>
                 </div>
             </div>
         </footer>
-
-        <!-- Duo -->
-        <script src="/js/marketing.js"></script>
-        <script src="/js/build.js"></script>
 
         <!-- Analytics -->
         <script>
@@ -90,3 +85,5 @@
         </script>
     </body>
 </html>
+
+{{ define "bodyclass" }}{{ end }}
