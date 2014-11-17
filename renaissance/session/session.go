@@ -5,6 +5,7 @@ package session
 import (
 	"github.com/derekdowling/bursa/config"
 	"github.com/gorilla/sessions"
+	"log"
 	"net/http"
 )
 
@@ -41,6 +42,8 @@ func CreateUserSession(w http.ResponseWriter, r *http.Request) {
 func LoggedIn(r *http.Request) bool {
 	session := getAppSession(r)
 
+	log.Print(session)
 	logged_in := session.Values[LoggedIn]
+	log.Print(logged_in)
 	return logged_in.(bool)
 }
