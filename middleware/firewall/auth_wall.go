@@ -1,6 +1,7 @@
+package firewall
+
 // This firewall handes basic authorization checking. If the user is not authorized
 // it redirects them back to safety where they can auth
-package firewall
 
 import (
 	"github.com/derekdowling/bursa/config"

@@ -10,6 +10,7 @@ import (
 	"github.com/derekdowling/bursa/config"
 	"github.com/derekdowling/bursa/controller/app"
 	"github.com/derekdowling/bursa/controller/home"
+	"github.com/derekdowling/bursa/middleware/firewall"
 	"github.com/derekdowling/bursa/middleware/logger"
 	"github.com/derekdowling/bursa/middleware/logtext"
 	"github.com/gorilla/mux"
@@ -81,6 +82,8 @@ func buildStack(production bool) *negroni.Negroni {
 	} else {
 		stack.Use(logger.NewLogger())
 	}
+
+	stack.Use(negroni.HandlerFunc(firewall.ServeHTTP))
 
 	// Builds our router and gives it routes
 	router := buildRouter()
