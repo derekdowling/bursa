@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/derekdowling/mamba"
+	"os"
 	"path"
 	"runtime"
 	"strings"
@@ -42,9 +43,27 @@ func getLoadPath() string {
 	return baseDir
 }
 
+// Detect the BURSA_ENV variable and user it to determine the final config name.
+// E.g. server.production. We default to server.development if the ENV isn't set.
+func getConfigName(baseDir string) string {
+	config_parts := []string{
+		"server",
+	}
+
+	if part := os.Getenv("BURSA_ENV"); part != "" {
+		config_parts = append(config_parts, part)
+	} else {
+		config_parts = append(config_parts, "development")
+	}
+
+	return strings.Join(config_parts, ".")
+}
+
 func LoadServer(baseDir string) *mamba.Config {
 	server := mamba.NewConfig()
-	server.SetConfigName("server")
+	server.SetConfigName(
+		getConfigName("server"),
+	)
 	server.AddConfigPath(baseDir)
 	server.ReadInConfig()
 	return server

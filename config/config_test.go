@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/derekdowling/mamba"
 	. "github.com/smartystreets/goconvey/convey"
+	"os"
 	"testing"
 )
 
@@ -24,13 +25,26 @@ func TestSpec(t *testing.T) {
 			})
 
 			Convey("LoadServer()", func() {
-				config := LoadServer(path)
+				original_env := os.Getenv("BURSA_ENV")
 
-				So(config, ShouldNotBeNil)
-				So(config, ShouldHaveSameTypeAs, new(mamba.Config))
-				asset_path := config.GetStringMapString("paths")["assets"]
-				So(asset_path, ShouldNotBeNil)
-				So(asset_path, ShouldEqual, "./assets")
+				Convey("With Blank or Development Environment", func() {
+					os.Setenv("BURSA_ENV", "")
+					config := LoadServer(path)
+
+					So(config, ShouldNotBeNil)
+					So(config, ShouldHaveSameTypeAs, new(mamba.Config))
+					asset_path := config.GetStringMapString("paths")["assets"]
+					So(asset_path, ShouldNotBeNil)
+					So(asset_path, ShouldEqual, "./assets")
+				})
+
+				Convey("With Production Environment", func() {
+					os.Setenv("BURSA_ENV", "production")
+					config := LoadServer(path)
+					So(config.GetStringMap("logging")["mode"], ShouldEqual, "prod")
+				})
+
+				os.Setenv("BURSA_ENV", original_env)
 			})
 
 			Convey("LoadConfig()", func() {
