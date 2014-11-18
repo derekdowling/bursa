@@ -6,15 +6,12 @@ package kernel
 
 import (
 	log "github.com/Sirupsen/logrus"
-	"github.com/codegangsta/negroni"
 	"github.com/derekdowling/bursa/config"
-	"github.com/derekdowling/bursa/controller/app"
-	"github.com/derekdowling/bursa/controller/home"
 	"github.com/derekdowling/bursa/middleware/logger"
 	"github.com/derekdowling/bursa/middleware/logtext"
-	"github.com/gorilla/mux"
 	"github.com/unrolled/secure"
-	"net/http"
+	"github.com/codegangsta/negroni"
+	"os"
 )
 
 func init() {
@@ -32,42 +29,16 @@ func init() {
 		log.SetLevel(log.DebugLevel)
 
 		// gives our logger file/line/stack traces
-		log.SetFormatter(logtext.NewLogtext(new(log.TextFormatter), true))
-
+		log.SetFormatter(logtext.NewLogtext(new(log.TextFormatter), false))
 	}
 
+	// Output to stderr instead of stdout, could also be a file.
+	log.SetOutput(os.Stderr)
 }
 
-// This handles starting up our web kernel. It'll load our routes, controllers, and
-// middleware.
-func Start(production bool) {
-
-	// get our stack rolling
-	stack := buildStack(production)
-
-	// figure out what port we need to be on
-	port := config.Server.GetStringMapString("ports")["http"]
-
-	// output to help notify that the server is loaded
-	log.WithFields(log.Fields{"port": port}).Info("Ready for requests with:")
-
-	// start and log server output
-	log.Fatal(http.ListenAndServe(port, stack))
-
-	// TODO: get below working when we want HTTPS in prod
-	// Listen, Serve, Log
-	// log.Fatal(
-	// http.ListenAndServeTLS(
-	// config.Server.GetString("server.Https_Port"),
-	// "src/bursa.io/server/certs/cert.pem",
-	// "src/bursa.io/server/certs/key.pem",
-	// stack,
-	// ),
-	// )
-}
 
 // Handle's putting the whole stack together
-func buildStack(production bool) *negroni.Negroni {
+func BuildStack(production bool) *negroni.Negroni {
 	// Build our contraption middleware and add the router
 	// as the last piece
 	stack := negroni.New()
@@ -82,55 +53,7 @@ func buildStack(production bool) *negroni.Negroni {
 		stack.Use(logger.NewLogger())
 	}
 
-	// Builds our router and gives it routes
-	router := buildRouter()
-
-	// Serve static assets that the website requests
-	static_routes := config.Server.GetStringMapString("static_routes")
-
-	for url, local := range static_routes {
-
-		log.WithFields(log.Fields{
-			"route": url,
-			"path":  local,
-		}).Info("Asset Path:")
-
-		router.PathPrefix(url).Handler(
-			http.FileServer(http.Dir(local)),
-		)
-	}
-
-	stack.UseHandler(router)
 	return stack
-}
-
-// Builds our routes
-// http://www.gorillatoolkit.org/pkg/mux
-func buildRouter() *mux.Router {
-
-	// Create a Gorilla Mux Router
-	router := mux.NewRouter()
-
-	router.Queries("email", "")
-
-	// Website Routes
-	router.HandleFunc("/", home.HandleIndex).Methods("GET")
-	router.HandleFunc("/app", app.HandleIndex).Methods("GET")
-	router.HandleFunc("/about", home.HandleAbout).Methods("GET")
-	router.HandleFunc("/login", home.HandleLogin).Methods("GET")
-	router.HandleFunc("/login", home.HandlePostLogin).Methods("POST")
-	router.HandleFunc("/signup", home.HandleSignup).Methods("GET")
-	router.HandleFunc("/signup", home.HandlePostSignup).Methods("POST")
-	router.HandleFunc("/forgot-password", home.HandleForgotPassword).Methods("GET")
-	// router.HandleFunc("/forgot-password", home.HandlePostSignup).Methods("POST").Queries("email", "")
-
-	// Our 404 Handler
-	router.NotFoundHandler = http.HandlerFunc(home.Handle404)
-
-	// API Routes
-	// TODO: Rest Layer
-
-	return router
 }
 
 // Sets our secure middleware based on what mode we are in

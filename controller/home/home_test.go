@@ -35,7 +35,8 @@ func TestSpec(t *testing.T) {
 				rec := httptest.NewRecorder()
 
 				So(err, ShouldBeNil)
-				HandleSignup(rec, req)
+				HandlePostSignup(rec, req)
+
 				So(rec.Code, ShouldEqual, http.StatusBadRequest)
 			})
 		})

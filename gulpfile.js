@@ -175,7 +175,6 @@ function sassify(src, alias, dest) {
       .pipe(
         sass({
           errLogToConsole: true,
-          sourceComments: 'map',
           onError: notify.onError({
             title: "Compile Error",
             message: "<%= error.message %>"
@@ -259,17 +258,20 @@ gulp.task('dist', function(cb) {
 
 gulp.task('build:css:watch', ['sass'], ready);
 gulp.task('build:js:watch', ['js:app:watch'], ready);
-gulp.task('react-bootstrap:watch', ['react-bootstrap'], ready);
 
 gulp.task('watch:css', function() {
   gulp.watch(paths.watch_scss, ['build:css:watch']);
 });
 
-gulp.task('watch', ['watch:css', 'build:js:watch', 'browser-sync']);
+gulp.task('watch:js', ['build:js:watch']);
+
+gulp.task('watch', ['build:css', 'build:js'], function() {
+  runSequence('watch:css', 'watch:js', 'browser-sync');
+});
 
 gulp.task('browser-sync', function() {
   browserSync({
-    proxy: "localhost:8080",
+    proxy: "dev.bursa.io",
     debug: true
   });
 });

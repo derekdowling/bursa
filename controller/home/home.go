@@ -3,6 +3,7 @@ package home
 
 import (
 	log "github.com/Sirupsen/logrus"
+	_ "github.com/derekdowling/bursa/kernel"
 	"github.com/derekdowling/bursa/email"
 	"github.com/derekdowling/bursa/models"
 	"github.com/derekdowling/bursa/picasso"
@@ -46,7 +47,6 @@ type Signup struct {
 }
 
 func HandlePostSignup(w http.ResponseWriter, r *http.Request) {
-
 	// parse out our query vars
 	err := r.ParseForm()
 	if err != nil {
