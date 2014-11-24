@@ -190,6 +190,7 @@ function sassify(src, alias, dest) {
 }
 
 gulp.task('app:sass', sassify('./assets/css/app/main.scss', 'app.css', 'static/css'));
+gulp.task('styleguide:sass', sassify('./assets/css/styleguide/styleguide.scss', 'styleguide.css', 'static/css'));
 
 gulp.task('minifycss', function() {
   gutil.log("running minfiy?");
@@ -206,7 +207,7 @@ gulp.task('bless', function() {
 });
 
 // Compile sass in parallel.
-gulp.task('sass', ['app:sass']);
+gulp.task('sass', ['app:sass', 'styleguide:sass']);
 
 // gulp.task('bless', ['app:bless']);
 
@@ -269,7 +270,7 @@ gulp.task('watch', ['watch:css', 'build:js:watch', 'browser-sync']);
 
 gulp.task('browser-sync', function() {
   browserSync({
-    proxy: "localhost:8080",
+    proxy: "dev.bursa.io",
     debug: true
   });
 });

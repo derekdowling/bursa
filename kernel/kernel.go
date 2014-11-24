@@ -10,6 +10,7 @@ import (
 	"github.com/derekdowling/bursa/config"
 	"github.com/derekdowling/bursa/controller/app"
 	"github.com/derekdowling/bursa/controller/home"
+	"github.com/derekdowling/bursa/controller/styleguide"
 	"github.com/derekdowling/bursa/middleware/logger"
 	"github.com/derekdowling/bursa/middleware/logtext"
 	"github.com/gorilla/mux"
@@ -122,6 +123,7 @@ func buildRouter() *mux.Router {
 	router.HandleFunc("/signup", home.HandleSignup).Methods("GET")
 	router.HandleFunc("/signup", home.HandlePostSignup).Methods("POST")
 	router.HandleFunc("/forgot-password", home.HandleForgotPassword).Methods("GET")
+	router.HandleFunc("/style-guide", styleguide.HandleIndex).Methods("GET")
 	// router.HandleFunc("/forgot-password", home.HandlePostSignup).Methods("POST").Queries("email", "")
 
 	// Our 404 Handler
