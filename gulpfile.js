@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var shell = require('gulp-shell');
 var notify = require('gulp-notify');
+var notifier = require('node-notifier');
 var path = require('path');
 
 // Slightly Stripped Rubix CSS
@@ -40,8 +41,11 @@ var clean = require('gulp-clean');
 
 var watchify = require('watchify');
 var browserify = require('browserify');
+var coffeeify = require('coffeeify');
 var coffee_reactify = require('coffee-reactify');
 var source = require('vinyl-source-stream');
+
+var jest = require('jest-cli');
 
 var runSequence = require('run-sequence');
 
@@ -105,30 +109,28 @@ logData('Environment : '+ (production ? 'Production':'Development'));
 // Javascript Related
 // -----------
 
+function onError(source, err) {
+  notify.onError({
+    title: source,
+    subtitle: "Failure!",
+    message:  "Error: <%= err.message %>"
+  })(err);
+
+  this.emit('end');
+}
+
 function bundlefile(file, as, watch) {
   var props = watchify.args;
   props.entries = [file];
   props.debug = true;
+  props.extensions = ['.coffee', '.cjsx'];
   var bundler = watch ? watchify(browserify(props)) : browserify(props);
   bundler.transform(coffee_reactify);
-
-
-  var onError = function(err) {
-    console.log(err);
-    notify.onError({
-      title:    "Sass",
-      subtitle: "Failure!",
-      message:  "Error: <%= err.message %>"
-    })(err);
-
-    this.emit('end');
-  };
-
 
   function rebundle() {
     var stream = bundler.bundle();
     return stream
-      .pipe(plumber({errorHandler: onError}))
+      .pipe(plumber({errorHandler: onError.bind('JS Error')}))
       .on('error', gutil.log.bind(gutil, 'error'))
       .pipe(source(as))
       .pipe(gulp.dest('static/js'))
@@ -255,6 +257,21 @@ gulp.task('dist', function(cb) {
   });
 });
 
+// Testing
+//--------
+
+gulp.task('test', function(done) {
+  jest.runCLI({ config: package.jest }, ".", function(result) {
+    if (result === false) {
+      notifier.notify({
+        title: "Fail!",
+        message: "Javascript tests failed.",
+      });
+    }
+    done();
+  });
+});
+
 // Watch Tasks
 //------------
 
@@ -266,11 +283,15 @@ gulp.task('watch:css', function() {
   gulp.watch(paths.watch_scss, ['build:css:watch']);
 });
 
+gulp.task('watch:test', function() {
+  gulp.watch(paths.js, ['test']);
+});
+
 gulp.task('watch', ['watch:css', 'build:js:watch', 'browser-sync']);
 
 gulp.task('browser-sync', function() {
   browserSync({
-    proxy: "dev.bursa.io",
+    proxy: "app.dev.bursa.io, dev.bursa.io",
     debug: true
   });
 });

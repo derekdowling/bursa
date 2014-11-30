@@ -5,6 +5,7 @@ require 'es6-shim' # {... extraProps}
 { Route, Routes, Link } = require 'react-router'
 
 Wallet = require './wallet.cjsx'
+WalletStore = require '../stores/WalletStore'
 
 
 # wallets is a hash of wallets keyed by their address.
@@ -31,7 +32,8 @@ collectLevels = (wallets, path = null) ->
     level_wallets
 
   # Provide the next level of children
-  levels[level] = (wallet for key, wallet of wallets)
+  if Object.keys(wallets).length
+    levels[level] = (wallet for key, wallet of wallets)
   levels
 
 pathToWallet = (wallets, address) ->
@@ -106,6 +108,10 @@ Wallets = React.createClass
 
     componentWillMount: ->
       @setState(@deriveState(@props, @state))
+      WalletStore.addChangeListener ->
+
+    componentWillUnmount: ->
+      WalletStore.removeChangeListener ->
 
     renderLevel: (wallets, depth) ->
       <div className="row wallet-level level-#{depth}">
@@ -124,9 +130,6 @@ Wallets = React.createClass
         @renderLevel level, i
 
     render: ->
-      console.log @state
-      console.log @state.levels
-      console.log @state.path
       wallets = @renderLevels()
       <div className="wallets">
         <div className="row">

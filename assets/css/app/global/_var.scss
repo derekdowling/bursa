@@ -68,15 +68,18 @@ $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !def
 $font-family-base:        $font-family-sans-serif !default;
 
 $font-size-base:          14px !default;
-$font-size-large:         ceil(($font-size-base * 1.25)) !default;
-$font-size-small:         ceil(($font-size-base * 0.85)) !default;
+$font-size-em:            1em;
+$font-size-large:         $font-size-em * 1.25 !default;
+$font-size-small:         $font-size-em * 0.85 !default;
+$font-size-large-px:      ceil($font-size-base * 1.25) !default;
+$font-size-small-px:      ceil($font-size-base * 0.85) !default;
 
-$font-size-h1:            floor(($font-size-base * 5.105)) !default;
-$font-size-h2:            floor(($font-size-base * 2.15)) !default;
-$font-size-h3:            ceil(($font-size-base * 1.7)) !default;
-$font-size-h4:            ceil(($font-size-base * 1.25)) !default;
-$font-size-h5:            $font-size-base !default;
-$font-size-h6:            ceil(($font-size-base * 0.85)) !default;
+$font-size-h1:            $font-size-em * 5.105 !default;
+$font-size-h2:            $font-size-em * 3.25 !default;
+$font-size-h3:            $font-size-em * 1.7 !default;
+$font-size-h4:            $font-size-em * 1.25 !default;
+$font-size-h5:            $font-size-em !default;
+$font-size-h6:            $font-size-em * 0.85 !default;
 
 //** Unit-less `line-height` for use in components like buttons.
 $line-height-base:        (20/14) !default; // 20/14
@@ -222,9 +225,9 @@ $input-color-placeholder:        $gray-light !default;
 //** Default `.form-control` height
 $input-height-base:              ($line-height-computed + ($padding-base-vertical * 2) + 2) !default;
 //** Large `.form-control` height
-$input-height-large:             (ceil($font-size-large * $line-height-large) + ($padding-large-vertical * 2) + 2) !default;
+$input-height-large:             (ceil($font-size-large-px * $line-height-large) + ($padding-large-vertical * 2) + 2) !default;
 //** Small `.form-control` height
-$input-height-small:             (floor($font-size-small * $line-height-small) + ($padding-small-vertical * 2) + 2) !default;
+$input-height-small:             (floor($font-size-small-px * $line-height-small) + ($padding-small-vertical * 2) + 2) !default;
 
 $legend-color:                   $gray-dark !default;
 $legend-border-color:            #e5e5e5 !default;
