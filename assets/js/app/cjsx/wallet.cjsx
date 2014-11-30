@@ -22,7 +22,7 @@ Wallet = React.createClass
       @props.address in @props.path[...-1]
 
     highlightClass: ->
-      if @isActive() then return 'panel-success' else ''
+      if @isActive() then return '' else ''
 
     isPreview: ->
       unless @props.path?
@@ -36,6 +36,9 @@ Wallet = React.createClass
         if @isAncestor() then "ancestor"
         if @isPreview() then "preview"
       ].join(" ")
+
+    createChild: ->
+      WalletCreateAction.build().dispatch()
 
     render: ->
       wallet_link = @makeHref "/wallets/wallet/#{@props.address}"
@@ -51,8 +54,10 @@ Wallet = React.createClass
           </div>
           <div className="panel-footer">
             <ButtonGroup className="tools">
-              <Button><i className="fa fa-plus-circle"/> New</Button>
-              <Button href={wallet_link}><i className="fa fa-plus-circle"/> View</Button>
+              <Button
+                onClick={@createChild()}
+                className="btn-primary"><i className="fa fa-plus-circle"/></Button>
+              <Button className="btn-primary" href={wallet_link}><i className="fa fa-binoculars"/></Button>
             </ButtonGroup>
           </div>
         </div>

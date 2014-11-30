@@ -3,7 +3,9 @@ npm-debug.log
 node_modules/
 assets/coffee/components/*
 static/js/*
+!static/js/styleguide/*
 static/css/*
+!static/css/styleguide/*
 static/components/*
 static/fonts/*
 assets/components/*

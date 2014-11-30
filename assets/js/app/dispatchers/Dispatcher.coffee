@@ -24,6 +24,8 @@ class Dispatcher
 
     null
 
-class ActionDispatcher extends Dispatcher
+class AppDispatcher extends Dispatcher
   onAction: (action) ->
     @dispatch source: 'ACTION_DISPATCHER', action: action
+
+module.exports = AppDispatcher

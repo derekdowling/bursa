@@ -1,2 +1,6 @@
-Backbone = require "backbone"
-WalletDispatcher = require "../dispatchers/wallet"
+AppDispatcher = require '../dispatchers/Dispatcher'
+Store = require './Store'
+
+class WalletStore extends Store
+
+module.exports = WalletStore

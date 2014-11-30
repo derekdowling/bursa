@@ -26,5 +26,5 @@
   font-family: 'Lato';
   font-style: italic;
   font-weight: 400;
-  src: local('Lato Italic'), local('Lato-Italic'), url('/fonts/Lato-Italic'), format('truetype');
+  src: local('Lato Italic'), local('Lato-Italic'), url('/fonts/Lato-Italic.ttf'), format('truetype');
 }
