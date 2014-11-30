@@ -10,7 +10,7 @@ import (
 
 func loadStore() sessions.Store {
 	// Load our session store
-	store := sessions.NewCookieStore([]byte(config.Server.GetString("session.Key.Main")))
+	store := sessions.NewCookieStore([]byte(config.App.GetString("session.Key.Main")))
 	return store
 }
 
@@ -18,7 +18,7 @@ func getAppSession(r *http.Request) *sessions.Session {
 	store := loadStore()
 
 	// always returns a blank session if none is present
-	session, _ := store.Get(r, config.Server.GetString("session.Key.App"))
+	session, _ := store.Get(r, config.App.GetString("session.Key.App"))
 	return session
 }
 

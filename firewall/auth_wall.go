@@ -14,7 +14,7 @@ func ServeHTTP(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 
 	// If not authorized, redirect to login
 	if !authorized {
-		http.Redirect(w, r, config.Server.GetString("app.Login_Url"), http.StatusUnauthorized)
+		http.Redirect(w, r, config.App.GetString("app.Login_Url"), http.StatusUnauthorized)
 	}
 
 	// if the user is authorized proceed

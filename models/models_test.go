@@ -14,8 +14,7 @@ func TestSpec(t *testing.T) {
 			db, err := Connect()
 
 			So(err, ShouldBeNil)
-			So(db, ShouldHaveSameTypeAs, new(gorm.DB))
+			So(db, ShouldHaveSameTypeAs, gorm.DB{})
 		})
-
 	})
 }

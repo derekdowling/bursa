@@ -20,3 +20,5 @@ config/local.yml
 bower_components/
 **/transform/dist
 .build
+# Local configuration settings.
+bursa.local.yml
