@@ -4,7 +4,6 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/derekdowling/bursa/config"
 	"github.com/mattbaird/gochimp"
-	"strconv"
 )
 
 // Adds a user, via their email, to one of our MailChimp mailing lists
@@ -31,17 +30,16 @@ func SubscribeToChimp(userEmail string) bool {
 // Checks whether or not we are in production to avoid spamming ourselves
 // with email
 func sendWelcomeEmail() bool {
-	val, _ := strconv.ParseBool(config.Server.GetStringMapString("email")["enabled"])
-	return val
+	return config.App.GetBool("email.enabled")
 }
 
 // Sets up the MailChimp API
 func getMailChimp() *gochimp.ChimpAPI {
-	api_key := config.Server.GetStringMapString("email")["mailchimp_key"]
+	api_key := config.App.GetString("email.mailchimp_key")
 	return gochimp.NewChimp(api_key, true)
 }
 
 // Determines which mailing list to add user to based on context
 func getMailListId() string {
-	return config.Server.GetStringMapString("email")["list_id"]
+	return config.App.GetString("email.list_id")
 }

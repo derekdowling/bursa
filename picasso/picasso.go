@@ -59,8 +59,8 @@ func combineTemplates(layout string, view string, partials []string) *template.T
 // Creates a relative path to our templates folder
 func getTemplateRoot() string {
 	_, filename, _, _ := runtime.Caller(1)
-	filepath := path.Join(path.Dir(filename), "/../")
-	return path.Join(filepath, config.Server.GetStringMapString("paths")["templates"])
+	base_path := path.Join(path.Dir(filename), "/../")
+	return path.Join(base_path, config.App.GetString("paths.templates"))
 }
 
 // Searches the folder that the layout is defined in for a "/partials" folder

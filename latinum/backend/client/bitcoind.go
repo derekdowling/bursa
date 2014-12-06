@@ -2,9 +2,7 @@ package client
 
 import (
 	"github.com/conformal/btcrpcclient"
-	_ "github.com/derekdowling/bursa/config"
-	// TODO how to ensure our config is loaded?
-	"github.com/spf13/viper"
+	"github.com/derekdowling/bursa/config"
 )
 
 // TODO g_ prefix? What is the proper way of initalizing global variables in go?
@@ -16,15 +14,14 @@ func Get() *btcrpcclient.Client {
 	// effects via the underscore modifier, but it seems to not read the
 	// configuration data when done that way.
 	if g_client == nil {
-		bitcoin_config := viper.GetStringMap("bitcoin")
 		g_client, _ = btcrpcclient.New(&btcrpcclient.ConnConfig{
 			// There appears to be a bug with nested booleans and viper.GetBool.
 			// HttpPostMode: viper.GetBool("bitcoin.HttpPostMode"),
-			HttpPostMode: bitcoin_config["HttpPostMode"].(bool),
-			DisableTLS:   bitcoin_config["DisableTLS"].(bool),
-			Host:         bitcoin_config["Host"].(string),
-			User:         bitcoin_config["User"].(string),
-			Pass:         bitcoin_config["Pass"].(string),
+			HttpPostMode: config.App.GetBool("bitcoin.HttpPostMode"),
+			DisableTLS:   config.App.GetBool("bitcoin.DisableTLS"),
+			Host:         config.App.GetString("bitcoin.Host"),
+			User:         config.App.GetString("bitcion.User"),
+			Pass:         config.App.GetString("bitcion.Pass"),
 		}, nil)
 	}
 	return g_client

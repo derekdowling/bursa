@@ -62,9 +62,8 @@ func generateSalt() string {
 // by the user
 func CreatePassword(raw_pass string) (salt string, hash string) {
 
-	password := new(Password)
 	salt = generateSalt()
-	salted_pass := combine(password.salt, raw_pass)
+	salted_pass := combine(salt, raw_pass)
 	hash = hashPassword(salted_pass)
 
 	return salt, hash

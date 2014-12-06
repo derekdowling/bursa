@@ -6,7 +6,7 @@ install:
     - go get github.com/tools/godep
     - godep restore
 
-script: go test ./...
+script: make test
 
 addons:
       postgresql: "9.3"
