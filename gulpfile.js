@@ -125,7 +125,8 @@ function bundlefile(file, as, watch) {
   props.debug = true;
   props.extensions = ['.coffee', '.cjsx'];
   var bundler = watch ? watchify(browserify(props)) : browserify(props);
-  bundler.transform(coffee_reactify);
+  bundler
+    .transform(coffee_reactify);
 
   function rebundle() {
     var stream = bundler.bundle();

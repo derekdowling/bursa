@@ -2,11 +2,11 @@
 React = require 'react'
 require 'es6-shim' # {... extraProps}
 
-{ Route, Routes, Link } = require 'react-router'
+{ Route, Routes, Link, State, Navigation } = require 'react-router'
 
 Wallet = require './wallet.cjsx'
 WalletStore = require '../stores/WalletStore'
-
+{ WalletCreateAction, WalletDestroyAction } = require '../actions/WalletActions'
 
 # wallets is a hash of wallets keyed by their address.
 # path is a slash delimited string.
@@ -47,7 +47,7 @@ pathToWallet = (wallets, address) ->
     else
       for key, wallet of wallet.wallets
         result = dfs(wallet, stack[..])
-        if result then return result
+        if result? then return result
 
     return null
 
@@ -58,43 +58,23 @@ pathToWallet = (wallets, address) ->
   return null
 
 Wallets = React.createClass
-    getInitialState: ->
-      wallets:
-        "1KNp2RrFvtRLh7FX6qAwYzqN6d1bmM849c":
-          label: "Bursa.io"
-          address: "1KNp2RrFvtRLh7FX6qAwYzqN6d1bmM849c"
-          balance: 50.0
-          wallets:
-            "2KNp2RrFvtRLh7FX6qAwYzqN6d1bmM849c":
-              label: "Capital"
-              address: "2KNp2RrFvtRLh7FX6qAwYzqN6d1bmM849c"
-              balance: 20.0
-              wallets:
-                "5KNp2RrFvtRLh7FX6qAwYzqN6d1bmM849c":
-                  label: "Infrastructure"
-                  address: "5KNp2RrFvtRLh7FX6qAwYzqN6d1bmM849c"
-                  balance: 14.65
-                  wallets: {}
-                "6KNp2RrFvtRLh7FX6qAwYzqN6d1bmM849c":
-                  label: "Equipment"
-                  address: "6KNp2RrFvtRLh7FX6qAwYzqN6d1bmM849c"
-                  balance: 5.35
-                  wallets: {}
-            "3KNp2RrFvtRLh7FX6qAwYzqN6d1bmM849c":
-              label: "Marketing"
-              address: "3KNp2RrFvtRLh7FX6qAwYzqN6d1bmM849c"
-              balance: 21.29
-              wallets: {}
-            "4KNp2RrFvtRLh7FX6qAwYzqN6d1bmM849c":
-              label: "Payroll"
-              address: "4KNp2RrFvtRLh7FX6qAwYzqN6d1bmM849c"
-              balance: 8.71
-              wallets: {}
+    mixins: [ State ]
 
-    # So this is a bit  ugly. These calcuations could be done before hand
-    # wallets shouldn't receive random loop indices, state, props blah.
-    deriveState: (nextProps, nextState) ->
-      path = pathToWallet nextState.wallets, nextProps.params.address
+    getInitialState: ->
+      # We don't pass all of the wallet store properties because that would just
+      # mess up our state with oddball properties that are actually functions.
+      # The repetition of wallets is slightly awkward. As is deriveState.
+      wallets: WalletStore.wallets
+
+    # Default event listener. Eventually this should be standardized instead of
+    # bound manually as in componentWillReceive props.
+    onChange: ->
+      @setState(@deriveState(@props, wallets: WalletStore.wallets))
+      @forceUpdate()
+
+    # Derive the state from a set of upcoming props and the the current state.
+    deriveState: (nextProps = @props, nextState = @state) ->
+      path = pathToWallet nextState.wallets, @getParams().address
       levels = collectLevels nextState.wallets, path
       active_level = path?.length or 0
 
@@ -108,10 +88,10 @@ Wallets = React.createClass
 
     componentWillMount: ->
       @setState(@deriveState(@props, @state))
-      WalletStore.addChangeListener ->
+      WalletStore.addChangeListener => @onChange()
 
     componentWillUnmount: ->
-      WalletStore.removeChangeListener ->
+      WalletStore.removeChangeListener => @onChange()
 
     renderLevel: (wallets, depth) ->
       <div className="row wallet-level level-#{depth}">

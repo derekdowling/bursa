@@ -1,12 +1,12 @@
 # @cjsx React.DOM
 React = require 'react'
 
-{ Route, Routes, Link, ActiveState } = require 'react-router'
+{ Route, Routes, Link, State } = require 'react-router'
 
 module.exports = NavLink = React.createClass
-  mixins: [ ActiveState ]
+  mixins: [ State ]
 
   render: ->
-    isActive = @isActive(@props.to, @props.params, @props.query)
+    isActive = @isActive(@props.to, @getParams(), @getQuery())
     className = if isActive  then 'active' else ''
     <li className={className}><Link {... @props}/></li>

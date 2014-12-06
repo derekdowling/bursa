@@ -7,11 +7,12 @@ class WalletAction
     new @(arguments...)
 
   dispatch: ->
-    Dispatcher.handleViewAction @
+    Dispatcher.dispatch @
 
 class WalletCreateAction extends WalletAction
-  constructor: (@parentWallet) ->
-    expect(@parentWallet).to.have.property('hash')
+  # The address of the parent wallet.
+  constructor: (@parentAddress) ->
+    expect(@parentAddress).to.be.a('string')
 
 class WalletDestroyAction extends WalletAction
   constructor: (@wallet) ->

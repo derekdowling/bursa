@@ -1,5 +1,6 @@
 # @cjsx React.DOM
 React = require 'react'
+{ RouteHandler } = require('react-router')
 
 Hud = require  './cjsx/hud.cjsx'
 Header = require  './cjsx/header.cjsx'
@@ -16,7 +17,7 @@ module.exports = Viewport = React.createClass
           </aside>
           <section id="content" className="content-container animate-fade-up">
              <div className="page page-dashboard">
-              {this.props.activeRouteHandler()}
+              <RouteHandler />
              </div>
           </section>
       </div>

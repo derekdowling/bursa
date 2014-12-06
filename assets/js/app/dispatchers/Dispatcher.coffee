@@ -10,7 +10,8 @@ class Dispatcher
     resolves = []
     rejects = []
 
-    @callbacks.map (_, i) ->
+    # Expose resolvers / rejecters. E.g. as if we had Q.defer()
+    @callbacks.forEach (_, i) ->
       new Promise (resolve, reject) ->
         resolves[i] = resolve
         rejects[i] = reject
@@ -28,4 +29,7 @@ class AppDispatcher extends Dispatcher
   onAction: (action) ->
     @dispatch source: 'ACTION_DISPATCHER', action: action
 
-module.exports = AppDispatcher
+# Expose a singleton instance.
+appDispatcher = new AppDispatcher()
+
+module.exports = appDispatcher

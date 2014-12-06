@@ -3,4 +3,4 @@ jest.dontMock('../actions/WalletActions')
 
 describe 'Action Tests', ->
   it 'Creates an action fluently', ->
-    expect(WalletCreateAction.build(hash:5)).toEqual(jasmine.any(WalletCreateAction))
+    expect(WalletCreateAction.build("5")).toEqual(jasmine.any(WalletCreateAction))

@@ -42,12 +42,21 @@
     }
 
     > .panel {
+        opacity: 0.3;
         margin:1em 0em;
+        cursor: pointer;
     }
 
-    > &.active .panel {
+    > &.active > .panel {
         box-shadow: 0px 0px 0px 6px rgba(white, 1);
         border-bottom:1px solid rgba($gray-light, 0.8);
+        opacity: 1;
+    }
+
+    > &.ancestor > .panel {
+        box-shadow: 0px 0px 0px 6px rgba(white, 1);
+        border-bottom:1px solid rgba($gray-light, 0.8);
+        opacity: 0.8;
     }
 
     // Progressive disclosure of button clutter.
@@ -70,14 +79,15 @@
       padding-bottom: 1em;
       /* border-bottom: 1px solid rgba(0,0,0,0.1); */
 
-      &:nth-child(0n+2) {
+      // an+b - a is the cycle size, b is the offset.
+      &:nth-child(3n+0) {
         background: rgba($brand-warning, 1);
       }
-      &:nth-child(2n+1) {
+      &:nth-child(3n+1) {
         background: rgba($brand-success, 1);
       }
-      &:nth-child(3n+1) {
-        background: rgba($brand-primary, 1);
+      &:nth-child(3n+2) {
+        background: rgba($brand-info, 1);
       }
     }
 }
