@@ -4,6 +4,7 @@
   "description": "Github for Bitcoin",
   "dependencies": {
     "backbone": "^1.1.2",
+    "bitcoinjs-lib": "^1.4.0",
     "bluebird": "^2.3.11",
     "bootstrap": "^3.3.0",
     "chai": "^1.10.0",
@@ -81,6 +82,7 @@
   "jest": {
     "rootDir": "assets/js/app",
     "moduleFileExtensions": [
+      "json",
       "coffee",
       "js"
     ],
