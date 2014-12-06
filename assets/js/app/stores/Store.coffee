@@ -42,5 +42,7 @@ class Store extends EventEmitter
   onViewAction: (action) ->
     if @canHandle action
       @handle(action)
+    else
+      console.debug "#{@constructor.name} does not handle #{action.name()}"
 
 module.exports = Store
