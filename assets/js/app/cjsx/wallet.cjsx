@@ -7,6 +7,7 @@ require 'es6-shim' # {... extraProps}
 
 Balance = require './balance.cjsx'
 Hash = require './hash.cjsx'
+{ WalletCreateAction } = require '../actions/WalletActions'
 
 Wallet = React.createClass
     mixins: [ Navigation ]
@@ -22,12 +23,11 @@ Wallet = React.createClass
       @props.address in @props.path[...-1]
 
     highlightClass: ->
-      if @isActive() then return 'panel-success' else ''
+      if @isActive() then return '' else ''
 
     isPreview: ->
       unless @props.path?
         return false
-      console.log @props
       @props.level == @props.active_level
 
     classes: ->
@@ -37,11 +37,14 @@ Wallet = React.createClass
         if @isPreview() then "preview"
       ].join(" ")
 
+    createChild: ->
+      WalletCreateAction.build(@props.address).dispatch()
+
     render: ->
       wallet_link = @makeHref "/wallets/wallet/#{@props.address}"
 
       <div className="wallet col-md-3 #{@classes()}">
-        <div className="panel panel-default #{@highlightClass()}">
+        <div onClick={=> @transitionTo("/wallets/"+@props.address)} className="panel panel-default #{@highlightClass()}">
           <div className="panel-heading">
             <Link to="/wallets/#{@props.address}"><h4>{@props.label}</h4></Link>
             <Balance balance={@props.balance} />
@@ -51,8 +54,10 @@ Wallet = React.createClass
           </div>
           <div className="panel-footer">
             <ButtonGroup className="tools">
-              <Button><i className="fa fa-plus-circle"/> New</Button>
-              <Button href={wallet_link}><i className="fa fa-plus-circle"/> View</Button>
+              <Button
+                onClick={@createChild}
+                className="btn-primary"><i className="fa fa-plus-circle"/></Button>
+              <Button className="btn-primary" href={wallet_link}><i className="fa fa-binoculars"/></Button>
             </ButtonGroup>
           </div>
         </div>

@@ -77,8 +77,8 @@ func Initialize() {
 }
 
 func Connect() (gorm.DB, error) {
-	dbConf := config.DB.GetStringMapString("orm")
-
-	println(dbConf["adapter"])
-	return gorm.Open(dbConf["adapter"], dbConf["settings"])
+	return gorm.Open(
+		config.App.GetString("orm.adapter"),
+		config.App.GetString("orm.settings"),
+	)
 }

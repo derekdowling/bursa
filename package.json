@@ -6,15 +6,18 @@
     "backbone": "^1.1.2",
     "bluebird": "^2.3.11",
     "bootstrap": "^3.3.0",
+    "chai": "^1.10.0",
     "coffee-react": "^1.0.3",
     "coffee-reactify": "^2.0.0",
+    "coffee-script": "^1.8.0",
     "es6-shim": "^0.20.2",
     "font-awesome": "^4.2.0",
     "jquery": "^2.1.1",
     "js-yaml": "^3.2.2",
+    "okra": "0.0.4",
     "react": "^0.12.0",
     "react-bootstrap": "^0.12.0",
-    "react-router": "^0.10.2",
+    "react-router": "^0.11.4",
     "reactify": "^0.15.2"
   },
   "repository": {
@@ -24,6 +27,7 @@
   "devDependencies": {
     "browser-sync": "^1.6.5",
     "browserify": "*",
+    "coffeeify": "^1.0.0",
     "compression": "*",
     "css-flip": "*",
     "del": "*",
@@ -54,8 +58,10 @@
     "gulp-util": "*",
     "gulp-webpack": "*",
     "html-minifier": "*",
+    "jest-cli": "^0.1.18",
     "jsx-loader": "*",
     "map-stream": "*",
+    "node-notifier": "^4.0.2",
     "node-sass": "*",
     "plumber": "^0.4.8",
     "raw-loader": "*",
@@ -70,7 +76,22 @@
     "yargs": "*"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "gulp test"
+  },
+  "jest": {
+    "rootDir": "assets/js/app",
+    "moduleFileExtensions": [
+      "coffee",
+      "js"
+    ],
+    "scriptPreprocessor": "jestcoffee.js",
+    "testFileExtensions": [
+      "coffee",
+      "js"
+    ]
+  },
+  "browser": {
+    "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js"
   },
   "author": "",
   "license": "full"

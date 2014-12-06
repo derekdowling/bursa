@@ -1,8 +1,5 @@
-$arrow_offset:4em;
-$arrow_restore:-3em;
-
 .wallet {
-    margin-bottom: $arrow_offset;
+    @include transition(all 0.5s ease-in-out);
 
     > abbr {
         text-overflow: ellipsis;
@@ -15,12 +12,14 @@ $arrow_restore:-3em;
 
     > .ancestor-arrow {
         display: none;
+        @include transition(all 0.5s ease-in-out);
+        transform: translateY(-50px);
+        opacity: 0;
         text-align: center;
     }
 
     &.ancestor > .ancestor-arrow {
-        margin-bottom: $arrow_restore;
-        display: block;
+        transform: translateY(0);
         opacity: 0.2;
     }
 
@@ -42,6 +41,24 @@ $arrow_restore:-3em;
         }
     }
 
+    > .panel {
+        opacity: 0.3;
+        margin:1em 0em;
+        cursor: pointer;
+    }
+
+    > &.active > .panel {
+        box-shadow: 0px 0px 0px 6px rgba(white, 1);
+        border-bottom:1px solid rgba($gray-light, 0.8);
+        opacity: 1;
+    }
+
+    > &.ancestor > .panel {
+        box-shadow: 0px 0px 0px 6px rgba(white, 1);
+        border-bottom:1px solid rgba($gray-light, 0.8);
+        opacity: 0.8;
+    }
+
     // Progressive disclosure of button clutter.
     > .panel > .panel-footer button {
        /* visibility: hidden; */
@@ -52,11 +69,25 @@ $arrow_restore:-3em;
 
     // Progressive disclsoure of lower-level wallets.
     &.preview {
-        opacity: 0.7;
+        opacity: 0.5;
     }
 }
 
 .wallets {
     > .wallet-level {
+      padding-top: 1em;
+      padding-bottom: 1em;
+      /* border-bottom: 1px solid rgba(0,0,0,0.1); */
+
+      // an+b - a is the cycle size, b is the offset.
+      &:nth-child(3n+0) {
+        background: rgba($brand-warning, 1);
+      }
+      &:nth-child(3n+1) {
+        background: rgba($brand-success, 1);
+      }
+      &:nth-child(3n+2) {
+        background: rgba($brand-info, 1);
+      }
     }
 }

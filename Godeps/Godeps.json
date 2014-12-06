@@ -1,6 +1,6 @@
 {
 	"ImportPath": "github.com/derekdowling/bursa",
-	"GoVersion": "go1.3.3",
+	"GoVersion": "go1.3.1",
 	"Packages": [
 		"./..."
 	],
@@ -12,16 +12,6 @@
 		},
 		{
 			"ImportPath": "code.google.com/p/go.crypto/blowfish",
-			"Comment": "null-232",
-			"Rev": "7ad4bae3f4670ffa3f967e498c0e2db28564dd7d"
-		},
-		{
-			"ImportPath": "code.google.com/p/go.crypto/cast5",
-			"Comment": "null-232",
-			"Rev": "7ad4bae3f4670ffa3f967e498c0e2db28564dd7d"
-		},
-		{
-			"ImportPath": "code.google.com/p/go.crypto/openpgp",
 			"Comment": "null-232",
 			"Rev": "7ad4bae3f4670ffa3f967e498c0e2db28564dd7d"
 		},
@@ -39,10 +29,6 @@
 			"ImportPath": "github.com/Sirupsen/logrus",
 			"Comment": "v0.6.0-5-gf92b795",
 			"Rev": "f92b7950b372b1db80bd3527e4d40e42555fe6c2"
-		},
-		{
-			"ImportPath": "github.com/armon/consul-api",
-			"Rev": "1b81c8e0c4cbf1d382310e4c0dc11221632e79d1"
 		},
 		{
 			"ImportPath": "github.com/codegangsta/negroni",
@@ -106,16 +92,6 @@
 			"Rev": "08812523f279944afd46e7fb820fa55e31f207f2"
 		},
 		{
-			"ImportPath": "github.com/coreos/go-etcd/etcd",
-			"Comment": "v0.2.0-rc1-127-g6fe04d5",
-			"Rev": "6fe04d580dfb71c9e34cbce2f4df9eefd1e1241e"
-		},
-		{
-			"ImportPath": "github.com/derekdowling/mamba",
-			"Comment": "0.1-1-g35ec462",
-			"Rev": "35ec462c69671710f620b0b9a4642a1741e3ad52"
-		},
-		{
 			"ImportPath": "github.com/gorilla/context",
 			"Rev": "14f550f51af52180c2eefed15e5fd18d63c0a64a"
 		},
@@ -134,6 +110,10 @@
 		{
 			"ImportPath": "github.com/gorilla/sessions",
 			"Rev": "aa5e036e6c44aec69a32eb41097001978b29ad31"
+		},
+		{
+			"ImportPath": "github.com/jacobstr/confer",
+			"Rev": "08fe82ea085898104965981e2789595762e06e0a"
 		},
 		{
 			"ImportPath": "github.com/jinzhu/gorm",
@@ -161,10 +141,6 @@
 			"Rev": "e93b6eb7ec8b8f44d9b73efc2568460a525b247c"
 		},
 		{
-			"ImportPath": "github.com/mitchellh/mapstructure",
-			"Rev": "740c764bc6149d3f1806231418adb9f52c11bcbf"
-		},
-		{
 			"ImportPath": "github.com/smartystreets/goconvey/convey",
 			"Comment": "1.5.0-335-g9f800fa",
 			"Rev": "9f800fa7d56a5bb44514a4b3463f3f4d21346b78"
@@ -182,27 +158,8 @@
 			"Rev": "463bdc838f2b35e9307e91d480878bda5fff7232"
 		},
 		{
-			"ImportPath": "github.com/spf13/viper",
-			"Rev": "77144270da4a139bc4554f0488514f4212312ac3"
-		},
-		{
 			"ImportPath": "github.com/unrolled/secure",
 			"Rev": "e5f5dae29182c4fb690db4b00b0773be2c9fce93"
-		},
-		{
-			"ImportPath": "github.com/xordataexchange/crypt/backend",
-			"Comment": "v0.0.2-4-g03786bc",
-			"Rev": "03786bce9f8afe83caba421baae83c18d74dac1e"
-		},
-		{
-			"ImportPath": "github.com/xordataexchange/crypt/config",
-			"Comment": "v0.0.2-4-g03786bc",
-			"Rev": "03786bce9f8afe83caba421baae83c18d74dac1e"
-		},
-		{
-			"ImportPath": "github.com/xordataexchange/crypt/encoding/secconf",
-			"Comment": "v0.0.2-4-g03786bc",
-			"Rev": "03786bce9f8afe83caba421baae83c18d74dac1e"
 		},
 		{
 			"ImportPath": "gopkg.in/yaml.v1",

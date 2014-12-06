@@ -1,7 +1,9 @@
 package config
 
 import (
-	"github.com/derekdowling/mamba"
+	"github.com/jacobstr/confer"
+	"os"
+	"fmt"
 	"path"
 	"runtime"
 	"strings"
@@ -11,30 +13,32 @@ func init() {
 	LoadConfig()
 }
 
-// Publicly accessible Mamba Configs
-var Server *mamba.Config
-var DB *mamba.Config
+var App *confer.ConfigManager
 
 // So we don't overwrite our existing configs
 var loaded = false
 
-// Loads our app configuration files into place
+// Load our configuration if it hasn't already been loaded.
 func LoadConfig() {
-
 	if loaded == false {
-		// Get Load Path
-		baseDir := getLoadPath()
-
-		// LOAD APP CONFIG
-		Server = LoadServer(baseDir)
-
-		// LOAD DB CONFIG
-		DB = LoadDB(baseDir)
-
-		loaded = true
+		load()
 	}
+
+	loaded = true
 }
 
+// Load configuration data.
+func load() (*confer.ConfigManager) {
+	// Load the config
+	App = confer.NewConfiguration()
+	App.SetRootPath(getLoadPath())
+	if errs := App.ReadPaths(getConfigPaths()...); errs != nil {
+		fmt.Println(errs)
+	}
+	return App
+}
+
+// Determines the root path for our configuration data.
 func getLoadPath() string {
 	// Some magic to get the abs path of the file
 	_, filename, _, _ := runtime.Caller(1)
@@ -42,18 +46,22 @@ func getLoadPath() string {
 	return baseDir
 }
 
-func LoadServer(baseDir string) *mamba.Config {
-	server := mamba.NewConfig()
-	server.SetConfigName("server")
-	server.AddConfigPath(baseDir)
-	server.ReadInConfig()
-	return server
-}
+// Determines the applicable set of config files to load based on our
+// current environment.
+func getConfigPaths() []string {
+	bursaEnv := os.Getenv("BURSA_ENV");
 
-func LoadDB(baseDir string) *mamba.Config {
-	database := mamba.NewConfig()
-	database.SetConfigName("database")
-	database.AddConfigPath(baseDir)
-	database.ReadInConfig()
-	return database
+	var paths []string
+
+	paths = append(paths, "server.yml")
+
+	// Server configuration
+	if (bursaEnv != "") {
+		paths = append(paths, fmt.Sprintf("server.%s.yml", bursaEnv))
+	} else {
+		paths = append(paths, "server.development.yml")
+	}
+
+	// Database configuration
+	return append(paths, "database.yml")
 }

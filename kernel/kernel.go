@@ -10,11 +10,13 @@ import (
 	"github.com/derekdowling/bursa/config"
 	"github.com/derekdowling/bursa/controller/app"
 	"github.com/derekdowling/bursa/controller/home"
+	"github.com/derekdowling/bursa/controller/styleguide"
 	"github.com/derekdowling/bursa/middleware/logger"
 	"github.com/derekdowling/bursa/middleware/logtext"
 	"github.com/gorilla/mux"
 	"github.com/unrolled/secure"
 	"net/http"
+	"fmt"
 )
 
 func init() {
@@ -22,7 +24,7 @@ func init() {
 	// loads our config into Viper so it can be used anywhere
 	config.LoadConfig()
 
-	log_mode := config.Server.GetStringMapString("logging")["mode"]
+	log_mode := config.App.GetString("logging.mode")
 	if log_mode == "production" {
 		// Log as JSON instead of the default ASCII formatter.
 		log.SetFormatter(&log.JSONFormatter{})
@@ -46,7 +48,7 @@ func Start(production bool) {
 	stack := buildStack(production)
 
 	// figure out what port we need to be on
-	port := config.Server.GetStringMapString("ports")["http"]
+	port := config.App.GetString("ports.http")
 
 	// output to help notify that the server is loaded
 	log.WithFields(log.Fields{"port": port}).Info("Ready for requests with:")
@@ -58,7 +60,7 @@ func Start(production bool) {
 	// Listen, Serve, Log
 	// log.Fatal(
 	// http.ListenAndServeTLS(
-	// config.Server.GetString("server.Https_Port"),
+	// config.App.GetString("server.Https_Port"),
 	// "src/bursa.io/server/certs/cert.pem",
 	// "src/bursa.io/server/certs/key.pem",
 	// stack,
@@ -75,7 +77,7 @@ func buildStack(production bool) *negroni.Negroni {
 	// define our list of production middleware here for now
 	if production {
 		// Turns on production API Keys
-		config.Server.Set("production", true)
+		config.App.Set("production", true)
 		// Secure middleware has a Negroni integration, hence the wonky syntax
 		stack.Use(negroni.HandlerFunc(secureMiddleware().HandlerFuncWithNext))
 	} else {
@@ -86,7 +88,11 @@ func buildStack(production bool) *negroni.Negroni {
 	router := buildRouter()
 
 	// Serve static assets that the website requests
-	static_routes := config.Server.GetStringMapString("static_routes")
+	static_routes := config.App.GetStringMapString("static_routes")
+
+	fmt.Println(static_routes)
+
+	log.Warn(static_routes)
 
 	for url, local := range static_routes {
 
@@ -122,6 +128,7 @@ func buildRouter() *mux.Router {
 	router.HandleFunc("/signup", home.HandleSignup).Methods("GET")
 	router.HandleFunc("/signup", home.HandlePostSignup).Methods("POST")
 	router.HandleFunc("/forgot-password", home.HandleForgotPassword).Methods("GET")
+	router.HandleFunc("/style-guide", styleguide.HandleIndex).Methods("GET")
 	// router.HandleFunc("/forgot-password", home.HandlePostSignup).Methods("POST").Queries("email", "")
 
 	// Our 404 Handler
@@ -136,9 +143,9 @@ func buildRouter() *mux.Router {
 // Sets our secure middleware based on what mode we are in
 func secureMiddleware() *secure.Secure {
 	secureMiddleware := secure.New(secure.Options{
-		AllowedHosts:          config.Server.GetStringSlice("server.Allowed_Hosts"),
+		AllowedHosts:          config.App.GetStringSlice("server.Allowed_Hosts"),
 		SSLRedirect:           true,
-		SSLHost:               config.Server.GetString("server.SSL_Host"),
+		SSLHost:               config.App.GetString("server.SSL_Host"),
 		SSLProxyHeaders:       map[string]string{"X-Forwarded-Proto": "https"},
 		STSSeconds:            315360000,
 		STSIncludeSubdomains:  true,

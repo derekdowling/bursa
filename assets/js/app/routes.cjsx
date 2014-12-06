@@ -18,12 +18,10 @@ address_levels = dynamic_level_route "address", 10
 
 module.exports = routes = (
   <Route handler={Viewport}>
-    <Route path="/wallets/?:address?" handler={Wallets}/>
+    <Route path="/wallets/?:address?" handler={Wallets} ignoreScrollBehavior/>
     <Route path="/wallets/wallet/:address" handler={WalletDetail}/>
-    <Route path="/transfers" handler={Transfers}/>
-    <Route path="/delegate"/>
   </Route>
 )
 
-
-React.render <Routes children={routes}/>, document.getElementById 'body'
+Router.run routes, Router.HistoryLocation, (Handler) ->
+  React.render <Handler/>, document.body

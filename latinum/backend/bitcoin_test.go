@@ -15,6 +15,7 @@ import (
 	"os/exec"
 	"testing"
 	"time"
+	"io/ioutil"
 )
 
 func init() {
@@ -36,9 +37,9 @@ func requireExec(fail_message string, name string, params ...string) {
 // Establish our test state.
 // And then I realized we could just back up and restore the regtest directory.
 // YOLO
-func reset(root_user_id int64) (src_address btcutil.Address, private_src_key *btcutil.WIF) {
+func reset(root_user_id int64) (btcutil.Address, *btcutil.WIF) {
 	requireExec("Couldn't reset regtest db", "rm", "-rf", "/home/vagrant/.bitcoin/regtest")
-	requireExec("Couldn't restart bitcoind", "sudo", "service", "bitcoin-server", "restart")
+	requireExec("Couldn't restart bitcoind", "service", "bitcoin-server", "restart")
 
 	if err := klutz.Flail(
 		10,
@@ -89,10 +90,13 @@ func reset(root_user_id int64) (src_address btcutil.Address, private_src_key *bt
 	// Bitcoind starts up with some random private key that we need to steal.
 	private_src_key, _ = client.Get().DumpPrivKey(src_address)
 
-	return
+	ioutil.WriteFile("/bursa/bursa/latinum/fixtures/regtest_pk.key", private_src_key, 0777)
+
+	return src_address, private_src_key
 }
 
 func TestSpec(t *testing.T) {
+	return;
 	db, err := models.Connect()
 	if err != nil {
 		log.Fatalf("Couldn't connect to database during testing", err)

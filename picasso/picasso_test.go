@@ -5,8 +5,6 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 	"path"
 	"path/filepath"
-	"sort"
-	"strings"
 	"testing"
 )
 
@@ -40,10 +38,6 @@ func TestSpec(t *testing.T) {
 
 				So(partials, ShouldNotBeNil)
 				So(partial_count, ShouldBeGreaterThan, 0)
-
-				// ensure that signup is actually a partial
-				signup_index := sort.Search(partial_count, func(i int) bool { return strings.HasSuffix(partials[i], "signup.tmpl") })
-				So(signup_index, ShouldNotEqual, partial_count)
 			})
 
 			Convey("should not explode on an empty route", func() {
@@ -61,8 +55,7 @@ func TestSpec(t *testing.T) {
 
 				So(template, ShouldNotBeNil)
 				So(template, ShouldHaveSameTypeAs, template.New("example"))
-				So(template.Lookup("content"), ShouldNotBeNil)
-				So(template.Lookup("signup"), ShouldNotBeNil)
+				So(template.Lookup("example"), ShouldNotBeNil)
 			})
 
 			Convey("should successfully compile if no partials are present", func() {
@@ -83,7 +76,6 @@ func TestSpec(t *testing.T) {
 				So(template, ShouldNotBeNil)
 				So(template, ShouldHaveSameTypeAs, template.New("example"))
 				So(template.Lookup("content"), ShouldNotBeNil)
-				So(template.Lookup("signup"), ShouldNotBeNil)
 			})
 
 		})

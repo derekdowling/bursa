@@ -25,17 +25,3 @@ ssl:
 app:
   login_url: "/login"
 
-email:
-  mailchimp_key: "4df049b873c7e2d5d08416ecfac6eee4-us9"
-  list_id: "ddb450e3b1"
-  enabled: false
-
-bitcoin:
-  HttpPostMode: true
-  DisableTLS: true
-  Host: localhost:18332
-  User: bitcoinrpc
-  Pass: D7YKqDXM5nuhHhAn6xkiMYaapiDfBKzHwCUfLFbVNZkK
-
-logging:
-  mode: "dev"
