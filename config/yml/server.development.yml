@@ -6,3 +6,6 @@ email:
 
 logging:
   mode: "dev"
+
+session:
+  key: "securemedevhoney"

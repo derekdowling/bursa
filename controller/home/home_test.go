@@ -3,10 +3,10 @@ package home
 import (
 	"github.com/derekdowling/bursa/testutils"
 	. "github.com/smartystreets/goconvey/convey"
+	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
-	"net/http"
 )
 
 func TestSpec(t *testing.T) {
@@ -15,29 +15,74 @@ func TestSpec(t *testing.T) {
 
 		test_email := testutils.TestEmail("homecontroller")
 
-		Convey("HandleSignup()", func() {
+		Convey("marshalForm()", func() {
+			form := url.Values{"email": {test_email}}
+			req := testutils.FormPostRequest("/signup", form)
 
-			Convey("should work with a valid email", func() {
-				form := url.Values{"email": {test_email}}
+			creds = marshalForm(req)
+			So(creds, ShouldHaveSameTypeAs, &Credentials{})
+			So(creds.Email, ShouldBe, test_email)
+		})
+
+		Convey("HandlePostSignup()", func() {
+
+			Convey("should work with valid credentials", func() {
+				form := url.Values{
+					"email":    {test_email},
+					"password": {test_password},
+				}
 
 				req, err := testutils.FormPostRequest("/signup", form)
 				rec := httptest.NewRecorder()
 
-				So(err, ShouldBeNil)
-				HandleSignup(rec, req)
+				HandlePostSignup(rec, req)
 				So(rec.Code, ShouldEqual, http.StatusOK)
 			})
 
-			Convey("should gracefully handle a bad email", func() {
-				form := url.Values{"email": {"bad_email@blah"}}
+			Convey("should gracefully handle bad credentials", func() {
+				form := url.Values{
+					"email":    {"bad_email@blah.com"},
+					"password": {""},
+				}
 
-				req, err := testutils.FormPostRequest("/signup", form)
+				req := testutils.FormPostRequest("/signup", form)
 				rec := httptest.NewRecorder()
 
-				So(err, ShouldBeNil)
 				HandlePostSignup(rec, req)
 				So(rec.Code, ShouldEqual, http.StatusBadRequest)
 			})
+		})
+
+		Convey("HandlePostLogin", func() {
+
+			Convey("For a successful login", func() {
+				form := url.Values{
+					"email":    {test_email},
+					"password": {test_password},
+				}
+
+				req := testutils.FormPostRequest("/login", form)
+				rec := httptest.NewRecorder()
+
+				HandlePostLogin(rec, req)
+				// TODO: better body checking
+				So(rec.Code, ShouldEqual, http.StatusOK)
+			})
+
+			Convey("For a bad login", func() {
+				form := url.Values{
+					"email":    {test_email},
+					"password": {"bad_password"},
+				}
+
+				req := testutils.FormPostRequest("/login", form)
+				rec := httptest.NewRecorder()
+
+				HandlePostLogin(rec, req)
+				// TODO: better body checking
+				So(rec.Code, ShouldEqual, http.StatusUnauthorized)
+			})
+
 		})
 
 	})

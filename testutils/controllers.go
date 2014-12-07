@@ -3,30 +3,54 @@ package testutils
 // This file adds some nice helpers for performing controller tests
 
 import (
-	"log"
+	log "github.com/Sirupsen/logrus"
+	"github.com/derekdowling/bursa/config"
+	"io"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 // Formats a post form submission url
-func urlForm(path string, form url.Values) string {
-	url := url.URL{
-		Host:     "localhost:8080",
-		Path:     path,
-		RawQuery: form.Encode(),
-	}
-
+func buildFormUrl(path string, form url.Values) string {
+	url := baseUrl(path)
+	url.RawQuery = form.Encode()
 	return url.String()
 }
 
-// Builds a nice post form submissions request you can use in testing
-func FormPostRequest(path string, form url.Values) (*http.Request, error) {
-	url := urlForm(path, form)
-	req, err := http.NewRequest("POST", url, nil)
+func GetRequest(path string) *http.Request {
+	url := buildUrl(path)
+	return buildRequest("GET", url, nil)
+}
 
-	if err != nil {
-		log.Print(err.Error())
+func buildUrl(path string) string {
+	return baseUrl(path).String()
+}
+
+func baseUrl(path string) *url.URL {
+	return &url.URL{
+		Host: getTestHost(),
+		Path: path,
 	}
+}
 
-	return req, err
+// Checks our config to get our local test path
+func getTestHost() string {
+	location := "localhost"
+	port := config.App.GetString("ports.http")
+	return strings.Join([]string{location, port}, ":")
+}
+
+func buildRequest(method string, url string, body io.Reader) *http.Request {
+	req, err := http.NewRequest(method, url, body)
+	if err != nil {
+		log.Error(err.Error())
+	}
+	return req
+}
+
+// Builds a nice post form submissions request you can use in testing
+func FormPostRequest(path string, form url.Values) *http.Request {
+	url := buildFormUrl(path, form)
+	return buildRequest("POST", url, nil)
 }

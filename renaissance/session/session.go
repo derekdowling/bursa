@@ -1,6 +1,5 @@
+// This package handles all of our session setting logic within the app
 package session
-
-// Handles all session interactions
 
 import (
 	"github.com/derekdowling/bursa/config"
@@ -8,39 +7,45 @@ import (
 	"net/http"
 )
 
-func loadStore() sessions.Store {
-	// Load our session store
-	store := sessions.NewCookieStore([]byte(config.App.GetString("session.Key.Main")))
-	return store
+// Interface for getting a session store. Overwrite this to Mock in testing.
+func getStore() *sessions.CookieStore {
+	return sessions.NewCookieStore([]byte(getSessionKey()))
 }
 
-func getAppSession(r *http.Request) *sessions.Session {
-	store := loadStore()
+func getSessionKey() string {
+	return config.App.GetString("session.key")
+}
 
-	// always returns a blank session if none is present
-	session, _ := store.Get(r, config.App.GetString("session.Key.App"))
+func getSessionName() string {
+	return config.App.GetString("session.name")
+}
+
+// Returns the current sessions assoicated with the request, returns a blank
+// session if one isn't setup
+func getAppSession(r *http.Request) *sessions.Session {
+	store := getStore()
+	session, _ := store.Get(r, getSessionName())
 	return session
 }
 
 // Handles creating a new user session
-func CreateUserSession(w http.ResponseWriter, r *http.Request) {
+func CreateUserSession(w http.ResponseWriter, r *http.Request, user_id int64) {
 
 	session := getAppSession(r)
-
 	session.Options = &sessions.Options{
 		Path:     "/",
 		MaxAge:   300,
 		HttpOnly: true,
 	}
 
-	session.Values[LoggedIn] = true
+	session.Values["user_id"] = user_id
 	session.Save(r, w)
 }
 
 // Checks whether or not a user is already logged in via their session token
-func LoggedIn(r *http.Request) bool {
+func GetUserId(r *http.Request) int64 {
 	session := getAppSession(r)
 
-	logged_in := session.Values[LoggedIn]
-	return logged_in.(bool)
+	user_id := session.Values["user_id"]
+	return user_id.(int64)
 }
