@@ -14,14 +14,19 @@ func TestSpec(t *testing.T) {
 	Convey("Home Tests", t, func() {
 
 		test_email := testutils.TestEmail("homecontroller")
+		test_password := "home_password"
 
 		Convey("marshalForm()", func() {
-			form := url.Values{"email": {test_email}}
+			form := url.Values{
+				"email":    {test_email},
+				"password": {test_password},
+			}
 			req := testutils.FormPostRequest("/signup", form)
 
-			creds = marshalForm(req)
+			creds := marshalForm(req)
 			So(creds, ShouldHaveSameTypeAs, &Credentials{})
-			So(creds.Email, ShouldBe, test_email)
+			So(creds.Email, ShouldEqual, test_email)
+			So(creds.Password, ShouldEqual, test_password)
 		})
 
 		Convey("HandlePostSignup()", func() {
@@ -32,7 +37,7 @@ func TestSpec(t *testing.T) {
 					"password": {test_password},
 				}
 
-				req, err := testutils.FormPostRequest("/signup", form)
+				req := testutils.FormPostRequest("/signup", form)
 				rec := httptest.NewRecorder()
 
 				HandlePostSignup(rec, req)

@@ -12,9 +12,7 @@ func TestSpec(t *testing.T) {
 	Convey("Models Tests", t, func() {
 
 		Convey("should connect", func() {
-			db, err := Connect()
-
-			So(err, ShouldBeNil)
+			db := Connect()
 			So(db, ShouldHaveSameTypeAs, gorm.DB{})
 		})
 
@@ -25,27 +23,26 @@ func TestSpec(t *testing.T) {
 			password := "test123"
 
 			Convey("CreateUser()", func() {
-				err, id := CreateUser(email, password)
-				So(err, ShouldBeNil)
+				id := CreateUser(email, password)
 
-				db := db.Connect()
+				db := Connect()
 				db.First(&user, id)
 
 				So(user, ShouldHaveSameTypeAs, &User{})
-				So(user.Email, ShouldBe, email)
+				So(user.Email, ShouldEqual, email)
 				So(user.Password, ShouldNotBeBlank)
 			})
 
 			Convey("FindUser()", func() {
 
 				Convey("should find valid user", func() {
-					newUser := FindUser(user.id)
+					newUser := FindUser(user.Id)
 					So(newUser, ShouldHaveSameTypeAs, &User{})
 					So(newUser, ShouldResemble, user)
 				})
 
 				Convey("on no result", func() {
-					user := FindUser("123")
+					user := FindUser(123)
 					So(user, ShouldBeNil)
 				})
 			})
@@ -67,14 +64,14 @@ func TestSpec(t *testing.T) {
 			Convey("FindUserByCreds()", func() {
 
 				Convey("should find valid user", func() {
-					newUser := FindByCreds(user.Email, password)
+					newUser := FindUserByCreds(user.Email, password)
 					So(newUser, ShouldHaveSameTypeAs, &User{})
 					So(newUser, ShouldResemble, user)
 				})
 
 				Convey("on no result", func() {
-					user := FindUserByCreds(user.id, "badpassword")
-					So(user, ShouldBeNil)
+					newUser := FindUserByCreds(user.Email, "badpassword")
+					So(newUser, ShouldBeNil)
 				})
 			})
 		})

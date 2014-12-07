@@ -1,8 +1,8 @@
 package models
 
 import (
+	log "github.com/Sirupsen/logrus"
 	"github.com/jinzhu/gorm"
-	"log"
 	"time"
 
 	"github.com/derekdowling/bursa/config"
@@ -84,7 +84,7 @@ func Connect() gorm.DB {
 	)
 
 	if err != nil {
-		log.Print(err)
+		log.Fatal(err)
 	}
 
 	return db
