@@ -74,6 +74,7 @@ func HandlePostSignup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// create a session and direct user to the app
+	session := session.New()
 	session.CreateUserSession(w, r, id)
 	http.Redirect(w, r, "/app", http.StatusOK)
 }
@@ -91,6 +92,7 @@ func HandlePostLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// direct the user to the app if login successful
+	session := session.New()
 	session.CreateUserSession(w, r, user.Id)
 	http.Redirect(w, r, "/app", http.StatusOK)
 }

@@ -83,7 +83,7 @@ func buildStack(production bool) *negroni.Negroni {
 		stack.Use(logger.NewLogger())
 	}
 
-	stack.Use()
+	// stack.Use(firewall.ServeHTTP)
 
 	// Builds our router and gives it routes
 	router := buildRouter()

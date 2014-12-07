@@ -24,7 +24,8 @@ func GetRequest(path string) *http.Request {
 }
 
 func buildUrl(path string) string {
-	return baseUrl(path).String()
+	url := baseUrl(path)
+	return url.String()
 }
 
 func baseUrl(path string) *url.URL {
@@ -44,7 +45,7 @@ func getTestHost() string {
 func buildRequest(method string, url string, body io.Reader) *http.Request {
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
-		log.Error(err.Error())
+		log.Fatal(err.Error())
 	}
 	return req
 }
