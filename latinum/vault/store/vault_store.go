@@ -22,10 +22,7 @@ import (
 // TODO do this properly as some kind of migration command? Or maybe this *is*
 // the way to do it in go land.
 func init() {
-	db, db_err := models.Connect()
-	if db_err != nil {
-		log.Fatalf("Failed to connect to key storage.", db_err)
-	}
+	db := models.Connect()
 
 	// TODO error check here
 	models.Initialize()
@@ -55,10 +52,7 @@ type UserKey struct {
 // never make sense to me aftewards. Usernames should be unique and unchanging.
 func Store(user_id int64, encoded_base_58_key string) error {
 	// See comment for the global db variable at the start of this file.
-	db, db_err := models.Connect()
-	if db_err != nil {
-		log.Fatalf("Failed to connect to key storage.", db_err)
-	}
+	db := models.Connect()
 
 	user_key := UserKey{
 		UserId:      user_id,
@@ -78,10 +72,7 @@ func Store(user_id int64, encoded_base_58_key string) error {
 // a public key corresponding to one (or none) of the user's private keys.
 func Retrieve(user_id int64) (string, error) {
 	// See comment for the global db variable at the start of this file.
-	db, db_err := models.Connect()
-	if db_err != nil {
-		log.Fatalf("Failed to connect to key storage.", db_err)
-	}
+	db := models.Connect()
 
 	var user_key UserKey
 	// TODO error checking goes here!

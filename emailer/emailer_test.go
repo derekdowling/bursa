@@ -1,4 +1,4 @@
-package email
+package emailer
 
 import (
 	"github.com/derekdowling/bursa/testutils"

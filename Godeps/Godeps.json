@@ -1,6 +1,6 @@
 {
 	"ImportPath": "github.com/derekdowling/bursa",
-	"GoVersion": "go1.3.1",
+	"GoVersion": "go1.3.3",
 	"Packages": [
 		"./..."
 	],

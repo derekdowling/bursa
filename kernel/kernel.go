@@ -16,7 +16,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/unrolled/secure"
 	"net/http"
-	"fmt"
 )
 
 func init() {
@@ -84,15 +83,14 @@ func buildStack(production bool) *negroni.Negroni {
 		stack.Use(logger.NewLogger())
 	}
 
+	// stack.Use(firewall.ServeHTTP)
+
 	// Builds our router and gives it routes
 	router := buildRouter()
 
 	// Serve static assets that the website requests
 	static_routes := config.App.GetStringMapString("static_routes")
-
-	fmt.Println(static_routes)
-
-	log.Warn(static_routes)
+	log.Info(static_routes)
 
 	for url, local := range static_routes {
 

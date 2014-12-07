@@ -1,6 +1,7 @@
 package models
 
 import (
+	log "github.com/Sirupsen/logrus"
 	"github.com/jinzhu/gorm"
 	"time"
 
@@ -59,7 +60,7 @@ type Wallet struct {
 
 // Well suited to some kind of management cli.
 func Initialize() {
-	db, _ := Connect()
+	db := Connect()
 
 	// See https://github.com/jinzhu/gorm/blob/master/migration_test.go#L23
 	// Note that the scope of db_err is visible only to this if block.
@@ -76,9 +77,15 @@ func Initialize() {
 	}
 }
 
-func Connect() (gorm.DB, error) {
-	return gorm.Open(
+func Connect() gorm.DB {
+	db, err := gorm.Open(
 		config.App.GetString("orm.adapter"),
 		config.App.GetString("orm.settings"),
 	)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return db
 }

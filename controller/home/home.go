@@ -3,18 +3,12 @@ package home
 
 import (
 	log "github.com/Sirupsen/logrus"
-	"github.com/derekdowling/bursa/email"
 	"github.com/derekdowling/bursa/models"
 	"github.com/derekdowling/bursa/picasso"
 	"github.com/derekdowling/bursa/renaissance/session"
 	"github.com/gorilla/schema"
 	"net/http"
 )
-
-type Form struct {
-	Email string
-	Name  string
-}
 
 // Handles loading the main page of the website
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
@@ -39,69 +33,67 @@ func HandleForgotPassword(w http.ResponseWriter, r *http.Request) {
 	picasso.Render(w, "marketing/layout", "marketing/forgot-password", struct{}{})
 }
 
-type Signup struct {
+// Struct to marshall signup data into
+type Credentials struct {
 	Email    string
 	Password string
 	Company  string
 }
 
-func HandlePostSignup(w http.ResponseWriter, r *http.Request) {
-
+// Marshals the results of a Post Form into our Credentials Object for either
+func marshalForm(r *http.Request) *Credentials {
 	// parse out our query vars
-	err := r.ParseForm()
-	if err != nil {
+	if err := r.ParseForm(); err != nil {
 		log.Error(err)
+		return nil
 	}
 
 	// marshal over to a struct
 	decoder := schema.NewDecoder()
-	signup := new(Signup)
-	err = decoder.Decode(signup, r.PostForm)
+	credentials := new(Credentials)
 
-	if err != nil {
+	if err := decoder.Decode(credentials, r.PostForm); err != nil {
 		log.Error(err)
+		return nil
 	}
 
-	success := email.Subscribe(signup.Email)
-	if !success {
-		picasso.RenderWithCode(w, "marketing/layout", "marketing/signup", signup.Email, http.StatusBadRequest)
+	return credentials
+}
+
+func HandlePostSignup(w http.ResponseWriter, r *http.Request) {
+
+	creds := marshalForm(r)
+
+	// store user in the database
+	id := models.CreateUser(creds.Email, creds.Password)
+	if id == 0 {
+		picasso.RenderWithCode(
+			w, "marketing/layout", "marketing/signup", creds.Email, http.StatusBadRequest,
+		)
 		return
 	}
 
-	picasso.Render(w, "marketing/layout", "marketing/success", nil)
-}
-
-// Creates a new user when they complete the signup process
-func HandleCreateUser(w http.ResponseWriter, r *http.Request) {
-
-	// get email/password from the form
-	email, pass := getCredentials(r)
-
-	// store user in the database
-	models.CreateUser(email, pass)
-
-	session.CreateUserSession(w, r)
-
-	// direct user to the app
+	// create a session and direct user to the app
+	session := session.New()
+	session.CreateUserSession(w, r, id)
 	http.Redirect(w, r, "/app", http.StatusOK)
 }
 
 // validates a user's login credentials
 func HandlePostLogin(w http.ResponseWriter, r *http.Request) {
 
-	// get email/password from the form
-	email, password := getCredentials(r)
+	creds := marshalForm(r)
 
 	// if not logged in successfully, return to main page
-	user := models.AttemptLogin(email, password)
-
+	user := models.FindUserByCreds(creds.Email, creds.Password)
 	if user == nil {
-		// TODO: include attempted email for auto-fill
-		// TODO: add login fail flag for login failure alert
 		http.Redirect(w, r, "/login", http.StatusUnauthorized)
+		return
 	}
 
 	// direct the user to the app if login successful
+	session := session.New()
+	session.CreateUserSession(w, r, user.Id)
 	http.Redirect(w, r, "/app", http.StatusOK)
 }
 
@@ -111,11 +103,4 @@ func Handle404(w http.ResponseWriter, r *http.Request) {
 
 func Handle500(w http.ResponseWriter, r *http.Request) {
 	picasso.Render(w, "marketing/layout", "marketing/500", nil)
-}
-
-// Used to fetch the a username/password from an input form
-func getCredentials(r *http.Request) (string, string) {
-	email := r.PostFormValue("email")
-	password := r.PostFormValue("password")
-	return email, password
 }

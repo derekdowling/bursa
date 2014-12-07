@@ -4,6 +4,7 @@ package models
 // attributes, and deleting them
 
 import (
+	"github.com/derekdowling/bursa/emailer"
 	"github.com/derekdowling/bursa/renaissance/authentication"
 	"time"
 )
@@ -27,7 +28,7 @@ type User struct {
 	Email string `sql:"size:255"`
 }
 
-func CreateUser(email string, password string) {
+func CreateUser(email string, password string) int64 {
 
 	// hash and salt password
 	salt, hash := authentication.CreatePassword(password)
@@ -39,17 +40,38 @@ func CreateUser(email string, password string) {
 		Password: hash,
 	}
 
-	// create/save user
-	db, _ := Connect()
+	// create user
+	db := Connect()
 	db.Create(&user)
+
+	if emailer.Enabled() {
+		emailer.Subscribe(email)
+	}
+
+	return user.Id
+}
+
+func FindUser(id int64) *User {
+	var user *User
+	db := Connect()
+	db.First(&user, id)
+	return user
+}
+
+func FindUserByEmail(email string) *User {
+	var user *User
+	db := Connect()
+	db.Where("email=?", email).First(&user)
+	return user
 }
 
 // Test's whether or not a user has authenticated successfully
-func AttemptLogin(email string, password string) *User {
-	// Todo: this is broken
-	db, _ := Connect()
-	var user *User
-	db.Where("email = ?", email).First(&user)
-	// match := authentication.PasswordMatch(password, user.salt, user.hash)
+func FindUserByCreds(email string, password string) *User {
+	user := FindUserByEmail(email)
+
+	if match := authentication.PasswordMatch(password, user.Salt, user.Password); !match {
+		return nil
+	}
+
 	return user
 }
