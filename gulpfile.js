@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var shell = require('gulp-shell');
 var notify = require('gulp-notify');
-var notifier = require('node-notifier');
 var path = require('path');
 
 // Slightly Stripped Rubix CSS
@@ -38,6 +37,7 @@ var minifycss = require('gulp-minify-css');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('gulp-autoprefixer');
 var clean = require('gulp-clean');
+var mocha = require('gulp-spawn-mocha');
 
 var watchify = require('watchify');
 var browserify = require('browserify');
@@ -76,7 +76,7 @@ var paths = {
   font_styles: [ 'assets/fonts/styles/*', 'node_modules/font-awesome/scss/font-awesome.scss'],
 
   // This sets browserify off on it's dependency resolution.
-  entrypoint: './assets/js/app/app.coffee'
+  entrypoint: './node_modules/app/init.coffee'
 };
 
 // UTILITY
@@ -109,14 +109,12 @@ logData('Environment : '+ (production ? 'Production':'Development'));
 // Javascript Related
 // -----------
 
-function onError(source, err) {
-  notify.onError({
+function onError(source) {
+  return notify.onError({
     title: source,
     subtitle: "Failure!",
-    message:  "Error: <%= err.message %>"
-  })(err);
-
-  this.emit('end');
+    message:  "<%= error.message %>"
+  });
 }
 
 function bundlefile(file, as, watch) {
@@ -131,8 +129,7 @@ function bundlefile(file, as, watch) {
   function rebundle() {
     var stream = bundler.bundle();
     return stream
-      .pipe(plumber({errorHandler: onError.bind('JS Error')}))
-      .on('error', gutil.log.bind(gutil, 'error'))
+      .on("error", onError('JS Error'))
       .pipe(source(as))
       .pipe(gulp.dest('static/js'))
       .pipe(browserSync.reload({stream:true, once: true}));
@@ -179,10 +176,7 @@ function sassify(src, alias, dest) {
         sass({
           errLogToConsole: true,
           sourceComments: 'map',
-          onError: notify.onError({
-            title: "Compile Error",
-            message: "<%= error.message %>"
-          })
+          onError: onError("Sass Error")
       }))
       // .pipe(autoprefixer('last 2 versions', '> 1%', 'ie 9'))
       .pipe(sourcemaps.write())
@@ -261,16 +255,33 @@ gulp.task('dist', function(cb) {
 // Testing
 //--------
 
-gulp.task('test', function(done) {
+gulp.task('test', ['test:jest', 'test:mocha']);
+
+gulp.task('test:jest', function(done) {
   jest.runCLI({ config: package.jest }, ".", function(result) {
     if (result === false) {
-      notifier.notify({
-        title: "Fail!",
-        message: "Javascript tests failed.",
-      });
+      // Some hackery to make gulp-notify work in a context where we don't have
+      // a stream, whilst utilizing gulp-notifier for it's pretty icon...
+      source('dummy')
+        .on("error", onError("Jest Failure"))
+        .emit("error", new Error("Oops"));
     }
     done();
   });
+});
+
+gulp.task('test:mocha', function() {
+  // All of this dirname stuff is a hack around the mocha environment.
+  // We'd really be better off just using a wrapper for mocha or putting
+  // the test folder in the basic location of project_root/test
+  gulp.src(__dirname + '/assets/js/app/test/test_*.coffee', { read: false })
+    .pipe(mocha({
+      env: {
+        CWD: __dirname + '/assets/js/app',
+      },
+      opts: __dirname + '/assets/js/app/test/mocha.opts'
+    }))
+    .on('error', onError("Mocha Failure"));
 });
 
 // Watch Tasks

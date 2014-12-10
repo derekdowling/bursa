@@ -6,7 +6,7 @@ require 'es6-shim' # {... extraProps}
 
 Wallet = require './wallet.cjsx'
 WalletStore = require '../stores/WalletStore'
-{ WalletCreateAction, WalletDestroyAction } = require '../actions/WalletActions'
+{ WalletViewCreateAction, WalletDestroyAction } = require '../actions/WalletActions'
 
 # wallets is a hash of wallets keyed by their address.
 # path is a slash delimited string.

@@ -25,3 +25,4 @@ module.exports = routes = (
 
 Router.run routes, Router.HistoryLocation, (Handler) ->
   React.render <Handler/>, document.body
+
