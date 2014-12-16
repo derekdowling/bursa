@@ -1,25 +1,14 @@
-Dispatcher = require '../dispatchers/Dispatcher'
 expect = require('chai').expect
+{ ViewAction } = require 'app/actions/Actions'
 
-class Action
-  # Fluently delegates to a constructor.
-  @build: ->
-    new @(arguments...)
+class WalletViewAction extends ViewAction
 
-  dispatch: ->
-    Dispatcher.dispatch @
-
-  name: ->
-    "#{@constructor.name}"
-
-class WalletAction extends Action
-
-class WalletCreateAction extends WalletAction
+class WalletViewCreateAction extends WalletViewAction
   # The address of the parent wallet.
   constructor: (@parentAddress) ->
     expect(@parentAddress).to.be.a('string')
 
-class WalletDestroyAction extends WalletAction
+class WalletViewDestroyAction extends WalletViewAction
   constructor: (@wallet) ->
 
-module.exports = { WalletAction, WalletCreateAction, WalletDestroyAction }
+module.exports = { WalletViewAction, WalletViewCreateAction, WalletViewDestroyAction }

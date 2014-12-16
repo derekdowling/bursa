@@ -1,33 +1,12 @@
 Promise = require 'bluebird'
-
-class Dispatcher
-  register: (callback) ->
-    @callbacks ||= []
-    @callbacks.push callback
-    @callbacks.length - 1
-
-  dispatch: (payload) ->
-    resolves = []
-    rejects = []
-
-    # Expose resolvers / rejecters. E.g. as if we had Q.defer()
-    @callbacks.forEach (_, i) ->
-      new Promise (resolve, reject) ->
-        resolves[i] = resolve
-        rejects[i] = reject
-
-    @callbacks.forEach (callback, i) ->
-      Promise.resolve(callback(payload)).then ->
-        resolves[i](payload)
-      # Failure
-      ,->
-        rejects[i](new Error('Dispatcher failed'))
-
-    null
+Dispatcher = require('flux').Dispatcher
 
 class AppDispatcher extends Dispatcher
-  onAction: (action) ->
-    @dispatch source: 'ACTION_DISPATCHER', action: action
+  # A wrapper that saves us the boilerplate of assigning the dispatch token as
+  # well as delegating to the stores onAction method rather than providing a
+  # callback function. Essentially to enshrine a few conventions.
+  registerStore: (store) ->
+    store.token = @register store.onAction.bind(store)
 
 # Expose a singleton instance.
 appDispatcher = new AppDispatcher()

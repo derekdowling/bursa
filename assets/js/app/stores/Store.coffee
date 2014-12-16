@@ -18,7 +18,7 @@ class Store extends EventEmitter
   changeEventName: ->
     "change.#{@constructor.name}"
 
-  # Adds a change listener to this store.
+  # Registers a callback as a change listener for this stores update events.
   addChangeListener: (callback) ->
     @addListener @changeEventName(), callback
 
@@ -39,7 +39,10 @@ class Store extends EventEmitter
     @[actionHandlerName(action)]
 
   # Invoked when an action initiate by the view is dispatched to this store.
-  onViewAction: (action) ->
+  # Given a `WalletViewCreateAction`, this will look for an
+  # `onWalletViewCreateAction` method on the current store and invoke it with the
+  # action as a payload.
+  onAction: (action) ->
     if @canHandle action
       @handle(action)
     else

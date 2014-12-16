@@ -3,7 +3,7 @@ package backend
 import (
 	"errors"
 	"fmt"
-	"log"
+	log "github.com/Sirupsen/logrus"
 
 	"github.com/derekdowling/bursa/latinum/backend/client"
 	shared_config "github.com/derekdowling/bursa/latinum/shared/config"
@@ -69,19 +69,16 @@ func GenerateInto(amt float64, src_private_key *btcutil.WIF, src_address btcutil
 		return errors.New("Insufficient funds in server wallet")
 	}
 
-	fmt.Println("current amt:", current_amt)
-
 	// Transaction fee is the difference between in/out.
 	tx_fee := 0.001
 
 	// Calculate change to send back to ourselves.
 	change := current_amt - tx_fee - amt
 
-	fmt.Println("change", change)
-	fmt.Println("amt", amt)
-	fmt.Println("tx_fee", tx_fee)
-	fmt.Println("new address", src_address.String())
-	fmt.Println("encoded address", encoded_address)
+	log.Debug("change", change)
+	log.Debug("amt", amt)
+	log.Debug("tx_fee", tx_fee)
+	log.Debug("encoded address", encoded_address)
 
 	// All of these different address types are painful to juggle. We should settle
 	// on a common denominator - if possible. That may not be the case as some of
@@ -118,7 +115,6 @@ func GenerateInto(amt float64, src_private_key *btcutil.WIF, src_address btcutil
 		return err
 	}
 
-	fmt.Println("signed")
 	sha_hash, err := client.Get().SendRawTransaction(signed, false)
 
 	if err != nil {
@@ -174,12 +170,10 @@ func SendBetween(amt float64, src_user_id int64, dest_user_id int64) error {
 
 	unsigned_raw_tx, err := client.Get().CreateRawTransaction(inputs, amounts)
 
-	fmt.Println(inputs)
-
 	// TODO we may want to return a new error rather than the descended one because
 	// it ends up leaking the underlying abstraction details to our caller.
 	if err != nil {
-		log.Print("Couldn't generate unsigned raw transaction", err)
+		log.Error("Couldn't generate unsigned raw transaction", err)
 		return err
 	}
 
@@ -190,7 +184,7 @@ func SendBetween(amt float64, src_user_id int64, dest_user_id int64) error {
 	)
 
 	if err != nil {
-		log.Print("Couldn't sign the damn thing.", err)
+		log.Error("Couldn't sign the damn thing.", err)
 		return err
 	}
 
@@ -198,9 +192,9 @@ func SendBetween(amt float64, src_user_id int64, dest_user_id int64) error {
 
 	if err != nil {
 		log.Fatalf("Couldn't send the signed transaction.", err)
+	} else {
+		log.Debug("Created signed transaction.", sha_hash)
 	}
-
-	log.Println(sha_hash)
 
 	return err
 

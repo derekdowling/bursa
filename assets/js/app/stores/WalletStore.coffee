@@ -1,5 +1,7 @@
-AppDispatcher = require '../dispatchers/Dispatcher'
-Store = require './Store'
+AppDispatcher    = require '../dispatchers/Dispatcher'
+Store            = require './Store'
+
+WalletController = require 'app/controllers/WalletController'
 
 class WalletStore extends Store
   initialize: ->
@@ -35,8 +37,8 @@ class WalletStore extends Store
             balance: 8.71
             wallets: {}
 
-  # @see WalletCreateAction
-  onWalletCreateAction: (action) ->
+  # @see WalletViewCreateAction
+  onWalletViewCreateAction: (action) ->
     wallet = @findWallet action.parentAddress
     if wallet
       @createWalletUnder wallet
@@ -73,6 +75,6 @@ class WalletStore extends Store
 # Also makes subclassing harder.
 walletStore = new WalletStore()
 
-AppDispatcher.register walletStore.onViewAction.bind(walletStore)
+AppDispatcher.registerStore walletStore
 
 module.exports = walletStore

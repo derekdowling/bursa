@@ -1,0 +1,4 @@
+--compilers coffee:coffee-script/register
+--reporter spec
+--require assets/js/app/test/common.coffee
+--inline-diffs

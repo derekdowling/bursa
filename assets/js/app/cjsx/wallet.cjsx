@@ -7,7 +7,7 @@ require 'es6-shim' # {... extraProps}
 
 Balance = require './balance.cjsx'
 Hash = require './hash.cjsx'
-{ WalletCreateAction } = require '../actions/WalletActions'
+{ WalletViewCreateAction } = require '../actions/WalletActions'
 
 Wallet = React.createClass
     mixins: [ Navigation ]
@@ -38,7 +38,7 @@ Wallet = React.createClass
       ].join(" ")
 
     createChild: ->
-      WalletCreateAction.build(@props.address).dispatch()
+      WalletViewCreateAction.build(@props.address).dispatch()
 
     render: ->
       wallet_link = @makeHref "/wallets/wallet/#{@props.address}"
